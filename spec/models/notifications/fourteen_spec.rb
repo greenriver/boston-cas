@@ -14,20 +14,31 @@ RSpec.describe 'Notifications::Fourteen', type: :model do
   let(:hsp) { create :contact }
   let(:dnd) { create :contact }
 
-  before do
-    match.hsp_contacts << hsp
-    match.dnd_staff_contacts << dnd
-  end
+  describe 'recipients' do
+    let(:contacts) do
+      [:shelter_agency_contacts, :housing_subsidy_admin_contacts, :ssp_contacts, :hsp_contacts, :dnd_staff_contacts].index_with { create(:contact) }
+    end
 
-  it 'FYI notifications go to everyone except the acting contact type' do
-    recipients = Notifications::Fourteen::FourteenEligibilityScreeningFyi.notification_recipients_for(match)
-    expect(recipients).to include(dnd)
-    expect(recipients).not_to include(hsp)
-  end
+    before { contacts.each { |type, contact| match.send(type) << contact } }
 
-  it 'actor notifications go only to the acting contact type' do
-    recipients = Notifications::Fourteen::FourteenEligibilityScreeningHsp.notification_recipients_for(match)
-    expect(recipients).to contain_exactly(hsp)
+    MatchRoutes::Fourteen.match_steps.each_key do |decision_class|
+      it "#{decision_class} notifies its actor type to act and every other contact type FYI" do
+        decision = decision_class.constantize.new
+        actor_notification, fyi_notification = decision.notifications_for_this_step
+        actor = contacts[decision.contact_actor_type]
+
+        expect(actor_notification.notification_recipients_for(match)).to contain_exactly(actor)
+        expect(fyi_notification.notification_recipients_for(match)).to match_array(contacts.values - [actor]) if fyi_notification
+      end
+    end
+
+    (MatchRoutes::Fourteen.match_steps_for_reporting.keys - MatchRoutes::Fourteen.match_steps.keys).each do |decision_class|
+      it "#{decision_class} notifies only DND staff" do
+        recipients = decision_class.constantize.new.notifications_for_this_step.flat_map { |klass| klass.notification_recipients_for(match) }
+
+        expect(recipients).to contain_exactly(contacts[:dnd_staff_contacts])
+      end
+    end
   end
 
   it 'every route-14 notification has a mailer method and a template' do
@@ -64,9 +75,7 @@ RSpec.describe 'Notifications::Fourteen', type: :model do
     before do
       # Only contacts with an active user are notification recipients.
       contacts.each_value { |contact| create(:user, contact: contact) }
-      match.shelter_agency_contacts << shelter
-      match.housing_subsidy_admin_contacts << hsa
-      match.ssp_contacts << ssp
+      contacts.each { |type, contact| match.send(type) << contact }
       route.update!(send_notifications: false)
     end
 

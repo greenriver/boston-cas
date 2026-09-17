@@ -10,6 +10,7 @@ require 'rails_helper'
 
 RSpec.describe 'Route Fourteen decision views', type: :request do
   let(:dnd_user) { create(:user) }
+  let(:user) { dnd_user }
   let(:route) { MatchRoutes::Fourteen.first }
   let(:program) { create(:program, match_route: route) }
   let(:sub_program) { create(:sub_program, program: program) }
@@ -21,12 +22,28 @@ RSpec.describe 'Route Fourteen decision views', type: :request do
   # variant submits "shelter_declined".
   let(:decline_submit_marker) { 'data-submit-param-value="declined"' }
 
+  let!(:non_hmis_data_source) { create(:data_source, :deidentified) }
+
   before do
     dnd_user.roles << create(:admin_role)
-    sign_in dnd_user
-    # Client#non_hmis? queries DataSource.non_hmis, which has no seed row in the test
-    # database, so it raises NoMethodError on nil.id unless stubbed.
-    allow_any_instance_of(Client).to receive(:non_hmis?).and_return(false)
+    sign_in user
+  end
+
+  describe 'as a contact of another actor type' do
+    let(:hsp) { create(:contact) }
+    let(:user) { create(:user, contact: hsp) }
+
+    before do
+      match.hsp_contacts << hsp
+      user.roles << create(:role, can_participate_in_matches: true)
+      match.fourteen_subsidy_admin_screening_decision.initialize_decision!(send_notifications: false)
+    end
+
+    it 'redirects away from the step with an alert' do
+      get match_decision_path(match, 'fourteen_subsidy_admin_screening')
+      expect(response).to redirect_to(match_path(match))
+      expect(flash[:alert]).to eq('Sorry, you are not authorized to access that.')
+    end
   end
 
   MatchRoutes::Fourteen.match_steps_for_reporting.each_key do |decision_class|

@@ -13,12 +13,16 @@ RSpec.describe NotificationsMailer, type: :mailer do
   let(:match) { create :client_opportunity_match, match_route: route }
   let(:contact) { create :contact }
 
-  it 'renders the Eligibility Screening HSP email' do
-    match.hsp_contacts << contact
-    match.fourteen_eligibility_screening_decision.initialize_decision!(send_notifications: false)
-    notification = Notifications::Fourteen::FourteenEligibilityScreeningHsp.create!(match: match, recipient: contact)
-    mail = described_class.fourteen_eligibility_screening_hsp(notification)
-    expect(mail.to).to eq([contact.email])
-    expect(mail.body.encoded).to include('Eligibility Screening')
+  Notifications::Fourteen.constants.sort.each do |const|
+    klass = Notifications::Fourteen.const_get(const)
+
+    it "renders #{klass} to its recipient" do
+      notification = klass.create!(match: match, recipient: contact)
+      notification.decision.initialize_decision!(send_notifications: false)
+      mail = described_class.public_send(notification.notification_type, notification)
+
+      expect(mail.to).to eq([contact.email])
+      expect(mail.body.encoded).to include("Hello #{contact.full_name}")
+    end
   end
 end

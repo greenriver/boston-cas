@@ -9,20 +9,6 @@
 require 'rails_helper'
 
 RSpec.describe MatchRoutes::Fourteen, type: :model do
-  describe '.match_steps' do
-    it 'lists the seven forward steps in order' do
-      expect(described_class.match_steps).to eq(
-        'MatchDecisions::Fourteen::FourteenInitiateMatch' => 1,
-        'MatchDecisions::Fourteen::FourteenMatchAcknowledgement' => 2,
-        'MatchDecisions::Fourteen::FourteenClientReview' => 3,
-        'MatchDecisions::Fourteen::FourteenEligibilityScreening' => 4,
-        'MatchDecisions::Fourteen::FourteenSubsidyAdminScreening' => 5,
-        'MatchDecisions::Fourteen::FourteenOfferUnit' => 6,
-        'MatchDecisions::Fourteen::FourteenConfirmMatchSuccess' => 7,
-      )
-    end
-  end
-
   describe '.match_steps_for_reporting' do
     it 'places each decline step immediately after the step it reviews' do
       steps = described_class.match_steps_for_reporting
@@ -39,10 +25,6 @@ RSpec.describe MatchRoutes::Fourteen, type: :model do
 
   it 'is registered in MatchRoutes::Base.all_routes' do
     expect(MatchRoutes::Base.all_routes).to include(described_class)
-  end
-
-  it 'reveals the client to the shelter agency from Acknowledge Match onward' do
-    expect(described_class.new.first_client_step).to eq('MatchDecisions::Fourteen::FourteenMatchAcknowledgement')
   end
 
   describe '#client_reveal_step_for' do

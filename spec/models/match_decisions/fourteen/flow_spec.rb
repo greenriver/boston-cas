@@ -12,6 +12,7 @@ RSpec.describe 'Match Route Fourteen decision flow', type: :model do
   let(:route) { MatchRoutes::Fourteen.first }
   let(:match) { create :client_opportunity_match, match_route: route }
   let(:reason) { create :match_decision_reason }
+  let!(:non_hmis_data_source) { create :data_source, :deidentified }
 
   # Each forward step validates a contact of its own actor type, and decline/cancel
   # statuses each require a reason.
@@ -27,7 +28,6 @@ RSpec.describe 'Match Route Fourteen decision flow', type: :model do
     match.shelter_agency_contacts << create(:contact)
     match.hsp_contacts << create(:contact)
     match.housing_subsidy_admin_contacts << create(:contact)
-    allow_any_instance_of(Client).to receive(:non_hmis?).and_return(false)
     match.fourteen_initiate_match_decision.initialize_decision!(send_notifications: false)
   end
 
@@ -48,33 +48,44 @@ RSpec.describe 'Match Route Fourteen decision flow', type: :model do
     expect(match.reload).to have_attributes(closed: true, closed_reason: 'success')
   end
 
-  describe 'declining Eligibility Screening' do
-    before do
-      match.fourteen_eligibility_screening_decision.initialize_decision!(send_notifications: false)
-      advance(match.fourteen_eligibility_screening_decision, 'declined')
-    end
+  {
+    fourteen_match_acknowledgement: :fourteen_client_review,
+    fourteen_client_review: :fourteen_eligibility_screening,
+    fourteen_eligibility_screening: :fourteen_subsidy_admin_screening,
+    fourteen_subsidy_admin_screening: :fourteen_offer_unit,
+    fourteen_offer_unit: :fourteen_confirm_match_success,
+  }.each do |step, next_step|
+    describe "declining #{step}" do
+      let(:decision) { match.send("#{step}_decision") }
+      let(:decline_decision) { match.send("#{step}_decline_decision") }
 
-    it 'hands the match to the DND review-decline step' do
-      expect(match.fourteen_eligibility_screening_decline_decision.reload.status).to eq('pending')
-      expect(route.status_declined?(match)).to be true
-    end
+      before do
+        decision.initialize_decision!(send_notifications: false)
+        advance(decision, 'declined')
+      end
 
-    it 'override skips the declined step and starts Subsidy Administrator Screening' do
-      advance(match.fourteen_eligibility_screening_decline_decision, 'decline_overridden')
-      expect(match.fourteen_eligibility_screening_decision.reload.status).to eq('skipped')
-      expect(match.fourteen_subsidy_admin_screening_decision.reload.status).to eq('pending')
-      expect(route.status_declined?(match)).to be false
-    end
+      it 'hands the match to the DND review-decline step' do
+        expect(decline_decision.reload.status).to eq('pending')
+        expect(route.status_declined?(match)).to be true
+      end
 
-    it 'override-and-return reopens Eligibility Screening' do
-      advance(match.fourteen_eligibility_screening_decline_decision, 'decline_overridden_returned')
-      expect(match.fourteen_eligibility_screening_decision.reload.status).to eq('pending')
-      expect(match.fourteen_eligibility_screening_decline_decision.reload.status).to be_nil
-    end
+      it "override skips the declined step and starts #{next_step}" do
+        advance(decline_decision, 'decline_overridden')
+        expect(decision.reload.status).to eq('skipped')
+        expect(match.send("#{next_step}_decision").reload.status).to eq('pending')
+        expect(route.status_declined?(match)).to be false
+      end
 
-    it 'confirming the decline rejects the match' do
-      advance(match.fourteen_eligibility_screening_decline_decision, 'decline_confirmed')
-      expect(match.reload).to have_attributes(closed: true, closed_reason: 'rejected')
+      it 'override-and-return reopens the declined step' do
+        advance(decline_decision, 'decline_overridden_returned')
+        expect(decision.reload.status).to eq('pending')
+        expect(decline_decision.reload.status).to be_nil
+      end
+
+      it 'confirming the decline rejects the match' do
+        advance(decline_decision, 'decline_confirmed')
+        expect(match.reload).to have_attributes(closed: true, closed_reason: 'rejected')
+      end
     end
   end
 
