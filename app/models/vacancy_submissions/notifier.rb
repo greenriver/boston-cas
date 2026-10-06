@@ -37,7 +37,9 @@ module VacancySubmissions
     private
 
     def reviewers
-      User.vacancy_reviewers
+      User.vacancy_reviewers.select do |reviewer|
+        VacancySubmission.visible_by(reviewer).exists?(@vacancy_submission.id)
+      end
     end
   end
 end

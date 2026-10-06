@@ -37,18 +37,19 @@ class VacancySubmissionsController < ApplicationController
   before_action :load_resubmittable_submission, only: [:edit, :update]
 
   def index
-    @vacancy_submissions = VacancySubmission
+    visible_submissions = VacancySubmission.visible_by(current_user)
+    @vacancy_submissions = visible_submissions
       .filtered(program_id: params[:program_id], status_filter: params[:status])
       .order(updated_at: :desc)
       .page(params[:page]).per(25)
 
     program_ids = @vacancy_submissions.map(&:program_id).uniq.compact
     @programs_by_id = Program.where(id: program_ids).index_by(&:id)
-    @programs = Program.where(id: VacancySubmission.program_ids_in_use).order(:name).pluck(:name, :id)
+    @programs = Program.where(id: visible_submissions.program_ids_in_use).order(:name).pluck(:name, :id)
   end
 
   def show
-    @submission = VacancySubmission.includes(user: [:contact, :agency]).find(params[:id])
+    @submission = VacancySubmission.visible_by(current_user).includes(user: [:contact, :agency]).find(params[:id])
     @notes = @submission.vacancy_submission_notes.includes(:user).order(created_at: :asc)
     @program = Program.find_by(id: @submission.program_id)
     @sub_program = @program.sub_programs.find_by(id: @submission.sub_program_id)
@@ -60,7 +61,7 @@ class VacancySubmissionsController < ApplicationController
   end
 
   def create
-    program = Program.find_by(id: submission_params[:program_id])
+    program = allowed_programs.find_by(id: submission_params[:program_id])
     sub_program = program&.sub_programs&.find_by(id: submission_params[:sub_program_id])
 
     unless program && sub_program
@@ -97,17 +98,17 @@ class VacancySubmissionsController < ApplicationController
   def edit
     @program = Program.find_by(id: @submission.program_id)
     @sub_program = @program.sub_programs.find_by(id: @submission.sub_program_id)
-    load_form_data
+    load_form_data(@submission)
   end
 
   def update
-    program = Program.find_by(id: submission_params[:program_id])
-    sub_program = program&.sub_programs&.find_by(id: submission_params[:sub_program_id])
+    program = allowed_programs(@submission).find_by(id: submission_params[:program_id])
+    sub_program = allowed_sub_programs(@submission).find_by(id: submission_params[:sub_program_id], program_id: program&.id)
 
     unless program && sub_program
       @program = Program.find_by(id: @submission.program_id)
       @sub_program = @program&.sub_programs&.find_by(id: @submission.sub_program_id)
-      load_form_data
+      load_form_data(@submission)
       @submission.errors.add(:program_id, :blank) unless program
       @submission.errors.add(:sub_program_id, :blank) unless sub_program
       return render :edit, status: :unprocessable_entity
@@ -129,7 +130,7 @@ class VacancySubmissionsController < ApplicationController
     else
       @program = program
       @sub_program = sub_program
-      load_form_data
+      load_form_data(@submission)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -138,12 +139,12 @@ class VacancySubmissionsController < ApplicationController
     config = SECTIONS[params[:section]]
     return head :not_found unless config
 
-    sub_program = SubProgram.find(params[:sub_program_id])
     vacancy_submission = if params[:vacancy_submission_id].present?
-      VacancySubmission.find(params[:vacancy_submission_id])
+      VacancySubmission.visible_by(current_user).find(params[:vacancy_submission_id])
     else
       VacancySubmission.new
     end
+    sub_program = allowed_sub_programs(vacancy_submission).find(params[:sub_program_id])
     vacancy_submission.required_document_names = Array(params[:required_document_names]) if params[:required_document_names].present?
     vacancy_submission.units = normalize_units(params[:units]) if params[:units].present?
 
@@ -189,11 +190,11 @@ class VacancySubmissionsController < ApplicationController
   private
 
   def load_submission
-    @submission = VacancySubmission.find(params[:id])
+    @submission = VacancySubmission.visible_by(current_user).find(params[:id])
   end
 
   def load_resubmittable_submission
-    @submission = VacancySubmission.find(params[:id])
+    @submission = VacancySubmission.visible_by(current_user).find(params[:id])
     redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be edited in its current state.' unless @submission.resubmittable?
   end
 
@@ -218,6 +219,22 @@ class VacancySubmissionsController < ApplicationController
     sections << 'Required Documents' if old_data['required_document_names'] != new_data['required_document_names']
     sections << 'Notes' if old_data['notes'] != new_data['notes']
     sections
+  end
+
+  # A saved submission keeps its program and sub-program selectable even when
+  # the user has no access to that program.
+  def allowed_programs(submission = nil)
+    programs = Program.visible_or_editable_by(current_user)
+    return programs unless submission&.persisted?
+
+    programs.or(Program.where(id: submission.program_id))
+  end
+
+  def allowed_sub_programs(submission = nil)
+    sub_programs = SubProgram.where(program_id: Program.visible_or_editable_by(current_user).select(:id))
+    return sub_programs unless submission&.persisted?
+
+    sub_programs.or(SubProgram.where(id: submission.sub_program_id))
   end
 
   def require_can_submit_or_review_vacancies!
@@ -268,14 +285,17 @@ class VacancySubmissionsController < ApplicationController
     end
   end
 
-  def load_form_data
-    @programs = Program.order(:name).includes(:sub_programs, :match_route)
+  def load_form_data(submission = nil)
+    @programs = allowed_programs(submission).order(:name).includes(:match_route)
+    sub_programs = allowed_sub_programs(submission).open
+    sub_programs = sub_programs.or(SubProgram.where(id: submission.sub_program_id)) if submission&.persisted?
+    sub_programs_by_program = sub_programs.order(:name).group_by(&:program_id)
     @programs_data = @programs.map do |p|
       {
         id: p.id,
         name: p.name,
         resource_type: nil,
-        sub_programs: p.sub_programs.open.order(:name).map do |sp|
+        sub_programs: sub_programs_by_program.fetch(p.id, []).map do |sp|
           {
             id: sp.id,
             name: sp.name.presence || '(unnamed)',

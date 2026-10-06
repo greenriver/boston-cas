@@ -48,6 +48,12 @@ class Program < ApplicationRecord
     user.can_edit_programs || (user.can_edit_assigned_programs && super )
   end
 
+  def self.visible_or_editable_by(user)
+    return all if user.can_view_programs? || user.can_edit_programs?
+
+    where(id: visible_by(user).select(:id)).or(where(id: editable_by(user).select(:id)))
+  end
+
   def sites
     s = []
     sub_programs.each do |sp|
