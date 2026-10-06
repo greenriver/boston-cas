@@ -37,7 +37,6 @@ class VacancySubmissionsController < ApplicationController
   before_action :load_resubmittable_submission, only: [:edit, :update]
 
   def index
-    visible_submissions = VacancySubmission.visible_by(current_user)
     @vacancy_submissions = visible_submissions
       .filtered(program_id: params[:program_id], status_filter: params[:status])
       .order(updated_at: :desc)
@@ -49,7 +48,7 @@ class VacancySubmissionsController < ApplicationController
   end
 
   def show
-    @submission = VacancySubmission.visible_by(current_user).includes(user: [:contact, :agency]).find(params[:id])
+    @submission = visible_submissions.includes(user: [:contact, :agency]).find(params[:id])
     @notes = @submission.vacancy_submission_notes.includes(:user).order(created_at: :asc)
     @program = Program.find_by(id: @submission.program_id)
     @sub_program = @program.sub_programs.find_by(id: @submission.sub_program_id)
@@ -140,7 +139,7 @@ class VacancySubmissionsController < ApplicationController
     return head :not_found unless config
 
     vacancy_submission = if params[:vacancy_submission_id].present?
-      VacancySubmission.visible_by(current_user).find(params[:vacancy_submission_id])
+      visible_submissions.find(params[:vacancy_submission_id])
     else
       VacancySubmission.new
     end
@@ -190,11 +189,11 @@ class VacancySubmissionsController < ApplicationController
   private
 
   def load_submission
-    @submission = VacancySubmission.visible_by(current_user).find(params[:id])
+    @submission = visible_submissions.find(params[:id])
   end
 
   def load_resubmittable_submission
-    @submission = VacancySubmission.visible_by(current_user).find(params[:id])
+    @submission = visible_submissions.find(params[:id])
     redirect_to vacancy_submission_path(@submission), alert: 'This submission cannot be edited in its current state.' unless @submission.resubmittable?
   end
 
@@ -219,6 +218,10 @@ class VacancySubmissionsController < ApplicationController
     sections << 'Required Documents' if old_data['required_document_names'] != new_data['required_document_names']
     sections << 'Notes' if old_data['notes'] != new_data['notes']
     sections
+  end
+
+  def visible_submissions
+    VacancySubmission.visible_by(current_user)
   end
 
   # A saved submission keeps its program and sub-program selectable even when
