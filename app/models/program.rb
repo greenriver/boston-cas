@@ -4,8 +4,9 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-class Program < ApplicationRecord
+# frozen_string_literal: true
 
+class Program < ApplicationRecord
   include Matching::HasOrInheritsRequirements
   include HasOrInheritsServices
   include HasRequirements
@@ -30,7 +31,7 @@ class Program < ApplicationRecord
   has_many :programs_to_projects, class_name: 'Warehouse::ProgramsToProjects'
   has_many :warehouse_projects, class_name: 'Warehouse::Project', through: :programs_to_projects, source: :project
 
-  scope :on_route, -> (route) do
+  scope :on_route, ->(route) do
     joins(:match_route).merge(MatchRoutes::Base.where(type: route.class.name))
   end
 
@@ -41,11 +42,11 @@ class Program < ApplicationRecord
   has_paper_trail
 
   def visible_by? user
-    user.can_view_programs || (user.can_view_assigned_programs && super )
+    user.can_view_programs || (user.can_view_assigned_programs && super)
   end
 
   def editable_by? user
-    user.can_edit_programs || (user.can_edit_assigned_programs && super )
+    user.can_edit_programs || (user.can_edit_assigned_programs && super)
   end
 
   def self.visible_or_editable_by(user)
@@ -57,7 +58,7 @@ class Program < ApplicationRecord
   def sites
     s = []
     sub_programs.each do |sp|
-      if sp.building == nil
+      if sp.building.nil?
         s << 'Scattered Sites'
       else
         s << sp.building.name
@@ -65,6 +66,7 @@ class Program < ApplicationRecord
     end
     s
   end
+
   def organizations
     s = []
     sub_programs.each do |sp|
@@ -82,14 +84,13 @@ class Program < ApplicationRecord
   def self.text_search(text)
     return none unless text.present?
 
-    funding_source_matches = FundingSource.where(
-      FundingSource.arel_table[:id].eq arel_table[:funding_source_id]
-    ).text_search(text).arel.exists
+    funding_source_matches = FundingSource.where(FundingSource.arel_table[:id].eq arel_table[:funding_source_id]).
+      text_search(text).arel.exists
 
     query = "%#{text}%"
     where(
       arel_table[:name].matches(query)
-      .or(funding_source_matches)
+      .or(funding_source_matches),
     )
   end
 
@@ -100,10 +101,10 @@ class Program < ApplicationRecord
 
   def self.preload_inherited_requirements
     preload(
-        services: {requirements: :rule},
-        funding_source: { requirements: :rule, services: {requirements: :rule} },
-        subgrantee: { requirements: :rule, services: {requirements: :rule} }
-      )
+      services: { requirements: :rule },
+      funding_source: { requirements: :rule, services: { requirements: :rule } },
+      subgrantee: { requirements: :rule, services: { requirements: :rule } },
+    )
   end
 
   def self.associations_adding_requirements
@@ -116,26 +117,26 @@ class Program < ApplicationRecord
 
   def self.sort_options
     [
-      {title: 'Program A-Z', column: 'program_id', direction: 'asc', order: 'LOWER(programs.name) ASC', visible: true},
-      {title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true},
-      {title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true},
-      {title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true},
-      {title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true},
-      {title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true},
+      { title: 'Program A-Z', column: 'program_id', direction: 'asc', order: 'LOWER(programs.name) ASC', visible: true },
+      { title: 'Program Z-A', column: 'program_id', direction: 'desc', order: 'LOWER(programs.name) DESC', visible: true },
+      { title: 'Sub-Program A-Z', column: 'sub_program_id', direction: 'asc', order: 'LOWER(sub_programs.name) ASC', visible: true },
+      { title: 'Sub-Program Z-A', column: 'sub_program_id', direction: 'desc', order: 'LOWER(sub_programs.name) DESC', visible: true },
+      { title: 'Building A-Z', column: 'building_id', direction: 'asc', order: 'LOWER(buildings.name) ASC', visible: true },
+      { title: 'Building Z-A', column: 'building_id', direction: 'desc', order: 'LOWER(buildings.name) DESC', visible: true },
     ]
   end
 
   private
-    def inherited_funding_source_requirements_by_source
-      {}.tap do |result|
-        if funding_source.present?
-          result.merge! funding_source.inherited_requirements_by_source
-          result[funding_source] = []
-          funding_source.requirements.each do |requirement|
-            result[funding_source] << requirement
-          end
+
+  def inherited_funding_source_requirements_by_source
+    {}.tap do |result|
+      if funding_source.present?
+        result.merge! funding_source.inherited_requirements_by_source
+        result[funding_source] = []
+        funding_source.requirements.each do |requirement|
+          result[funding_source] << requirement
         end
       end
     end
-
+  end
 end
