@@ -1,3 +1,4 @@
+- required = local_assigns.fetch(:required, false)
 - if defined?(match_route)
   - label = "#{match_route&.contact_label_for(contact_type)} Contacts"
 - else
@@ -11,7 +12,7 @@
 
 - editable = current_user&.can_edit_match_contacts? || current_contact&.user_can_edit_match_contacts? || (hsa_can_edit_contacts? && contacts_type == 'housing_subsidy_admin')
 - if editable
-  = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, include_blank: true, input_html: {id: "#{contact_type}_#{SecureRandom.hex(5)}", class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name }}
+  = form.input contact_type, collection: object.public_send(available_contacts_method), label: label, required: required, include_blank: true, input_html: {id: "#{contact_type}_#{SecureRandom.hex(5)}", class: [:select2, :jContactField], data: {contact_type: contact_type, input_name: input_name }}
   %div{ data: {selected_contacts: true} }
     - selected_contacts = object.send(selected_contacts_method)
     - selected_contacts&.each do |contact|
@@ -39,7 +40,10 @@
               %i.icon-cross
 - else
   .form-group
-    %label.mb-4= label
+    %label.mb-4
+      = label
+      - if required
+        %abbr{title: 'required'} *
     %div{ data: {selected_contacts: true} }
       - contacts = @match_contacts || object
       - contacts.send(selected_contacts_method)&.each do |contact|
