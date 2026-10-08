@@ -31,7 +31,8 @@
               %tr
                 %td= opportunity.sub_program.program.name
                 %td= opportunity.sub_program.name
-                %td= opportunity.match_route&.title
+                - if MatchRoutes::Base.more_than_one?
+                  %td= opportunity.match_route&.title
                 %td
                   - opportunity.requirements_with_inherited.each do |r|
                     = r.name
