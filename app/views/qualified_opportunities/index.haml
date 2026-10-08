@@ -13,6 +13,7 @@
   %p #{@client.full_name} meets all requirements for the following vacancies.  These vacancies are either not yet involved in an active match, or the match has not progressed to a stage that would be disruptive if it were canceled, such as #{Translation.translate("#{Translation.translate('DND')} Initial Review")}.  Activating a match on a vacancy below will cancel any match involving the vacancy returning the matched client into the pool of available clients. It will not cancel other matches involving #{@client.full_name}.
 
   - can_activate_match = @client.editable_by?(current_user)
+  - show_match_route = MatchRoutes::Base.more_than_one?
   .table-responsive
     .c-card.c.card__flush.mb-4
       .c-card__content.p-0
@@ -21,7 +22,7 @@
             %tr
               %th Program
               %th Sub Program
-              - if MatchRoutes::Base.more_than_one?
+              - if show_match_route
                 %th Match Route
               %th Requirements
               %th Vacancy
@@ -31,7 +32,8 @@
               %tr
                 %td= opportunity.sub_program.program.name
                 %td= opportunity.sub_program.name
-                %td= opportunity.match_route&.title
+                - if show_match_route
+                  %td= opportunity.match_route&.title
                 %td
                   - opportunity.requirements_with_inherited.each do |r|
                     = r.name
