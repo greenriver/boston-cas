@@ -9,7 +9,7 @@
 module Notifications::Fourteen
   class FourteenOfferUnitFyi < ::Notifications::Base
     def self.contact_types_for_notification
-      [:shelter_agency_contacts, :housing_subsidy_admin_contacts, :ssp_contacts, :dnd_staff_contacts]
+      [:housing_subsidy_admin_contacts, :hsp_contacts, :ssp_contacts, :dnd_staff_contacts]
     end
 
     def decision

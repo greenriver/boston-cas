@@ -17,7 +17,7 @@ module Notifications::Fourteen
     end
 
     def event_label
-      "#{Translation.translate('HSA Fourteen')} notified to complete subsidy administrator screening."
+      "#{Translation.translate('HSA Fourteen')} notified to complete voucher administrator review."
     end
   end
 end

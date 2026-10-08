@@ -17,7 +17,7 @@ module Notifications::Fourteen
     end
 
     def event_label
-      "#{Translation.translate('CoC Fourteen')} notified of #{Translation.translate('Housing Search Provider Fourteen')} decline."
+      "#{Translation.translate('CoC Fourteen')} notified of #{Translation.translate('Shelter Agency Fourteen')} decline."
     end
   end
 end

@@ -63,7 +63,7 @@ Decline review steps copy `fourteen_eligibility_screening_decline.rb`: statuses 
 `ClientOpportunityMatch#show_client_info_to?(contact)` decides per contact type:
 
 - Shelter agency sees the client from `route.first_client_step` onward (a `match_steps_for_reporting` key).
-- Any other contact type can be given its own reveal step by overriding `client_reveal_step_for(contact_type)` on the route (route 14: HSP from Eligibility Screening, HSA from Subsidy Administrator Screening). Return `nil` to fall back to the default rules (`contacts_editable_by_hsa`, `client_info_approved_for_release?`, the release-of-information gate used by routes Default and Thirteen).
+- Any other contact type can be given its own reveal step by overriding `client_reveal_step_for(contact_type)` on the route (route 14: HSP from Eligibility Screening, HSA from Voucher Administrator Review). Return `nil` to fall back to the default rules (`contacts_editable_by_hsa`, `client_info_approved_for_release?`, the release-of-information gate used by routes Default and Thirteen).
 
 ## Notifications and mail
 
@@ -82,7 +82,7 @@ One partial per decision under `app/views/match_decisions/<name>/`. Shared parti
 - `match_decisions/cancel_actions` — cancel/park/backup tabs for a DND-only step (Initiate Match).
 - `match_decisions/decline_and_cancel_backup_actions` — decline + cancel + park + backup tabs; the cancel tab hides itself unless `can_reject_matches?`.
 - `match_decisions/decline_overrides` — the DND review-decline form.
-- `match_decisions/reject_actions` — Confirm Match Success's reject tab.
+- `match_decisions/reject_actions` — the Confirm Client Moves In / Success reject tab.
 - `match_decisions/shelter_agency_expiration`, `match_decisions/shelter_agency_agreement`, `match_decisions/continue_button`.
 
 Shelter-agency "indicate interest" steps must keep the standard acceptance flow: the `jNeedsToAgree` button opens `#shelter-agency-modal` and the modal's Accept button submits. Strip route-specific inputs, not the modal.
@@ -116,8 +116,8 @@ Specs use `MatchRoutes::<Name>.first` (seeded by `spec_helper`), not a factory. 
 | 2 | Acknowledge Match | Shelter Agency | yes | no | + shelter agency |
 | 3 | Client Review | Shelter Agency | yes | no | |
 | 4 | Eligibility Screening | Housing Search Provider | yes | yes | + HSP |
-| 5 | Subsidy Administrator Screening | HSA | yes | yes | + HSA |
-| 6 | Offer Unit or Client Approved for Unit | Housing Search Provider | yes | yes | |
-| 7 | Confirm Match Success | CoC (DND staff) | no | yes | |
+| 5 | Voucher Administrator Review | HSA | yes | yes | + HSA |
+| 6 | Unit Offered to Client | Shelter Agency | yes | yes | |
+| 7 | Confirm Client Moves In / Success | CoC (DND staff) | no | yes | |
 
 Initiate Match embeds the contact picker and cannot be accepted without a shelter agency, HSA, and HSP contact. Cancel is available on every step for users with `can_reject_matches?`. Translation keys: `CoC Fourteen`, `Shelter Agency Fourteen`, `HSA Fourteen`, `Housing Search Provider Fourteen`, `Stabilization Service Providers Fourteen`, `Match Route Fourteen`. Decline and cancel reasons are seeded as a single `Other` placeholder per step pending curation. Route 14 has no release-of-information gate on the client reveal.

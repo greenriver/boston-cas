@@ -17,21 +17,21 @@ module MatchDecisions::Fourteen
     end
 
     def step_name
-      'Offer Unit or Client Approved for Unit'
+      'Unit Offered to Client'
     end
 
     def actor_type
-      Translation.translate('Housing Search Provider Fourteen')
+      Translation.translate('Shelter Agency Fourteen')
     end
 
     def contact_actor_type
-      :hsp_contacts
+      :shelter_agency_contacts
     end
 
     # Notifications to send when this step is initiated
     def notifications_for_this_step
       @notifications_for_this_step ||= [].tap do |m|
-        m << Notifications::Fourteen::FourteenOfferUnitHsp
+        m << Notifications::Fourteen::FourteenOfferUnitShelterAgency
         m << Notifications::Fourteen::FourteenOfferUnitFyi
       end
     end
@@ -49,8 +49,8 @@ module MatchDecisions::Fourteen
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('Housing Search Provider Fourteen')} assigned match"
-      when :accepted then "Match Reviewed by #{Translation.translate('Housing Search Provider Fourteen')}."
+      when :pending then "#{Translation.translate('Shelter Agency Fourteen')} assigned match"
+      when :accepted then "Match Reviewed by #{Translation.translate('Shelter Agency Fourteen')}."
       when :canceled then canceled_status_label
       when :declined then "Match Declined.  Reason: #{decline_reason_name}"
       when :skipped then 'Skipped'
@@ -74,7 +74,7 @@ module MatchDecisions::Fourteen
 
     private def ensure_required_contacts_present_on_accept
       missing_contacts = []
-      missing_contacts << "a #{Translation.translate('Housing Search Provider Fourteen')} Contact" if save_will_accept? && match.send(contact_actor_type).none?
+      missing_contacts << "a #{Translation.translate('Shelter Agency Fourteen')} Contact" if save_will_accept? && match.send(contact_actor_type).none?
 
       errors.add :match_contacts, "needs #{missing_contacts.to_sentence}" if missing_contacts.any?
     end

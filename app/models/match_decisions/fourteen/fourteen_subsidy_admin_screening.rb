@@ -17,7 +17,7 @@ module MatchDecisions::Fourteen
     end
 
     def step_name
-      'Subsidy Administrator Screening'
+      'Voucher Administrator Review'
     end
 
     def actor_type

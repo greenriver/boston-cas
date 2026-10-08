@@ -15,7 +15,7 @@ module MatchDecisions::Fourteen
     end
 
     def step_name
-      "#{Translation.translate('CoC Fourteen')} Subsidy Administrator Screening Decline"
+      "#{Translation.translate('CoC Fourteen')} Voucher Administrator Review Decline"
     end
 
     def actor_type

@@ -26,7 +26,7 @@ module MatchDecisions::Fourteen
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('CoC Fourteen')} to confirm match success"
+      when :pending then "#{Translation.translate('CoC Fourteen')} to confirm client moves in / success"
       when :confirmed then "#{Translation.translate('CoC Fourteen')} confirms match success#{move_in_date_label_suffix}"
       when :rejected then "Match rejected by #{Translation.translate('CoC Fourteen')}"
       when :canceled then canceled_status_label
@@ -35,7 +35,7 @@ module MatchDecisions::Fourteen
     end
 
     def step_name
-      Translation.translate('Confirm Match Success')
+      Translation.translate('Confirm Client Moves In / Success')
     end
 
     def actor_type

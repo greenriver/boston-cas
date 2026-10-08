@@ -113,7 +113,7 @@ RSpec.describe 'Match Route Fourteen decision flow', type: :model do
     end
   end
 
-  describe 'Confirm Match Success move-in date' do
+  describe 'Confirm Client Moves In / Success move-in date' do
     let(:decision) { match.fourteen_confirm_match_success_decision }
 
     before { decision.initialize_decision!(send_notifications: false) }

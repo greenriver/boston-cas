@@ -28,7 +28,7 @@ RSpec.describe MatchRoutes::Fourteen, type: :model do
   end
 
   describe '#client_reveal_step_for' do
-    it 'reveals the client to HSP at Eligibility Screening and to HSA at Subsidy Administrator Screening' do
+    it 'reveals the client to HSP at Eligibility Screening and to HSA at Voucher Administrator Review' do
       route = described_class.new
       expect(route.client_reveal_step_for(:hsp_contacts)).to eq('MatchDecisions::Fourteen::FourteenEligibilityScreening')
       expect(route.client_reveal_step_for(:housing_subsidy_admin_contacts)).to eq('MatchDecisions::Fourteen::FourteenSubsidyAdminScreening')

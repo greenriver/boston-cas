@@ -17,7 +17,7 @@ module Notifications::Fourteen
     end
 
     def event_label
-      'Match contacts notified that subsidy administrator screening is underway.'
+      'Match contacts notified that voucher administrator review is underway.'
     end
   end
 end

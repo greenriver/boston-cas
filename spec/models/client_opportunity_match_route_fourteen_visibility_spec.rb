@@ -69,12 +69,12 @@ RSpec.describe ClientOpportunityMatch, 'route fourteen client visibility', type:
     expect(match.show_client_info_to?(hsa)).to be false
   end
 
-  it 'reveals the client to HSA at Subsidy Administrator Screening' do
+  it 'reveals the client to HSA at Voucher Administrator Review' do
     current_step!('fourteen_subsidy_admin_screening')
     expect(match.show_client_info_to?(hsa)).to be true
   end
 
-  it 'keeps the client visible to shelter, HSP, and HSA at Offer Unit' do
+  it 'keeps the client visible to shelter, HSP, and HSA at Unit Offered to Client' do
     current_step!('fourteen_offer_unit')
     expect([shelter, hsp, hsa].map { |c| match.show_client_info_to?(c) }).to all(be true)
   end

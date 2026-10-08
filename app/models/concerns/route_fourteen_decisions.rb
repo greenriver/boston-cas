@@ -19,7 +19,7 @@ module RouteFourteenDecisions
     has_decision :fourteen_eligibility_screening_decline, decision_class_name: 'MatchDecisions::Fourteen::FourteenEligibilityScreeningDecline', notification_class_name: 'Notifications::Fourteen::FourteenEligibilityScreeningDecline'
     has_decision :fourteen_subsidy_admin_screening, decision_class_name: 'MatchDecisions::Fourteen::FourteenSubsidyAdminScreening', notification_class_name: 'Notifications::Fourteen::FourteenSubsidyAdminScreeningHsa'
     has_decision :fourteen_subsidy_admin_screening_decline, decision_class_name: 'MatchDecisions::Fourteen::FourteenSubsidyAdminScreeningDecline', notification_class_name: 'Notifications::Fourteen::FourteenSubsidyAdminScreeningDecline'
-    has_decision :fourteen_offer_unit, decision_class_name: 'MatchDecisions::Fourteen::FourteenOfferUnit', notification_class_name: 'Notifications::Fourteen::FourteenOfferUnitHsp'
+    has_decision :fourteen_offer_unit, decision_class_name: 'MatchDecisions::Fourteen::FourteenOfferUnit', notification_class_name: 'Notifications::Fourteen::FourteenOfferUnitShelterAgency'
     has_decision :fourteen_offer_unit_decline, decision_class_name: 'MatchDecisions::Fourteen::FourteenOfferUnitDecline', notification_class_name: 'Notifications::Fourteen::FourteenOfferUnitDecline'
     has_decision :fourteen_confirm_match_success, decision_class_name: 'MatchDecisions::Fourteen::FourteenConfirmMatchSuccess', notification_class_name: 'Notifications::Fourteen::FourteenConfirmMatchSuccessDndStaff'
   end

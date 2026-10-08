@@ -74,7 +74,7 @@ module RouteFourteenMailerMethods
       mail(to: @contact.email, subject: 'Match Declined - Requires Your Review')
     end
 
-    def fourteen_offer_unit_hsp(notification = nil)
+    def fourteen_offer_unit_shelter_agency(notification = nil)
       setup_instance_variables(notification)
       mail(to: @contact.email, subject: 'New Housing Recommendation - Requires Your Action')
     end

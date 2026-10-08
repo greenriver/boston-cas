@@ -15,7 +15,7 @@ module MatchDecisions::Fourteen
     end
 
     def step_name
-      "#{Translation.translate('CoC Fourteen')} Offer Unit or Client Approved for Unit Decline"
+      "#{Translation.translate('CoC Fourteen')} Unit Offered to Client Decline"
     end
 
     def actor_type
@@ -45,9 +45,9 @@ module MatchDecisions::Fourteen
 
     def label_for_status status
       case status.to_sym
-      when :pending then "#{Translation.translate('CoC Fourteen')} to confirm #{Translation.translate('Housing Search Provider Fourteen')} decline"
-      when :decline_overridden then "#{Translation.translate('Housing Search Provider Fourteen')} Decline overridden by #{Translation.translate('CoC Fourteen')}.  Match proceeding to #{Translation.translate('CoC Fourteen')}"
-      when :decline_overridden_returned then "#{Translation.translate('Housing Search Provider Fourteen')} overridden by #{Translation.translate('CoC Fourteen')}.  Match returned to the #{Translation.translate('Housing Search Provider Fourteen')}"
+      when :pending then "#{Translation.translate('CoC Fourteen')} to confirm #{Translation.translate('Shelter Agency Fourteen')} decline"
+      when :decline_overridden then "#{Translation.translate('Shelter Agency Fourteen')} Decline overridden by #{Translation.translate('CoC Fourteen')}.  Match proceeding to #{Translation.translate('CoC Fourteen')}"
+      when :decline_overridden_returned then "#{Translation.translate('Shelter Agency Fourteen')} overridden by #{Translation.translate('CoC Fourteen')}.  Match returned to the #{Translation.translate('Shelter Agency Fourteen')}"
       when :decline_confirmed then "Match rejected by #{Translation.translate('CoC Fourteen')}"
       when :canceled then canceled_status_label
       when :back then backup_status_label

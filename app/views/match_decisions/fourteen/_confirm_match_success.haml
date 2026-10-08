@@ -20,5 +20,5 @@
                   = form.input :client_move_in_date, label: Translation.translate('Lease start date'), as: :date_picker, disabled: !@decision.editable?, required: true
             %p Confirming match success will complete the match and remove the client and voucher/unit from future matching.
             -# = form.submit 'Confirm Match Success', class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?)
-            = render 'match_decisions/continue_button', text: 'Confirm Match Success', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?) }
+            = render 'match_decisions/continue_button', text: 'Confirm Client Moves In / Success', icon: 'checkmark', button_attributes: { class: 'btn btn-success', data: {submit_param_name: 'decision[status]', submit_param_value: 'confirmed'}, disabled: !(@decision.editable?) }
         = render 'match_decisions/reject_actions', form: form

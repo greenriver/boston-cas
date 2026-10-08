@@ -17,7 +17,7 @@ module Notifications::Fourteen
     end
 
     def event_label
-      "#{Translation.translate('CoC Fourteen')} notified to confirm match success."
+      "#{Translation.translate('CoC Fourteen')} notified to confirm client moves in / success."
     end
   end
 end

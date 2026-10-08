@@ -75,7 +75,7 @@ RSpec.describe 'Route Fourteen decision views', type: :request do
     expect(response.body).to include('shelter-agency-modal')
   end
 
-  describe 'Confirm Match Success move-in date field' do
+  describe 'Confirm Client Moves In / Success move-in date field' do
     before { match.fourteen_confirm_match_success_decision.initialize_decision!(send_notifications: false) }
 
     it 'is shown when the route records move-in dates' do

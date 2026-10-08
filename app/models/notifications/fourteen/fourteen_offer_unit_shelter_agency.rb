@@ -7,9 +7,9 @@
 # frozen_string_literal: true
 
 module Notifications::Fourteen
-  class FourteenOfferUnitHsp < ::Notifications::Base
+  class FourteenOfferUnitShelterAgency < ::Notifications::Base
     def self.contact_types_for_notification
-      [:hsp_contacts]
+      [:shelter_agency_contacts]
     end
 
     def decision
@@ -17,7 +17,7 @@ module Notifications::Fourteen
     end
 
     def event_label
-      "#{Translation.translate('Housing Search Provider Fourteen')} notified to offer a unit or confirm the client is approved for a unit."
+      "#{Translation.translate('Shelter Agency Fourteen')} notified to confirm the unit was offered to the client."
     end
   end
 end
