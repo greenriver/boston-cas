@@ -9,7 +9,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Qualified opportunities', type: :request do
-  let!(:active_route) { MatchRoutes::Default.first.tap { |r| r.update!(active: true) } }
+  let!(:active_route) do
+    MatchRoutes::Default.first.tap do |r|
+      r.update!(active: true)
+      MatchRoutes::Base.where.not(id: r.id).update_all(active: false)
+    end
+  end
   let!(:inactive_route) { MatchRoutes::Four.first.tap { |r| r.update!(active: false) } }
   let!(:client) { create :client }
   let!(:active_route_opportunity) do
