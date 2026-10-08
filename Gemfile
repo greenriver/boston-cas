@@ -14,6 +14,8 @@ gem 'rexml', '>= 3.4.2' # CVE-2025-58767, note this is bundled with ruby, and mu
 gem 'json', '>= 2.19.2' # CVE-2026-33210, note this is bundled with ruby, and must be explicitly pinned
 gem 'openssl', '>=3.3.1' # override the default ruby version of openssl https://github.com/ruby/openssl/issues/949#issuecomment-3370358680
 
+gem 'resolv', '>= 0.7.2' # CVE-2026-80212 and CVE-2026-80213
+
 # No longer default gems
 gem 'irb'
 gem 'reline'

@@ -566,6 +566,7 @@ GEM
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
+    resolv (0.7.2)
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
@@ -843,6 +844,7 @@ DEPENDENCIES
   redcarpet
   redis
   reline
+  resolv (>= 0.7.2)
   responders
   rexml (>= 3.4.2)
   roda
@@ -1092,6 +1094,7 @@ CHECKSUMS
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
   reline (0.7.0) sha256=5b012d8e55dbf9d450f12bde2cf7d15ff546ae80b3f8f3b30e570d431815583d
   request_store (1.7.0) sha256=e1b75d5346a315f452242a68c937ef8e48b215b9453a77a6c0acdca2934c88cb
+  resolv (0.7.2) sha256=626d044d975ab2daac759bf898416f1b51e2cb8dcd6727c2b5b5b28b97ead2e1
   responders (3.2.0) sha256=89c2d6ac0ae16f6458a11524cae4a8efdceba1a3baea164d28ee9046bd3df55a
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   roda (3.102.0) sha256=b2156fff6d2b1b52bfac39e4ccde0d820a26594f069c3d9e99cc0853f7ee7dcc
