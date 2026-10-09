@@ -30,6 +30,7 @@
 //////////////////////////
 //= require namespace
 //= require ./select_two
+//= require contact_fields
 //= require_tree ./templates
 //= require ajax_modal_rails
 //= require acknowledge_notification
