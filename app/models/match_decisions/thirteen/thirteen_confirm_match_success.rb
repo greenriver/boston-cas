@@ -8,8 +8,6 @@
 
 module MatchDecisions::Thirteen
   class ThirteenConfirmMatchSuccess < Base
-    include MatchDecisions::RouteEightCancelReasons
-
     def statuses
       {
         pending: 'Pending',

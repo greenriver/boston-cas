@@ -262,7 +262,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       render_views
 
       let(:unit) { create(:unit, building: create(:building)) }
-      let(:active_submission) { create(:vacancy_submission, :active) }
+      let(:active_submission) { create(:vacancy_submission, :active, user: create(:user, agency: user.agency)) }
 
       before do
         active_submission.units = [{ 'building_id' => unit.building_id, 'unit_number' => '1A', 'unit_id' => unit.id, 'voucher_id' => 999 }]
@@ -431,7 +431,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         # an arbitrary non-domain error (e.g. an infrastructure fault) can only be
         # produced with a stub. This is the one branch that needs a seam; the deeper
         # fix would be making #approve! injectable so we needn't stub the class.
-        allow(VacancySubmission).to receive(:find).and_return(submission)
+        allow(VacancySubmission).to receive(:visible_by).and_return(instance_double(ActiveRecord::Relation, find: submission))
         allow(submission).to receive(:approve!).and_raise(StandardError.new('boom'))
 
         expect { post :approve, params: { id: submission.id } }.not_to raise_error
@@ -541,6 +541,203 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       it 'redirects with not authorized' do
         post :resubmit, params: { id: submission.id }
         expect(response).to redirect_to(root_path)
+      end
+    end
+  end
+
+  describe 'agency scoping' do
+    let(:assigned_role) do
+      create(
+        :role,
+        name: 'assigned vacancy staff',
+        can_view_opportunities: true,
+        can_add_vacancies: true,
+        can_review_vacancies: true,
+        can_view_assigned_programs: true,
+      )
+    end
+    let(:own_program) { create(:program, name: 'Own Agency Program') }
+    let(:other_program) { create(:program, name: 'Other Agency Program') }
+    let(:other_sub_program) { create(:sub_program, program: other_program, program_type: 'Project-Based', building: create(:building)) }
+    let!(:own_submission) { create(:vacancy_submission, :changes_requested, the_program: own_program) }
+    let!(:other_submission) { create(:vacancy_submission, :changes_requested, the_program: other_program, the_sub_program: other_sub_program) }
+
+    before do
+      user.roles = [assigned_role]
+      EntityViewPermission.create!(entity: own_program, agency: user.agency)
+      EntityViewPermission.create!(entity: other_program, agency: create(:agency))
+    end
+
+    it 'lists only submissions for programs assigned to the user agency' do
+      get :index, params: { status: 'all' }
+      expect(assigns(:vacancy_submissions)).to contain_exactly(own_submission)
+    end
+
+    it 'lists every submission for a can_view_programs user' do
+      user.roles = [admin_role]
+      get :index, params: { status: 'all' }
+      expect(assigns(:vacancy_submissions)).to contain_exactly(own_submission, other_submission)
+    end
+
+    context 'as a reviewer without program permissions' do
+      let(:reviewer_role) { create(:role, name: 'agency reviewer', can_view_opportunities: true, can_review_vacancies: true) }
+      let!(:agency_mate_submission) do
+        create(:vacancy_submission, :changes_requested, the_program: other_program, the_sub_program: other_sub_program, user: create(:user, agency: user.agency))
+      end
+
+      before { user.roles = [reviewer_role] }
+
+      it 'lists only submissions made by users at the reviewer agency' do
+        get :index, params: { status: 'all' }
+        expect(assigns(:vacancy_submissions)).to contain_exactly(agency_mate_submission)
+      end
+
+      it 'shows a submission made by a user at the reviewer agency' do
+        get :show, params: { id: agency_mate_submission.id }
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'does not show another agency submission to the reviewer' do
+        expect { get :show, params: { id: other_submission.id } }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context 'with rendered views' do
+      render_views
+
+      it 'offers only the user agency programs in the index program filter' do
+        get :index
+        expect(response.body).to include('Own Agency Program')
+        expect(response.body).not_to include('Other Agency Program')
+      end
+
+      it 'offers only the user agency programs on the new submission form' do
+        get :new
+        expect(response.body).to include('Own Agency Program')
+        expect(response.body).not_to include('Other Agency Program')
+      end
+    end
+
+    it 'shows a submission for an assigned program' do
+      get :show, params: { id: own_submission.id }
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'does not show a submission for another agency program' do
+      expect { get :show, params: { id: other_submission.id } }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'does not open another agency submission for editing' do
+      expect { get :edit, params: { id: other_submission.id } }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'does not approve another agency submission' do
+      expect { post :approve, params: { id: other_submission.id } }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(other_submission.reload.status).to eq('return_changes_requested')
+    end
+
+    it 'rejects creating a submission for another agency program' do
+      params = {
+        vacancy_submission: {
+          program_id: other_program.id,
+          sub_program_id: other_sub_program.id,
+          units: { '0' => { building_id: other_sub_program.building_id, unit_number: '1A' } },
+        },
+      }
+
+      expect { post :create, params: params }.not_to change(VacancySubmission, :count)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it 'rejects moving a submission to another agency program' do
+      params = {
+        id: own_submission.id,
+        vacancy_submission: {
+          program_id: other_program.id,
+          sub_program_id: other_sub_program.id,
+          units: { '0' => { building_id: other_sub_program.building_id, unit_number: '1A' } },
+        },
+      }
+
+      patch :update, params: params
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(own_submission.reload.program_id).to eq(own_program.id)
+    end
+
+    it 'does not render sections for another agency sub-program' do
+      expect do
+        get :sub_program_section, params: { section: 'vacancy', sub_program_id: other_sub_program.id }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    context 'when editing a saved submission for a program the user cannot access' do
+      let(:reviewer_submitter_role) do
+        create(
+          :role,
+          name: 'agency reviewer submitter',
+          can_view_opportunities: true,
+          can_add_vacancies: true,
+          can_review_vacancies: true,
+        )
+      end
+      let(:new_building) { create(:building) }
+      let!(:sibling_sub_program) { create(:sub_program, program: other_program, program_type: 'Project-Based', building: create(:building)) }
+      let!(:agency_mate_submission) do
+        create(:vacancy_submission, :changes_requested, the_program: other_program, the_sub_program: other_sub_program, user: create(:user, agency: user.agency))
+      end
+
+      before { user.roles = [reviewer_submitter_role] }
+
+      def update_params(sub_program)
+        {
+          id: agency_mate_submission.id,
+          vacancy_submission: {
+            program_id: other_program.id,
+            sub_program_id: sub_program.id,
+            units: { '0' => { building_id: new_building.id, unit_number: '2B' } },
+          },
+        }
+      end
+
+      it 'offers only the saved program and sub-program on the edit form' do
+        get :edit, params: { id: agency_mate_submission.id }
+
+        expect(assigns(:programs)).to contain_exactly(other_program)
+        expect(assigns(:programs_data).flat_map { |p| p[:sub_programs].pluck(:id) }).to contain_exactly(other_sub_program.id)
+      end
+
+      it 'offers the saved sub-program on the edit form after it is closed' do
+        other_sub_program.update!(closed: true)
+
+        get :edit, params: { id: agency_mate_submission.id }
+
+        expect(assigns(:programs_data).flat_map { |p| p[:sub_programs].pluck(:id) }).to contain_exactly(other_sub_program.id)
+      end
+
+      it 'saves changes that keep the saved program and sub-program' do
+        patch :update, params: update_params(other_sub_program)
+
+        expect(response).to redirect_to(vacancy_submission_path(agency_mate_submission))
+        expect(agency_mate_submission.reload.draft_data['units'][0]['building_id'].to_i).to eq(new_building.id)
+      end
+
+      it 'rejects switching to a different sub-program of the saved program' do
+        patch :update, params: update_params(sibling_sub_program)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(agency_mate_submission.reload.sub_program_id).to eq(other_sub_program.id)
+      end
+
+      it 'renders sections for the saved sub-program' do
+        get :sub_program_section, params: { section: 'vacancy', sub_program_id: other_sub_program.id, vacancy_submission_id: agency_mate_submission.id }
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'does not render sections for a different sub-program of the saved program' do
+        expect do
+          get :sub_program_section, params: { section: 'vacancy', sub_program_id: sibling_sub_program.id, vacancy_submission_id: agency_mate_submission.id }
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

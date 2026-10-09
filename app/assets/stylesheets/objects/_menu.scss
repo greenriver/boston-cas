@@ -15,14 +15,21 @@
     z-index: $zIndex-4;
   }
 
-  @include media-breakpoint-down(md) {
+  // Below this breakpoint the menu is a drawer. See $nav-side-on-canvas in
+  // _settings/_variables.scss before changing this.
+  @include media-breakpoint-down($nav-side-on-canvas) {
     width: 45vw;
     position: fixed;
     right: 0;
-    top: 0;
+    // Falls back to $header-height until JS measures the real offset — the
+    // non-production/impersonation banners above the header (see
+    // layouts/_header_warnings.haml) vary in height. See site_menu.js.coffee.
+    top: var(--nav-side-offset-top, #{$header-height});
     bottom: 0;
-    padding-top: calc(#{$header-height} + #{space(6)});
-    min-height: 100vh;
+    // Overrides the base rule's min-height: 100% — once fixed, that resolves
+    // against the viewport and silently overrides `top` above.
+    min-height: 0;
+    padding-top: space(6);
     transition: 0.35s transform ease-in-out;
 
     &.off-canvas {

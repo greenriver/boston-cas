@@ -7,7 +7,7 @@
     $('.jContactForm').replaceWith(contact_form_html);
 
     $('.jDnDStaffContactForm').each(function(i) {
-      let dnd_contact_form_html = "<%= j render 'matches/match_contacts_form' %>"
+      let dnd_contact_form_html = "<%= j render 'matches/match_contacts_form', required_contact_types: @match.current_decision.try(:required_contact_types) || [] %>"
       $(this).replaceWith(dnd_contact_form_html)
     });
 

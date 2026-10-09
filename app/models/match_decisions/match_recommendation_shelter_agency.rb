@@ -9,8 +9,6 @@
 module MatchDecisions
   class MatchRecommendationShelterAgency < Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultShelterAgencyDeclineReasons
-    include MatchDecisions::RouteOneDeclineReasons
     include MatchDecisions::AcceptsNotWorkingWithClientReason
 
     # proxy for client.release_of_information

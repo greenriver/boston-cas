@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Five
   class FiveMitigation < Base
     include MatchDecisions::AcceptsDeclineReason
@@ -94,13 +96,6 @@ module MatchDecisions::Five
 
     def accessible_by? contact
       contact.user_can_reject_matches? || contact.user_can_approve_matches?
-    end
-
-    def step_decline_reasons(_contact)
-      [
-        'Mitigation failed',
-        'Other',
-      ]
     end
   end
 end

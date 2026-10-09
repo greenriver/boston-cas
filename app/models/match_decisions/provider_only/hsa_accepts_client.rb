@@ -12,7 +12,6 @@ module MatchDecisions::ProviderOnly
       'match_decisions/hsa_accepts_client'
     end
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteTwoDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id
@@ -117,24 +116,6 @@ module MatchDecisions::ProviderOnly
       end
     end
     private_constant :StatusCallbacks
-
-    def step_decline_reasons(_contact)
-      [
-        'Household could not be located',
-        'Ineligible for Housing Program',
-        'Client refused offer',
-        'Health and Safety',
-        'Other',
-      ]
-    end
-
-    def step_cancel_reasons
-      [
-        'Vacancy should not have been entered',
-        'Vacancy filled by other client',
-        'Other',
-      ]
-    end
 
     def whitelist_params_for_update params
       super.merge params.require(:decision).permit(

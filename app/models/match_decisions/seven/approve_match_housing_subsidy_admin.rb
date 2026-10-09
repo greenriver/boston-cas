@@ -9,7 +9,6 @@
 module MatchDecisions::Seven
   class ApproveMatchHousingSubsidyAdmin < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultHsaDeclineReasons
 
     def label
       label_for_status status

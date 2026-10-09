@@ -9,8 +9,6 @@
 module MatchDecisions::Twelve
   class TwelveHsaConfirmMatchSuccess < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteTwelveDeclineReasons
-    include MatchDecisions::RouteTwelveCancelReasons
 
     def to_partial_path
       'match_decisions/twelve/hsa_confirm_match_success'

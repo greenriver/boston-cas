@@ -23,7 +23,9 @@
   padding: space(4);
   margin-right: rem(-16px);
   font-size: rem(20px);
-  @include media-breakpoint-up(lg) {
+  // Hide the drawer toggle once the menu is on-canvas. See
+  // $nav-side-on-canvas in _settings/_variables.scss.
+  @include media-breakpoint-up($nav-side-on-canvas) {
     display: none;
   }
 }
