@@ -301,7 +301,9 @@ class ClientOpportunityMatch < ApplicationRecord
     return all if user.can_view_all_matches?
 
     # Allow logged-in users to see any match they are a contact on, and the ones they are granted via program visibility
-    where(id: accessible_match_ids(user))
+    # Subqueries rather than plucked ids, so the scope's SQL stays small
+    where(id: ClientOpportunityMatchContact.where(contact_id: user.contact.id).select(:match_id)).
+      or(where(id: visible_by(user).select(:id)))
   end
 
   def self.accessible_match_ids(user)
