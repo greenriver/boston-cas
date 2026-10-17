@@ -6,7 +6,7 @@
 
 class Users::InvitationsController < Devise::InvitationsController
 
-  prepend_before_action :require_can_edit_users!, only: [:new, :create]
+  prepend_before_action :require_can_edit_users!, only: [:new, :create, :confirm]
 
   # GET /resource/invitation/new
   def new
