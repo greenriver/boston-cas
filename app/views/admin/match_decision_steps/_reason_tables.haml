@@ -2,7 +2,7 @@
 .row
   - kinds.each do |kind|
     - show_audience = kind == MatchDecisionReasonAssignment::KIND_DECLINE && @step.supports_multiple_actors?
-    .col-lg-6
+    .col-sm-12
       .c-card.mb-4
         .c-card__header
           %h3= "#{kind.titleize} Reasons"
