@@ -41,6 +41,8 @@ module CasSeeds
       'Health and Safety',
     ].freeze
 
+    # Assignment lookups include soft-deleted rows: the unique index covers them,
+    # and a reason an admin removed must stay removed when this runs on deploy.
     def run!
       MatchRoutes::Base.ensure_all
       ensure_all_match_decision_steps_exist!
@@ -71,7 +73,7 @@ module CasSeeds
         reason = reasons_by_name[row['reason_name']]
         next unless route && reason
 
-        MatchDecisionReasonAssignment.find_or_create_by!(route: route, decision_type: row['decision_type'], match_decision_reason: reason, kind: row['kind']) do |assignment|
+        MatchDecisionReasonAssignment.with_deleted.find_or_create_by!(route: route, decision_type: row['decision_type'], match_decision_reason: reason, kind: row['kind']) do |assignment|
           assignment.position = row['position'].to_i
           assignment.requires_explanation = row['requires_explanation'] == 'true'
           assignment.audience = row['audience'].presence
@@ -104,7 +106,7 @@ module CasSeeds
         return
       end
 
-      MatchDecisionReasonAssignment.find_or_create_by!(route: route, decision_type: decision_type, match_decision_reason: reason, kind: MatchDecisionReasonAssignment::KIND_DECLINE) do |assignment|
+      MatchDecisionReasonAssignment.with_deleted.find_or_create_by!(route: route, decision_type: decision_type, match_decision_reason: reason, kind: MatchDecisionReasonAssignment::KIND_DECLINE) do |assignment|
         assignment.audience = audience
         assignment.position = position
       end
