@@ -70,6 +70,19 @@ RSpec.describe CasSeeds::MatchDecisionReasonAssignments do
       expect(MatchDecisionReasonAssignment.count).to eq(count_after_first_run)
     end
 
+    it 'leaves soft-deleted assignments deleted on a re-run, for both the CSV rows and the ApproveMatchHousingSubsidyAdmin rows' do
+      described_class.new.run!
+      csv_assignment = MatchDecisionReasonAssignment.find_by!(decision_type: 'MatchDecisions::MatchRecommendationDndStaff', kind: 'decline', match_decision_reason: MatchDecisionReasons::Base.find_by!(name: 'Other'))
+      hsa_assignment = MatchDecisionReasonAssignment.find_by!(decision_type: 'MatchDecisions::ApproveMatchHousingSubsidyAdmin', kind: 'decline', match_decision_reason: MatchDecisionReasons::Base.find_by!(name: 'CORI'))
+      csv_assignment.destroy
+      hsa_assignment.destroy
+
+      described_class.new.run!
+
+      rows = MatchDecisionReasonAssignment.with_deleted.where(id: [csv_assignment.id, hsa_assignment.id])
+      expect(rows.map { |row| [row.id, row.deleted?] }).to contain_exactly([csv_assignment.id, true], [hsa_assignment.id, true])
+    end
+
     it "seeds route four's post-approval HSA decline steps with their own reason list, not the shared route-wide one" do
       route_four = MatchRoutes::Four.first || create(:route_four)
 

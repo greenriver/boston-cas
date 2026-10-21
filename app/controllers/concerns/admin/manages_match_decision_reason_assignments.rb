@@ -33,10 +33,13 @@ module Admin::ManagesMatchDecisionReasonAssignments
   # Upserts selected rows for one kind and destroys unchecked assignments whose
   # reasons are still active. Skips entirely when that kind's params are absent
   # so a form that omits a kind does not clear its assignments.
+  #
+  # Soft-deleted rows are loaded and restored on re-select because the unique
+  # index on (route, decision_type, reason, kind) includes them.
   private def sync_kind!(route:, decision_type:, kind:, rows_params:)
     return if rows_params.nil?
 
-    existing = MatchDecisionReasonAssignment.where(route: route, decision_type: decision_type, kind: kind).index_by(&:match_decision_reason_id)
+    existing = MatchDecisionReasonAssignment.with_deleted.where(route: route, decision_type: decision_type, kind: kind).index_by(&:match_decision_reason_id)
     offered_reason_ids = MatchDecisionReasons::Base.active.ids
 
     rows_params.each do |reason_id, row|
@@ -45,6 +48,7 @@ module Admin::ManagesMatchDecisionReasonAssignments
       reason_id = reason_id.to_i
       # Remove from the existing hash so it isn't deleted below
       assignment = existing.delete(reason_id) || MatchDecisionReasonAssignment.new(route: route, decision_type: decision_type, kind: kind, match_decision_reason_id: reason_id)
+      assignment.deleted_at = nil
       assignment.position = row[:position].presence || 0
       assignment.requires_explanation = row[:requires_explanation] == '1'
       assignment.referral_result = row[:referral_result].presence
@@ -53,7 +57,7 @@ module Admin::ManagesMatchDecisionReasonAssignments
     end
 
     existing.each do |reason_id, assignment|
-      assignment.destroy if offered_reason_ids.include?(reason_id)
+      assignment.destroy if !assignment.deleted? && offered_reason_ids.include?(reason_id)
     end
   end
 
