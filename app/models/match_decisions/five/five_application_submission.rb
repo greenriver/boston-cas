@@ -4,10 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Five
   class FiveApplicationSubmission < Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultShelterAgencyDeclineReasons
 
     validate :application_date_present_if_status_complete
 

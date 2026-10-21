@@ -1,4 +1,5 @@
 - not_specified = '<span class="font-no-data">Not specified</span>'.html_safe
+- required_contact_types = local_assigns.fetch(:required_contact_types, [])
 = simple_form_for @match_contacts, url: access_context.match_contacts_path(@match), html: { class: 'current-step-form jDnDStaffContactForm' }, remote: true do |form|
   .o-pre-choose
     %h3.h3.mb-3
@@ -11,7 +12,7 @@
   .row
     - if @match.match_route.visible_contact_types.include?(:shelter_agency_contacts)
       .col-sm-6
-        = render 'contact_manager/contact_field', contact_type: :shelter_agency_contacts, input_name: 'match_contacts[shelter_agency_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: true
+        = render 'contact_manager/contact_field', contact_type: :shelter_agency_contacts, input_name: 'match_contacts[shelter_agency_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:shelter_agency_contacts)
     .col-sm-6
       .form-group.email.optional
         .controls
@@ -31,24 +32,24 @@
         .col-sm-6.text-right
           = link_to client_path(@match_contacts.match.client), class: 'btn btn-sm btn-light' do
             Edit Client
-      -# = render 'contact_manager/contact_field', contact_type: :client_contacts, input_name: 'match_contacts[client_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: false
+      -# = render 'contact_manager/contact_field', contact_type: :client_contacts, input_name: 'match_contacts[client_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:client_contacts)
 
   .row
     - if @match.match_route.visible_contact_types.include?(:dnd_staff_contacts)
       .col-sm-6
-        = render 'contact_manager/contact_field', contact_type: :dnd_staff_contacts, input_name: 'match_contacts[dnd_staff_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: true
+        = render 'contact_manager/contact_field', contact_type: :dnd_staff_contacts, input_name: 'match_contacts[dnd_staff_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:dnd_staff_contacts)
     - if @match.match_route.visible_contact_types.include?(:housing_subsidy_admin_contacts)
       .col-sm-6
-        = render 'contact_manager/contact_field', contact_type: :housing_subsidy_admin_contacts, input_name: 'match_contacts[housing_subsidy_admin_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: true
+        = render 'contact_manager/contact_field', contact_type: :housing_subsidy_admin_contacts, input_name: 'match_contacts[housing_subsidy_admin_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:housing_subsidy_admin_contacts)
 
   .row
     - if @match.match_route.visible_contact_types.include?(:ssp_contacts)
       .col-sm-6
-        = render 'contact_manager/contact_field', contact_type: :ssp_contacts, input_name: 'match_contacts[ssp_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: false
+        = render 'contact_manager/contact_field', contact_type: :ssp_contacts, input_name: 'match_contacts[ssp_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:ssp_contacts)
     - if @match.match_route.visible_contact_types.include?(:hsp_contacts)
       .col-sm-6
-        = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'match_contacts[hsp_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: false
+        = render 'contact_manager/contact_field', contact_type: :hsp_contacts, input_name: 'match_contacts[hsp_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:hsp_contacts)
   - if @match.match_route.visible_contact_types.include?(:do_contacts)
     .row
       .col-sm-6
-        = render 'contact_manager/contact_field', contact_type: :do_contacts, input_name: 'match_contacts[do_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: false
+        = render 'contact_manager/contact_field', contact_type: :do_contacts, input_name: 'match_contacts[do_contact_ids][]', object: @match_contacts, match_route: @match.match_route, form: form, required: required_contact_types.include?(:do_contacts)

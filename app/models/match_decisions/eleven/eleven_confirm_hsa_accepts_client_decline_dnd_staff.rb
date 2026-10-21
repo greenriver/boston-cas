@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Eleven
   class ElevenConfirmHsaAcceptsClientDeclineDndStaff < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteElevenDeclineReasons
-    include MatchDecisions::RouteElevenCancelReasons
 
     def to_partial_path
       'match_decisions/eleven/confirm_hsa_accepts_client_decline_dnd_staff'

@@ -60,6 +60,13 @@ class VacancySubmission < ApplicationRecord
 
   scope :queue,     -> { where(status: REVIEW_QUEUE_STATUSES) }
   scope :by_status, ->(s) { where(status: s) }
+  scope :visible_by, ->(user) do
+    return current_scope if user.can_view_programs? || user.can_edit_programs?
+
+    submitter_ids = user.can_review_vacancies? ? User.where(agency_id: user.agency_id).select(:id) : [user.id]
+    where("(draft_data ->> 'program_id')::integer IN (?)", Program.visible_or_editable_by(user).select(:id)).
+      or(where(user_id: submitter_ids))
+  end
 
   def self.filtered(program_id:, status_filter:)
     scope = all

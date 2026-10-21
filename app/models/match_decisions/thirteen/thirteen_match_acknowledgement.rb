@@ -8,8 +8,6 @@
 
 module MatchDecisions::Thirteen
   class ThirteenMatchAcknowledgement < Base
-    include MatchDecisions::RouteThirteenCancelReasons
-
     validate :ensure_required_contacts_present_on_accept
 
     def to_partial_path

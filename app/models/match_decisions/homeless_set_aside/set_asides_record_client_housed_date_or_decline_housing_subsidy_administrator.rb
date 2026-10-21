@@ -9,8 +9,6 @@
 module MatchDecisions::HomelessSetAside
   class SetAsidesRecordClientHousedDateOrDeclineHousingSubsidyAdministrator < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultSetAsidesDeclineReasons
-    include MatchDecisions::RouteThreeDeclineReasons
 
     attr_accessor :building_id
     attr_accessor :unit_id

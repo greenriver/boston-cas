@@ -4,9 +4,10 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Four
   class ConfirmMatchSuccessDndStaff < ::MatchDecisions::Base
-    include MatchDecisions::RouteFourCancelReasons
     # validate :note_present_if_status_rejected
 
     def statuses

@@ -3,7 +3,7 @@
 
 %label Please indicate a reason to #{client_action} this match:
 .cancel-match-fields
-  = form.association :administrative_cancel_reason, collection: @decision.cancel_reasons, label: '', as: :check_boxes, wrapper_html: {class: 'jCancelReason jButtonStateTriggers'}
+  = form.association :administrative_cancel_reason, collection: @decision.cancel_reasons(contact: current_contact), label: '', as: :check_boxes, wrapper_html: {class: 'jCancelReason jButtonStateTriggers'}
   - if @decision.cancel_reasons_not_other_requiring_explanation.present?
     %p= "* indicates that additional information must be provided in order to submit #{client_action} reason"
   - if include_other

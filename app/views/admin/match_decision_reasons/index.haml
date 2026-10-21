@@ -1,0 +1,39 @@
+- title = 'Decline & Cancel Reasons'
+- content_for :title, title
+
+= render 'menus/admin_tabs'
+
+.o-page
+  .o-page__title
+    %h1= content_for :title
+    .o-page__action.o-page__action--stacked
+      = link_to new_admin_match_decision_reason_path, class: 'btn btn-primary pull-right margin-bottom-02' do
+        %span.icon-plus
+        Add a Reason
+
+  %p.text-muted
+    This is the catalog of reasons available to routes. To choose which of these apply to a specific route (and any per-step overrides), use the
+    %strong Decline & Cancel Reasons
+    link on that
+    = link_to("route's admin page", admin_match_routes_path)
+
+  .table-responsive
+    .c-card.c.card__flush.mb-4
+      .c-card__content.p-0
+        %table.table.table-striped.mb-0
+          %thead
+            %tr
+              %th Name
+              %th Referral Result
+              %th Active
+              %th Actions
+          %tbody
+            - @match_decision_reasons.each do |reason|
+              %tr
+                %td= link_to reason.name, edit_admin_match_decision_reason_path(reason)
+                %td= reason.referral_result_text
+                %td= checkmark reason.active
+                %td
+                  = link_to edit_admin_match_decision_reason_path(reason), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                    %span.icon-pencil
+                    Edit
