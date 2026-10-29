@@ -16,7 +16,6 @@ class NonHmisClientsController < ApplicationController
   before_action :load_neighborhoods
   before_action :load_contacts, only: [:new, :edit]
   before_action :set_active_filter, only: [:index, :search]
-  before_action :find_match, only: [:current_assessment_limited]
   around_action :with_skip_build_assessment_if_missing, only: [:index, :search]
 
   helper_method :non_hmis_client_search_queries_path
@@ -163,6 +162,8 @@ class NonHmisClientsController < ApplicationController
     @modal_size = :lg
     @assessment = NonHmisAssessment.where(type: assessment_type).find(params[:id].to_i)
     @non_hmis_client = @assessment.non_hmis_client
+    find_match
+    not_authorized! unless can_view_limited_assessment?
   end
 
   private def download_clients
@@ -336,10 +337,40 @@ class NonHmisClientsController < ApplicationController
     assessment_type&.include?('Pathways')
   end
 
+  # Called from the action: access_context is set by a subclass before_action, which runs after this class's callbacks.
   private def find_match
-    return if can_view_all_covid_pathways?
+    return if can_view_all_covid_pathways? || params[:match_id].blank?
 
-    @match = ClientOpportunityMatch.find(params[:match_id].to_i)
+    @match = access_context.match_scope.find(params[:match_id].to_i)
+  end
+
+  # Users who can open the client directly see any of its assessments.
+  # Everyone else is limited to COVID assessments.
+  private def can_view_limited_assessment?
+    return false if @non_hmis_client.blank?
+    return true if can_access_non_hmis_client_directly?
+    return false unless @assessment.type.in?(NonHmisAssessment.limited_assessment_types)
+    # COVID pathways viewers see every client's COVID assessments, so match_id is not checked for them.
+    return true if can_view_all_covid_pathways?
+
+    match_reveals_assessment_client?
+  end
+
+  # Same rule as the show page: entry permission plus the visibility scope.
+  private def can_access_non_hmis_client_directly?
+    return false unless can_enter_clients?
+
+    client_source.exists?(id: @non_hmis_client.id)
+  end
+
+  private def can_enter_clients?
+    raise NotImplementedError.new("#{self.class} must define can_enter_clients?")
+  end
+
+  private def match_reveals_assessment_client?
+    return false if @match.blank?
+
+    @match.client&.non_hmis_client&.id == @non_hmis_client.id && @match.show_client_info_to?(current_contact)
   end
 
   private def require_can_edit_this_client!

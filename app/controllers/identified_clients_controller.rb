@@ -90,6 +90,10 @@ class IdentifiedClientsController < NonHmisClientsController
     IdentifiedClient.identified.visible_to(current_user)
   end
 
+  private def can_enter_clients?
+    can_enter_identified_clients?
+  end
+
   private def path_for_non_hmis_client
     identified_client_path(id: @non_hmis_client.id)
   end
