@@ -4,7 +4,7 @@
     .detail-box--value= value
 
 
-- if @client.non_hmis? && @client&.non_hmis_client&.current_covid_assessment.present?
+- if show_client_info? && @client.non_hmis? && @client&.non_hmis_client&.current_covid_assessment.present?
   - assessment = @client&.non_hmis_client&.current_covid_assessment
   - url = if assessment.type == 'DeidentifiedCovidPathwaysAssessment' then current_assessment_limited_deidentified_client_path(assessment.id, match_id: @match.id) else current_assessment_limited_identified_client_path(assessment.id, match_id: @match.id) end
   = link_to 'Current COVID Pathways Asssessment', url, data: {'loads-in-ajax-modal' => true}
