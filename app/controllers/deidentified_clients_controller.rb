@@ -134,6 +134,10 @@ class DeidentifiedClientsController < NonHmisClientsController
     DeidentifiedClient.deidentified.visible_to(current_user)
   end
 
+  private def can_enter_clients?
+    can_enter_deidentified_clients?
+  end
+
   def sort_options
     [
       { title: 'Client Identifier A-Z', column: 'client_identifier', direction: 'asc', order: 'LOWER(client_identifier) ASC', visible: true },
