@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Ten
   class TenAgencyConfirmMatchSuccessDecline < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteTenDeclineReasons
-    include MatchDecisions::RouteTenCancelReasons
 
     def step_name
       "#{Translation.translate('DND')} Confirms Match Success Decline"

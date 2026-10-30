@@ -381,6 +381,79 @@ RSpec.describe VacancySubmission, type: :model do
     end
   end
 
+  describe '.visible_by' do
+    let(:user) { create(:user) }
+    let(:own_program) { create(:program) }
+    let(:other_program) { create(:program) }
+    let!(:own_submission) { create(:vacancy_submission, the_program: own_program) }
+    let!(:other_submission) { create(:vacancy_submission, the_program: other_program) }
+    # Submitted by someone at the user's agency, for a program the agency has no permission row for.
+    let!(:agency_mate_submission) do
+      create(:vacancy_submission, the_program: create(:program), user: create(:user, agency: user.agency))
+    end
+
+    before do
+      EntityViewPermission.create!(entity: other_program, agency: create(:agency), editable: true)
+    end
+
+    def grant(editable: false, **role_attributes)
+      user.roles << create(:role, name: "visible_by #{role_attributes.keys.join(' ')}", **role_attributes)
+      EntityViewPermission.create!(entity: own_program, agency: user.agency, editable: editable)
+    end
+
+    it 'limits a can_view_assigned_programs user to submissions for programs assigned to their agency' do
+      grant(can_view_assigned_programs: true)
+
+      expect(described_class.visible_by(user)).to contain_exactly(own_submission)
+    end
+
+    it 'limits a can_edit_assigned_programs user to submissions for programs their agency can edit' do
+      grant(can_edit_assigned_programs: true, editable: true)
+
+      expect(described_class.visible_by(user)).to contain_exactly(own_submission)
+    end
+
+    it 'excludes programs whose agency permission is view-only for a can_edit_assigned_programs user' do
+      grant(can_edit_assigned_programs: true, editable: false)
+
+      expect(described_class.visible_by(user)).to be_empty
+    end
+
+    it 'shows a reviewer with no program permission only submissions made by users at their agency' do
+      grant(can_review_vacancies: true)
+
+      expect(described_class.visible_by(user)).to contain_exactly(agency_mate_submission)
+    end
+
+    it 'shows a reviewer with assigned programs both their agency programs and their agency submitters' do
+      grant(can_review_vacancies: true, can_view_assigned_programs: true)
+
+      expect(described_class.visible_by(user)).to contain_exactly(own_submission, agency_mate_submission)
+    end
+
+    it 'shows a non-reviewer their own submissions for programs their agency cannot access' do
+      grant(can_view_assigned_programs: true)
+      own_unpermitted_submission = create(:vacancy_submission, the_program: create(:program), user: user)
+
+      expect(described_class.visible_by(user)).to contain_exactly(own_submission, own_unpermitted_submission)
+    end
+
+    it 'returns every submission, including soft-deleted programs, to a can_view_programs user' do
+      grant(can_view_programs: true)
+      deleted_program = create(:program)
+      deleted_submission = create(:vacancy_submission, the_program: deleted_program)
+      deleted_program.destroy
+
+      expect(described_class.visible_by(user)).to contain_exactly(own_submission, other_submission, agency_mate_submission, deleted_submission)
+    end
+
+    it 'returns every submission to a can_edit_programs user' do
+      grant(can_edit_programs: true)
+
+      expect(described_class.visible_by(user)).to contain_exactly(own_submission, other_submission, agency_mate_submission)
+    end
+  end
+
   describe 'state guard methods' do
     it '#approvable? is true when awaiting_approval' do
       vs = build(:vacancy_submission, status: 'awaiting_approval')

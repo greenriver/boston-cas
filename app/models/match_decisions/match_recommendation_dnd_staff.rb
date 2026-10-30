@@ -4,10 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions
   class MatchRecommendationDndStaff < Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::DefaultDndStaffDeclineReasons
 
     validate :cant_accept_if_match_closed
     validate :cant_accept_if_related_active_match

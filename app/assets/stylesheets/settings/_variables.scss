@@ -10,6 +10,12 @@ $header-height: 60px;
 $nav-side-width: 185px;
 $nav-side-collapsed-width: 65px;
 
+// Breakpoint at and above which the side menu sits on-canvas (always visible,
+// no toggle); below it the menu is a drawer. Used with media-breakpoint-down()
+// in objects/_menu.scss and media-breakpoint-up() in layouts/_main.scss and
+// modules/_header.scss so the three cannot drift apart.
+$nav-side-on-canvas: lg;
+
 // Footer
 $footer-logo-height: 85px;
 $footer-logo-padding: 15px;

@@ -4,11 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchDecisions::Thirteen
   class ThirteenHsaReviewDecline < Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteThirteenDeclineReasons
-    include MatchDecisions::RouteThirteenCancelReasons
 
     def to_partial_path
       'match_decisions/thirteen/hsa_review_decline'

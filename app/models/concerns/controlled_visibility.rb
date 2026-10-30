@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module ControlledVisibility
   extend ActiveSupport::Concern
 
@@ -26,8 +28,7 @@ module ControlledVisibility
 
       evp_t = EntityViewPermission.arel_table
       joins(:entity_view_permissions).where(
-        evp_t[:agency_id].eq(user.agency_id),
-        evp_t[:editable].eq(true),
+        evp_t[:agency_id].eq(user.agency_id).and(evp_t[:editable].eq(true)),
       )
     }
 
@@ -41,8 +42,7 @@ module ControlledVisibility
     scope :editable_by_agency, ->(agency) {
       evp_t = EntityViewPermission.arel_table
       joins(:entity_view_permissions).where(
-        evp_t[:agency_id].eq(agency.id),
-        evp_t[:editable].eq(true),
+        evp_t[:agency_id].eq(agency.id).and(evp_t[:editable].eq(true)),
       )
     }
   end

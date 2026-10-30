@@ -2,7 +2,10 @@
   transition: .35s max-width ease-in-out;
   max-width: 100%;
   flex: 0 0 100%;
-  @include media-breakpoint-up(lg) {
+  // Give back the width the on-canvas menu takes. Must stay in lockstep with
+  // the drawer breakpoint in objects/_menu.scss — see $nav-side-on-canvas in
+  // _settings/_variables.scss.
+  @include media-breakpoint-up($nav-side-on-canvas) {
     flex: 0 0 calc(100vw - #{$nav-side-width});
     max-width: calc(100vw - #{$nav-side-width});
   }

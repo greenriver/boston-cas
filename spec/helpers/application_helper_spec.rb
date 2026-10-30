@@ -16,6 +16,25 @@ require 'rails_helper'
 # separator handling; these specs cover the current 7.2 behavior any regressions
 # in path/query comparison would surface here.
 RSpec.describe ApplicationHelper, type: :helper do
+  describe '#release_info' do
+    after { Git.reset_memo! if Git.respond_to?(:reset_memo!) }
+
+    it 'renders a badge with the release when one is available' do
+      allow(Git).to receive(:release).and_return('v1.2.3+4')
+
+      rendered = helper.release_info
+
+      expect(rendered).to include('v1.2.3+4')
+      expect(rendered).to include('navbar-text')
+    end
+
+    it 'renders nothing when there is no release (e.g. cache missing or dev env)' do
+      allow(Git).to receive(:release).and_return(nil)
+
+      expect(helper.release_info).to be_nil
+    end
+  end
+
   describe '#menu_request_matches_generated_path?' do
     # Drive the private helper with a stubbed request path and params, mirroring
     # how a filtered menu link is compared against the current request.
