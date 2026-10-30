@@ -4,10 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ClientContactController < ApplicationController
   include AjaxModalRails::Controller
 
-  before_action :authenticate_user!
   before_action :set_client
 
   def edit
@@ -19,7 +20,7 @@ class ClientContactController < ApplicationController
   end
 
   private def set_client
-    @client = Client.find params[:client_id].to_i
+    @client = Client.editable_by(current_user).find(params[:client_id].to_i)
   end
 
   private def contact_params

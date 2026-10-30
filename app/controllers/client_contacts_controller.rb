@@ -4,10 +4,13 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class ClientContactsController < ApplicationController
   include AjaxModalRails::Controller
 
   before_action :set_client
+  before_action :require_can_edit_client_contacts!, only: [:update]
   before_action :set_client_contacts
   before_action :set_current_contact
 
@@ -15,22 +18,17 @@ class ClientContactsController < ApplicationController
   end
 
   def update
-    saved = @client_contacts.update(client_contacts_params)
-    unless request.xhr?
-      if saved
-        flash[:notice] = "Default Client Contacts updated"
-        redirect_to client_path(@client)
-      else
-        flash[:error] = "Please review the form problems below."
-        redirect_to :edit
-      end
-    end
+    @client_contacts.update(client_contacts_params)
+    return if request.xhr?
+
+    flash[:notice] = 'Default Client Contacts updated'
+    redirect_to client_path(@client)
   end
 
   private
 
   def set_client
-    @client = Client.find params[:client_id].to_i
+    @client = Client.accessible_by_user(current_user).find(params[:client_id].to_i)
   end
 
   def set_client_contacts
@@ -44,13 +42,13 @@ class ClientContactsController < ApplicationController
   def client_contacts_params
     base_params = params[:client_contacts] || ActionController::Parameters.new
     base_params.permit(
-        shelter_agency_contact_ids: [],
-        housing_subsidy_admin_contact_ids: [],
-        dnd_staff_contact_ids: [],
-        regular_contact_ids: [],
-        ssp_contact_ids: [],
-        hsp_contact_ids: [],
-        do_contact_ids: []
+      shelter_agency_contact_ids: [],
+      housing_subsidy_admin_contact_ids: [],
+      dnd_staff_contact_ids: [],
+      regular_contact_ids: [],
+      ssp_contact_ids: [],
+      hsp_contact_ids: [],
+      do_contact_ids: [],
     ).tap do |result|
       result[:shelter_agency_contact_ids] = result[:shelter_agency_contact_ids]&.map(&:to_i) || []
       result[:regular_contact_ids] = result[:regular_contact_ids]&.map(&:to_i) || []
@@ -62,23 +60,23 @@ class ClientContactsController < ApplicationController
     end
   end
 
-  private
+  def can_edit_client_contacts?
+    @can_edit_client_contacts ||= @client.editable_by?(current_user)
+  end
+  helper_method :can_edit_client_contacts?
 
-    def contact_owner_source
-      Client
-    end
+  def require_can_edit_client_contacts!
+    not_authorized! unless can_edit_client_contacts?
+  end
 
-    def contact_join_model_source
-      @contact_owner.client_contacts
-    end
+  def hsa_can_edit_contacts?
+    false
+  end
+  helper_method :hsa_can_edit_contacts?
 
-    def join_model_class
-      ClientContact
-    end
+  def not_authorized!
+    return head(:forbidden) if request.xhr?
 
-    def hsa_can_edit_contacts?
-      false
-    end
-    helper_method :hsa_can_edit_contacts?
-
+    super
+  end
 end

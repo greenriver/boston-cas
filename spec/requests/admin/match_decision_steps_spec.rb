@@ -144,6 +144,32 @@ RSpec.describe 'Admin::MatchDecisionSteps', type: :request do
 
       expect(MatchDecisionReasonAssignment.exists?(assignment.id)).to be false
     end
+
+    it 'restores a soft-deleted assignment, with the submitted attributes, when its reason is re-selected' do
+      assignment = create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason, position: 0, requires_explanation: false)
+      assignment.destroy
+
+      patch admin_match_route_match_decision_step_path(route, step), params: {
+        assignments: { decline: { reason.id.to_s => { selected: '1', position: '3', requires_explanation: '1' } } },
+      }
+
+      rows = MatchDecisionReasonAssignment.with_deleted.where(route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+      expect(rows.map { |row| [row.id, row.deleted_at, row.position, row.requires_explanation] }).to eq([[assignment.id, nil, 3, true]])
+    end
+
+    it 'leaves the deleted_at of an already soft-deleted assignment unchanged when its reason is submitted unchecked' do
+      assignment = create(:match_decision_reason_assignment, route: route, decision_type: step.decision_type, kind: 'decline', match_decision_reason: reason)
+      assignment.destroy
+      original_deleted_at = MatchDecisionReasonAssignment.with_deleted.find(assignment.id).deleted_at
+
+      travel_to(1.day.from_now) do
+        patch admin_match_route_match_decision_step_path(route, step), params: {
+          assignments: { decline: { reason.id.to_s => { selected: '0' } } },
+        }
+      end
+
+      expect(MatchDecisionReasonAssignment.with_deleted.find(assignment.id).deleted_at).to eq(original_deleted_at)
+    end
   end
 
   describe 'authorization' do
