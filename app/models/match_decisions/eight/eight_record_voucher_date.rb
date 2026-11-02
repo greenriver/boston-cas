@@ -9,7 +9,6 @@
 module MatchDecisions::Eight
   class EightRecordVoucherDate < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteEightCancelReasons
 
     validate :date_voucher_issued_present_if_status_complete
 
@@ -88,19 +87,6 @@ module MatchDecisions::Eight
     def accessible_by? contact
       contact.user_can_act_on_behalf_of_match_contacts? ||
         contact.in?(match.send(contact_actor_type))
-    end
-
-    def step_decline_reasons(_contact)
-      [
-        'Immigration status',
-        'Ineligible for Housing Program',
-        'Self-resolved',
-        'Household did not respond after initial acceptance of match',
-        'Client refused offer',
-        'Client needs higher level of care',
-        'Unable to reach client after multiple attempts',
-        'Other',
-      ]
     end
 
     class StatusCallbacks < StatusCallbacks

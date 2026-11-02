@@ -9,8 +9,6 @@
 module MatchDecisions::Thirteen
   class ThirteenHearingOutcome < Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteThirteenCancelReasons
-    include MatchDecisions::RouteThirteenDeclineReasons
 
     validate :ensure_required_contacts_present_on_accept
     validate :criminal_hearing_outcome_has_been_recorded

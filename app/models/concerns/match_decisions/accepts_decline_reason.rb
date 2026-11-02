@@ -12,24 +12,31 @@ module MatchDecisions
 
     included do
       validate :validate_decline_reason
+      before_save :snapshot_decline_reason_text
+    end
+
+    def decline_reason_assignments(contact = nil)
+      assignments = MatchDecisionReasonAssignment.resolve_for(route: match_route, decision_type: self.class.name, kind: MatchDecisionReasonAssignment::KIND_DECLINE)
+      filter_reason_assignments_by_audience(assignments, contact)
+    end
+
+    def step_decline_reasons(contact = nil)
+      decline_reason_assignments(contact).map { |assignment| assignment.match_decision_reason.name }
     end
 
     def decline_reasons(contact:)
-      @decline_reasons ||= [].tap do |result|
-        MatchDecisionReasons::Base.active.where(name: step_decline_reasons(contact)).find_each do |reason|
-          result << reason
-        end
-        # Move other to the end of the list
-        result.sort_by! { |m| [m.name.downcase == 'other' ? 1 : 0, m.name.downcase] }
-        result.map! do |reason|
-          # Only include the asterisks if more than 'Other' requires additional explanation && if not ALL decline reasons require additional explanation
-          not_other = decline_reasons_not_other_requiring_explanation(contact)
-          more_than_other_requires_explanation = not_other.present?
-          this_reason_requires_explanation = not_other.include?(reason.name)
+      @decline_reasons ||= begin
+        assignments = decline_reason_assignments(contact)
+        non_other = assignments.reject { |assignment| assignment.match_decision_reason.other? }
+        more_than_other_requires_explanation = non_other.any?(&:requires_explanation)
+        all_require_explanation = all_declines_require_explanation(contact)
 
-          include_asterisk = if all_declines_require_explanation(contact)
+        assignments.map do |assignment|
+          reason = assignment.match_decision_reason
+          # Only include the asterisks if more than 'Other' requires additional explanation && if not ALL decline reasons require additional explanation
+          include_asterisk = if all_require_explanation
             false
-          elsif more_than_other_requires_explanation && (reason.other? || this_reason_requires_explanation)
+          elsif more_than_other_requires_explanation && (reason.other? || assignment.requires_explanation)
             true
           end
 
@@ -41,9 +48,12 @@ module MatchDecisions
     end
 
     def all_declines_require_explanation(contact)
-      not_other = decline_reasons_not_other_requiring_explanation(contact)
-      step_reasons_except_other = step_decline_reasons(contact).reject { |r| r == 'Other' }
-      not_other.sort == step_reasons_except_other.sort
+      non_other = decline_reason_assignments(contact).reject { |assignment| assignment.match_decision_reason.other? }
+      non_other.present? && non_other.all?(&:requires_explanation)
+    end
+
+    def decline_reasons_not_other_requiring_explanation(contact = nil)
+      decline_reason_assignments(contact).select(&:requires_explanation).map { |assignment| assignment.match_decision_reason.name }
     end
 
     def whitelist_params_for_update params
@@ -82,10 +92,14 @@ module MatchDecisions
       elsif decline_reason.other?
         "Other (#{decline_reason_other_explanation})"
       else
-        reason = decline_reason.name.to_s
+        reason = decline_reason_text.presence || decline_reason.name.to_s
         reason += ". Note: #{decline_reason_other_explanation}" if decline_reason_other_explanation.present?
         reason
       end
+    end
+
+    private def snapshot_decline_reason_text
+      self.decline_reason_text = decline_reason.name if decline_reason_id_changed? && decline_reason.present?
     end
   end
 end

@@ -1644,6 +1644,45 @@ ALTER SEQUENCE public.match_census_id_seq OWNED BY public.match_census.id;
 
 
 --
+-- Name: match_decision_reason_assignments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.match_decision_reason_assignments (
+    id bigint NOT NULL,
+    route_id bigint NOT NULL,
+    decision_type character varying NOT NULL,
+    match_decision_reason_id bigint NOT NULL,
+    kind character varying NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    requires_explanation boolean DEFAULT false NOT NULL,
+    referral_result integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    deleted_at timestamp(6) without time zone,
+    audience character varying
+);
+
+
+--
+-- Name: match_decision_reason_assignments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.match_decision_reason_assignments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: match_decision_reason_assignments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.match_decision_reason_assignments_id_seq OWNED BY public.match_decision_reason_assignments.id;
+
+
+--
 -- Name: match_decision_reasons; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1681,6 +1720,39 @@ ALTER SEQUENCE public.match_decision_reasons_id_seq OWNED BY public.match_decisi
 
 
 --
+-- Name: match_decision_steps; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.match_decision_steps (
+    id bigint NOT NULL,
+    route_id bigint NOT NULL,
+    decision_type character varying NOT NULL,
+    default_referral_result integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: match_decision_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.match_decision_steps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: match_decision_steps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.match_decision_steps_id_seq OWNED BY public.match_decision_steps.id;
+
+
+--
 -- Name: match_decisions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1711,7 +1783,9 @@ CREATE TABLE public.match_decisions (
     include_note_in_email boolean,
     date_voucher_issued timestamp without time zone,
     manager character varying,
-    criminal_hearing_outcome_recorded boolean
+    criminal_hearing_outcome_recorded boolean,
+    decline_reason_text character varying,
+    administrative_cancel_reason_text character varying
 );
 
 
@@ -4685,10 +4759,24 @@ ALTER TABLE ONLY public.match_census ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: match_decision_reason_assignments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_decision_reason_assignments ALTER COLUMN id SET DEFAULT nextval('public.match_decision_reason_assignments_id_seq'::regclass);
+
+
+--
 -- Name: match_decision_reasons id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.match_decision_reasons ALTER COLUMN id SET DEFAULT nextval('public.match_decision_reasons_id_seq'::regclass);
+
+
+--
+-- Name: match_decision_steps id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_decision_steps ALTER COLUMN id SET DEFAULT nextval('public.match_decision_steps_id_seq'::regclass);
 
 
 --
@@ -5426,11 +5514,27 @@ ALTER TABLE ONLY public.match_census
 
 
 --
+-- Name: match_decision_reason_assignments match_decision_reason_assignments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_decision_reason_assignments
+    ADD CONSTRAINT match_decision_reason_assignments_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: match_decision_reasons match_decision_reasons_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.match_decision_reasons
     ADD CONSTRAINT match_decision_reasons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: match_decision_steps match_decision_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match_decision_steps
+    ADD CONSTRAINT match_decision_steps_pkey PRIMARY KEY (id);
 
 
 --
@@ -5927,6 +6031,13 @@ CREATE INDEX delayed_jobs_priority ON public.delayed_jobs USING btree (priority,
 
 
 --
+-- Name: idx_on_match_decision_reason_id_54e59b4f78; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_on_match_decision_reason_id_54e59b4f78 ON public.match_decision_reason_assignments USING btree (match_decision_reason_id);
+
+
+--
 -- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6249,6 +6360,13 @@ CREATE INDEX index_contacts_on_user_id ON public.contacts USING btree (user_id);
 
 
 --
+-- Name: index_decision_steps_on_route_and_decision_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_decision_steps_on_route_and_decision_type ON public.match_decision_steps USING btree (route_id, decision_type);
+
+
+--
 -- Name: index_entity_view_permissions_on_agency_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6393,6 +6511,20 @@ CREATE INDEX index_match_census_on_match_prioritization_id ON public.match_censu
 --
 
 CREATE INDEX index_match_census_on_opportunity_id ON public.match_census USING btree (opportunity_id);
+
+
+--
+-- Name: index_match_decision_reason_assignments_on_route_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_decision_reason_assignments_on_route_id ON public.match_decision_reason_assignments USING btree (route_id);
+
+
+--
+-- Name: index_match_decision_steps_on_route_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_match_decision_steps_on_route_id ON public.match_decision_steps USING btree (route_id);
 
 
 --
@@ -6694,6 +6826,13 @@ CREATE INDEX index_project_clients_on_date_of_birth ON public.project_clients US
 --
 
 CREATE INDEX index_project_clients_on_source_last_changed ON public.project_clients USING btree (source_last_changed);
+
+
+--
+-- Name: index_reason_assignments_on_route_step_reason_kind; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_reason_assignments_on_route_step_reason_kind ON public.match_decision_reason_assignments USING btree (route_id, decision_type, match_decision_reason_id, kind);
 
 
 --
@@ -7313,6 +7452,12 @@ ALTER TABLE ONLY public.vouchers
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260730161749'),
+('20260730092443'),
+('20260729172307'),
+('20260729172306'),
+('20260729172305'),
+('20260728120000'),
 ('20260714153122'),
 ('20260701170632'),
 ('20260701000001'),
@@ -7320,7 +7465,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260601000002'),
 ('20260601000001'),
 ('20260528000001'),
-('20260728120000'),
 ('20260505173350'),
 ('20260505170932'),
 ('20250917150302'),

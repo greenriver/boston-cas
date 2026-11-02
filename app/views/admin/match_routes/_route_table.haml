@@ -1,0 +1,33 @@
+- if routes.any?
+  .table-responsive
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Route Name
+          %th Housing Type
+          %th Match Prioritization
+          %th Stall Days
+          %th Multiple Clients per Match
+          %th One Match per Client
+          %th
+      %tbody
+        - routes.each do |route|
+          %tr
+            %td
+              = route.title
+              - if route.title != route.untranslated_title
+                %br
+                %em.text-muted.font-size-small= "(#{route.untranslated_title})"
+            %td= route.housing_type
+            %td= route.match_prioritization.title
+            %td
+              - if route.stalled_interval > 0
+                = route.stalled_interval
+            %td= checkmark route.allow_multiple_active_matches
+            %td= checkmark route.should_prevent_multiple_matches_per_client
+            %td
+              = link_to edit_admin_match_route_path(route), class: ['btn', 'btn-sm', 'btn-secondary'] do
+                %span.icon-pencil
+                Edit
+- else
+  %p.text-muted No routes match.

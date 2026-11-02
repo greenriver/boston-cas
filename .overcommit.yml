@@ -43,6 +43,14 @@ PreCommit:
     exclude:
       - 'db/schema.rb' # Ignore trailing whitespace in generated files
       - 'db/structure.rb'
+PrePush:
+  ProtectedBranches:
+    enabled: true
+    destructive_only: false  # false = block all pushes
+    branches:
+      - main
+      - production
+      - staging
 #
 #PostCheckout:
 #  ALL: # Special hook name that customizes all hooks of this type

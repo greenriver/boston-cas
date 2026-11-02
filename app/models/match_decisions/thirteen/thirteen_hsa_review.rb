@@ -9,8 +9,6 @@
 module MatchDecisions::Thirteen
   class ThirteenHsaReview < Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteThirteenCancelReasons
-    include MatchDecisions::RouteThirteenDeclineReasons
 
     validate :ensure_required_contacts_present_on_accept
 

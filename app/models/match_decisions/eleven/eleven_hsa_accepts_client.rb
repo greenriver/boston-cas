@@ -9,8 +9,6 @@
 module MatchDecisions::Eleven
   class ElevenHsaAcceptsClient < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteElevenDeclineReasons
-    include MatchDecisions::RouteElevenCancelReasons
 
     def to_partial_path
       'match_decisions/eleven/hsa_accepts_client'

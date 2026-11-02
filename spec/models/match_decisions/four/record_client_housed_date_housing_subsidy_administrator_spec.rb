@@ -38,25 +38,12 @@ RSpec.describe MatchDecisions::Four::RecordClientHousedDateHousingSubsidyAdminis
   end
 
   describe '#decline_reasons' do
-    it 'offers the route four post-approval reason list, not the shared DefaultHsaDeclineReasons list' do
-      [
-        'Ineligible for Housing Program',
-        'Client has another housing option',
-        'Client refused unit (non-SRO)',
-        'Client refused voucher',
-        'Does not agree to services',
-        'Does not want housing at this time',
-        'Unsafe environment for this person',
-        'Unwilling to live in that neighborhood',
-        'Unwilling to live in SRO',
-        'Client has disappeared',
-        'Client has disengaged',
-        'Client deceased',
-        'Incarcerated',
-        'Other',
-      ].each { |name| MatchDecisionReasons::All.where(name: name).first_or_create! }
-      MatchDecisionReasons::All.where(name: 'CORI').first_or_create!
+    before do
+      CasSeeds::MatchDecisionReasons.new.run!
+      CasSeeds::MatchDecisionReasonAssignments.new.run!
+    end
 
+    it 'offers the route four post-approval reason list, not the shared DefaultHsaDeclineReasons list' do
       names = decision.decline_reasons(contact: nil).map(&:first)
 
       expect(names).to contain_exactly(

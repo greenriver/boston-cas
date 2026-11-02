@@ -9,8 +9,6 @@
 module MatchDecisions::Ten
   class TenAgencyConfirmMatchSuccess < ::MatchDecisions::Base
     include MatchDecisions::AcceptsDeclineReason
-    include MatchDecisions::RouteTenDeclineReasons
-    include MatchDecisions::RouteTenCancelReasons
 
     def label
       label_for_status status

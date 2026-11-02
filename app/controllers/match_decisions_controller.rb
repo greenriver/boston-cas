@@ -150,6 +150,9 @@ class MatchDecisionsController < ApplicationController
       end
     else
       flash[:error] = "Please review the form problems below.<br /> #{@decision.errors.full_messages.join('; ')}"
+      # @decision is the match's cached association, still holding the rejected attributes.
+      # Reload so match-level status reads persisted decisions; the form keeps using @decision.
+      @match.reload
       render 'matches/show'
     end
   end
