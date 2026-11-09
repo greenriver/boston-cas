@@ -9,6 +9,7 @@
 module Reports
   class ExternalReferralsController < ApplicationController
     before_action :authenticate_user!
+    before_action :require_can_view_reports!
     before_action :filter
 
     def index
@@ -22,7 +23,7 @@ module Reports
       if ids.any?
         # limit download and add referral
         @clients = @clients.where(id: ids)
-        referrals = ids.map do |id|
+        referrals = @clients.pluck(:id).map do |id|
           {
             client_id: id,
             user_id: current_user.id,
