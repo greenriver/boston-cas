@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'rails_helper'
 include ActiveJob::TestHelper
 
@@ -279,6 +281,32 @@ RSpec.describe ClientOpportunityMatch, type: :model do
           }.by(1)
         end
       end
+    end
+  end
+
+  describe '.accessible_by_user' do
+    let(:user) { create :user }
+    let!(:contact_match) { create :client_opportunity_match }
+    let!(:program_match) { create :client_opportunity_match }
+    let!(:hidden_match) { create :client_opportunity_match }
+
+    before do
+      ClientOpportunityMatchContact.create!(match: contact_match, contact: user.contact)
+      user.roles << create(:role, name: 'assigned program viewer', can_view_assigned_programs: true)
+      EntityViewPermission.create!(entity: program_match.program, agency: user.agency)
+    end
+
+    it 'returns matches the user is a contact on or can see through program visibility' do
+      expect(described_class.accessible_by_user(user)).to contain_exactly(contact_match, program_match)
+    end
+
+    it 'agrees with accessible_match_ids' do
+      expect(described_class.accessible_by_user(user).pluck(:id)).to match_array(described_class.accessible_match_ids(user).to_a)
+    end
+
+    it 'keeps visible match ids out of the not-found message' do
+      expect { described_class.accessible_by_user(user).find(hidden_match.id) }.
+        to raise_error(ActiveRecord::RecordNotFound, satisfy('omit an id list') { |message| !message.match?(/IN \([$\d]/) })
     end
   end
 end

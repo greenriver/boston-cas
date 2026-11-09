@@ -56,6 +56,7 @@ class QualifiedOpportunitiesController < ApplicationController
 
   def opportunity_scope
     Opportunity.available_for_poaching.joins(sub_program: :program).
+      merge(Program.where(match_route_id: MatchRoutes::Base.active.select(:id))).
       order(Program.arel_table[:name].asc, SubProgram.arel_table[:name].asc, id: :asc)
   end
 

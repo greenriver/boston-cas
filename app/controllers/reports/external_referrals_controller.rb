@@ -9,6 +9,7 @@
 module Reports
   class ExternalReferralsController < ApplicationController
     before_action :authenticate_user!
+    before_action :require_can_view_reports!
     before_action :filter
 
     def index
@@ -22,7 +23,7 @@ module Reports
       if ids.any?
         # limit download and add referral
         @clients = @clients.where(id: ids)
-        referrals = ids.map do |id|
+        referrals = @clients.pluck(:id).map do |id|
           {
             client_id: id,
             user_id: current_user.id,
@@ -94,6 +95,7 @@ module Reports
     helper_method :filter_params
 
     private def client_scope
+      # Not limited by Client.visible_by: this report is meant to cover every client.
       @client_scope ||= Client
       return @client_scope.none if filter.assessment_types.blank?
 

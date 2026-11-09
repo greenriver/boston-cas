@@ -9,7 +9,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Reports::ExternalReferrals', type: :request do
-  let!(:user) { create(:user) }
+  let!(:user) { create(:user, roles: [create(:role, can_view_reports: true)]) }
+  let(:user_without_reports) { create(:user) }
   let!(:client) do
     create(
       :client,
@@ -32,6 +33,14 @@ RSpec.describe 'Reports::ExternalReferrals', type: :request do
     it 'redirects unauthenticated users' do
       get reports_external_referrals_path
       expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it 'redirects a user without can_view_reports to the root path' do
+      sign_in user_without_reports
+
+      get reports_external_referrals_path(format: :xlsx), params: filter_params
+
+      expect(response).to redirect_to(root_path)
     end
   end
 
@@ -94,6 +103,17 @@ RSpec.describe 'Reports::ExternalReferrals', type: :request do
       end
     end
 
+    context 'when a checked client is outside the filtered report' do
+      it 'skips client ids outside the filtered report' do
+        out_of_range = create(:client, assessment_name: 'DeidentifiedClientAssessment', rrh_assessment_collected_at: 2.years.ago)
+        params = filter_params.merge(referrals: { clients: { client.id.to_s => '1', out_of_range.id.to_s => '1' } })
+
+        post refer_reports_external_referrals_path(format: :xlsx), params: params
+
+        expect(ExternalReferral.pluck(:client_id)).to contain_exactly(client.id)
+      end
+    end
+
     context 'when no clients are checked (all values are 0)' do
       it 'does not create ExternalReferral records' do
         params = filter_params.merge(referrals: { clients: { client.id.to_s => '0' } })
@@ -104,6 +124,20 @@ RSpec.describe 'Reports::ExternalReferrals', type: :request do
 
         expect(response).to have_http_status(:ok)
       end
+    end
+  end
+
+  describe 'POST /reports/external_referrals/refer without can_view_reports' do
+    before { sign_in user_without_reports }
+
+    it 'does not create referrals for a user without can_view_reports' do
+      params = filter_params.merge(referrals: { clients: { client.id.to_s => '1' } })
+
+      expect do
+        post refer_reports_external_referrals_path(format: :xlsx), params: params
+      end.not_to change(ExternalReferral, :count)
+
+      expect(response).to redirect_to(root_path)
     end
   end
 end
