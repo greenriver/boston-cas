@@ -55,5 +55,39 @@ RSpec.describe 'Reports::HousedAddresses', type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).not_to include('Housedperson')
     end
+
+    context 'when the user can see clients based on rules' do
+      let(:other_client) { create(:client, last_name: 'Otherhoused', female: false) }
+      let(:other_match) do
+        create(
+          :client_opportunity_match,
+          client: other_client,
+          closed: true,
+          active: false,
+          closed_reason: 'success',
+        )
+      end
+
+      before do
+        client.update!(female: true)
+        create(
+          :match_decisions_match_recommendation_dnd_staff,
+          match: other_match,
+          client_move_in_date: 1.month.ago.to_date,
+        )
+        role = create(:role, can_view_reports: true, can_edit_clients_based_on_rules: true)
+        user = create(:user, roles: [role])
+        user.requirements << create(:requirement, rule: create(:rules_female), positive: true)
+        sign_in user
+      end
+
+      it 'lists only housed clients that meet the user requirements' do
+        get reports_housed_addresses_path
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include('Housedperson')
+        expect(response.body).not_to include('Otherhoused')
+      end
+    end
   end
 end

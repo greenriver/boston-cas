@@ -95,6 +95,7 @@ module Reports
     helper_method :filter_params
 
     private def client_scope
+      # Not limited by Client.visible_by: this report is meant to cover every client.
       @client_scope ||= Client
       return @client_scope.none if filter.assessment_types.blank?
 
