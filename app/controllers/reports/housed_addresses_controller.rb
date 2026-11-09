@@ -4,11 +4,14 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module Reports
   class HousedAddressesController < ApplicationController
     include ArelHelper
 
     before_action :authenticate_user!
+    before_action :require_can_view_reports!
 
     def index
       @filter = filter
@@ -86,6 +89,7 @@ module Reports
     private def addresses(start_date, end_date)
       ClientOpportunityMatch.
         joins(:program, :sub_program, :client, :decisions).
+        where(client_id: Client.visible_by(current_user).select(:id)).
         where(md_b_t[:client_move_in_date].between(start_date .. end_date).and(md_b_t[:client_move_in_date].not_eq(nil))).
         where(closed_reason: :success).
         order(md_b_t[:client_move_in_date].desc)

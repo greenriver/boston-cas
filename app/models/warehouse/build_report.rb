@@ -248,10 +248,10 @@ module Warehouse
     end
 
     def data_source_name data_source_id
-      @non_hmis_data_source_id ||= DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
+      @non_hmis_data_source_id ||= ::DataSource.where(db_identifier: 'Deidentified').pluck(:id).first
       return 'Non-HMIS' if data_source_id == @non_hmis_data_source_id
 
-      @data_source_names ||= Hash[DataSource.pluck(:id, :name)]
+      @data_source_names ||= Hash[::DataSource.pluck(:id, :name)]
       @data_source_names[data_source_id] || data_source_id
     end
 

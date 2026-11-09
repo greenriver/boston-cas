@@ -12,6 +12,7 @@ module Warehouse
     acts_as_paranoid(column: :DateDeleted)
 
     belongs_to :organization, class_name: Warehouse::Organization.name, primary_key: [:OrganizationID, :data_source_id], foreign_key: [:OrganizationID, :data_source_id], inverse_of: :projects
+    belongs_to :data_source, class_name: Warehouse::DataSource.name, optional: true, inverse_of: :projects
 
     # Projects can be made confidential explicitly or by inheriting from their organization
     def name
@@ -24,10 +25,11 @@ module Warehouse
       options = {}
       where(confidential: false).
         joins(:organization).
-        preload(:organization).
+        preload(:organization, :data_source).
         order(OrganizationName: :asc, ProjectName: :asc).
         each do |project|
-          org_name = project.organization.OrganizationName
+          org_name = "#{project.organization.OrganizationName} (#{project.data_source.short_display_name})"
+
           options[org_name] ||= []
           options[org_name] << [
             project.ProjectName,
