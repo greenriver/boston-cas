@@ -16,7 +16,8 @@ export default class extends Controller {
     if (typeof $ !== 'undefined') {
       $(this.selectTarget).on('change.vacancy-unit-building', () => this.render())
     } else {
-      this.selectTarget.addEventListener('change', () => this.render())
+      this.onChange = () => this.render()
+      this.selectTarget.addEventListener('change', this.onChange)
     }
     this.render()
   }
@@ -24,6 +25,8 @@ export default class extends Controller {
   disconnect() {
     if (typeof $ !== 'undefined') {
       $(this.selectTarget).off('change.vacancy-unit-building')
+    } else {
+      this.selectTarget.removeEventListener('change', this.onChange)
     }
   }
 

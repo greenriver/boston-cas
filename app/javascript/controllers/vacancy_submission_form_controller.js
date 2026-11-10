@@ -135,8 +135,17 @@ export default class extends Controller {
       delete this[containerProp].dataset.forwardParams
     }
 
-    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-    const html = await response.text()
+    let html
+    try {
+      const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      if (!response.ok) throw new Error(`${section} section request failed with status ${response.status}`)
+      html = await response.text()
+    } catch (error) {
+      if (this.sectionRequestIds[target] !== requestId) return
+      console.error(error)
+      this[containerProp].innerHTML = '<p class="text-danger">This section could not be loaded. Reload the page to try again.</p>'
+      return
+    }
     if (this.sectionRequestIds[target] !== requestId) return
 
     this[containerProp].innerHTML = html
