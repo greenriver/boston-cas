@@ -9,7 +9,7 @@ class OpportunityContactsController < AssociatedContactsController
   private
 
     def contact_owner_source
-      Opportunity
+      Opportunity.visible_by(current_user)
     end
 
     def contact_join_model_source

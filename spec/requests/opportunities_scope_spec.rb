@@ -102,4 +102,30 @@ RSpec.describe 'Opportunities program scope', type: :request do
       end
     end
   end
+
+  describe 'POST /opportunities/:opportunity_id/contacts' do
+    let(:role) do
+      create(
+        :role,
+        can_view_assigned_programs: true,
+        can_view_opportunities: true,
+        can_view_contacts: true,
+        can_edit_contacts: true,
+      )
+    end
+    let(:contact) { create(:contact) }
+
+    it 'does not link a contact to an opportunity in another program' do
+      expect do
+        post opportunity_contacts_path(other_opportunity), params: { opportunity_contact: { contact_id: contact.id } }
+      end.not_to change(OpportunityContact, :count)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'links a contact to an opportunity in a visible program' do
+      expect do
+        post opportunity_contacts_path(own_opportunity), params: { opportunity_contact: { contact_id: contact.id } }
+      end.to change { own_opportunity.opportunity_contacts.where(contact_id: contact.id).count }.by(1)
+    end
+  end
 end
