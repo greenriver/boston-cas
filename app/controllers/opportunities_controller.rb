@@ -12,7 +12,7 @@ class OpportunitiesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_opportunities!, except: [:new, :create]
   before_action :require_can_edit_opportunities!, only: [:update, :destroy, :restore]
-  before_action :require_can_view_opportunities_or_can_add_vacancies!, only: [:new, :create]
+  before_action :require_can_add_vacancies!, only: [:new, :create]
   before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
 
@@ -111,16 +111,18 @@ class OpportunitiesController < ApplicationController
     @opportunity = Opportunity.new(opportunity_params)
 
     if params[:opportunity][:program].blank?
-      @opportunity.errors[:program] = 'Required'
+      @opportunity.errors.add(:program, 'Required')
     else
-      sub_program = SubProgram.find(opportunity_params[:program].to_i)
+      sub_program = sub_program_scope.find_by(id: opportunity_params[:program].to_i)
+      @opportunity.errors.add(:program, 'Not available') if sub_program.nil?
     end
 
     if sub_program.present? && sub_program.has_buildings?
       if params[:opportunity][:building].blank?
-        @opportunity.errors[:building] = 'Required'
+        @opportunity.errors.add(:building, 'Required')
       else
-        building = Building.find(opportunity_params[:building].to_i)
+        building = building_scope.find_by(id: opportunity_params[:building].to_i)
+        @opportunity.errors.add(:building, 'Not available') if building.nil?
       end
     end
     @opportunity.errors.add(:units, 'Required, and must be a number') if params[:opportunity][:units].blank? || ! params[:opportunity][:units].to_i.positive?
@@ -240,14 +242,12 @@ class OpportunitiesController < ApplicationController
     end
   end
 
-  # TODO: limit to programs you are associated with
   private def sub_program_scope
-    SubProgram.open
+    SubProgram.open.where(program_id: Program.visible_or_editable_by(current_user).select(:id))
   end
 
-  # TODO: limit to buildings you are associated with
   private def building_scope
-    Building.all
+    Building.where(id: sub_program_scope.select(:building_id))
   end
 
   private def sort_column
@@ -260,10 +260,6 @@ class OpportunitiesController < ApplicationController
 
   private def query_string
     "%#{@query}%"
-  end
-
-  private def require_can_view_opportunities_or_can_add_vacancies!
-    not_authorized! unless can_view_opportunities? || can_add_vacancies?
   end
 
   private def successful_matches(opportunities)
