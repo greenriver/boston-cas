@@ -102,6 +102,7 @@ RSpec.describe 'Opportunities program scope', type: :request do
     it 'restores an opportunity in an editable program' do
       own_opportunity.destroy
       post opportunity_restore_path(own_opportunity)
+      expect(response).to redirect_to(opportunities_path)
       expect(Opportunity.find_by(id: own_opportunity.id)).to eq(own_opportunity)
     end
 
@@ -127,22 +128,39 @@ RSpec.describe 'Opportunities program scope', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'does not update the opportunity' do
-      patch opportunity_path(own_opportunity), params: { opportunity: { available: false } }
-      expect(response).to have_http_status(:not_found)
-      expect(own_opportunity.reload.available).to be(true)
+    it 'updates the opportunity' do
+      expect do
+        patch opportunity_path(own_opportunity), params: { opportunity: { available: false } }
+      end.to change { own_opportunity.reload.available }.from(true).to(false)
     end
 
-    it 'does not delete the opportunity' do
-      expect { delete opportunity_path(own_opportunity) }.not_to(change { Opportunity.where(id: own_opportunity.id).count })
-      expect(response).to have_http_status(:not_found)
+    it 'deletes the opportunity' do
+      expect { delete opportunity_path(own_opportunity) }.to change { Opportunity.where(id: own_opportunity.id).count }.by(-1)
+      expect(response).to redirect_to(opportunities_path)
     end
 
-    it 'does not restore the opportunity' do
+    it 'restores the opportunity' do
       own_opportunity.destroy
       post opportunity_restore_path(own_opportunity)
-      expect(response).to have_http_status(:not_found)
-      expect(Opportunity.with_deleted.find(own_opportunity.id).deleted_at).not_to be_nil
+      expect(response).to redirect_to(opportunities_path)
+      expect(Opportunity.with_deleted.find(own_opportunity.id).deleted_at).to be_nil
+    end
+  end
+
+  context 'when the role can edit but not view assigned programs' do
+    let(:role) do
+      create(:role, can_edit_assigned_programs: true, can_view_opportunities: true, can_edit_opportunities: true)
+    end
+
+    it 'lists the opportunity in the own program only' do
+      get opportunities_path(tab: route_tab_id)
+      expect(response.body).to include(own_program.name)
+      expect(response.body).not_to include(other_program.name)
+    end
+
+    it 'shows the opportunity' do
+      get opportunity_path(own_opportunity)
+      expect(response).to have_http_status(:ok)
     end
   end
 

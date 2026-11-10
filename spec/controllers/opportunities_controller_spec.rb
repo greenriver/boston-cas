@@ -96,6 +96,14 @@ RSpec.describe OpportunitiesController, type: :controller do
         expect(assigns(:buildings)).not_to include(foreign_building)
       end
 
+      it 'creates one unit and one voucher for a building in the user programs' do
+        own_building = create(:building)
+        project_sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: own_building)
+        expect do
+          post :create, params: { opportunity: { program: project_sub_program.id.to_s, building: own_building.id.to_s, units: '1' } }
+        end.to change(Unit, :count).by(1).and change(Voucher, :count).by(1)
+      end
+
       it 'does not create units in a building outside the user sub-programs' do
         own_building = create(:building)
         project_sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: own_building)

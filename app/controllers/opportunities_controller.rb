@@ -181,7 +181,7 @@ class OpportunitiesController < ApplicationController
 
   # RESTORE /hmis/opportunities/1
   def restore
-    @opportunity = Opportunity.only_deleted.editable_by(current_user).find(params[:opportunity_id])
+    @opportunity = Opportunity.only_deleted.visible_or_editable_by(current_user).find(params[:opportunity_id])
     if @opportunity.restore
       redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> successfully restored."
     else
@@ -193,13 +193,12 @@ class OpportunitiesController < ApplicationController
     Opportunity.where(success: false, available: true).
       joins(:voucher).
       where(vouchers: { available: true }).
-      where(id: Opportunity.visible_by(current_user).select(:id))
+      where(id: Opportunity.visible_or_editable_by(current_user).select(:id))
   end
 
   # Use callbacks to share common setup or constraints between actions.
   private def set_opportunity
-    source = action_name == 'show' ? Opportunity.visible_by(current_user) : Opportunity.editable_by(current_user)
-    @opportunity = source.find(params[:id])
+    @opportunity = Opportunity.visible_or_editable_by(current_user).find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
