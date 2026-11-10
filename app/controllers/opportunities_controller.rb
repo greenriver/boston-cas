@@ -11,7 +11,7 @@ class OpportunitiesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :require_can_view_opportunities!, except: [:new, :create]
-  before_action :require_can_edit_opportunities!, only: [:update, :destroy]
+  before_action :require_can_edit_opportunities!, only: [:update, :destroy, :restore]
   before_action :require_can_view_opportunities_or_can_add_vacancies!, only: [:new, :create]
   before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
@@ -179,26 +179,26 @@ class OpportunitiesController < ApplicationController
 
   # RESTORE /hmis/opportunities/1
   def restore
-    if Opportunity.restore(params[:opportunity_id])
-      @opportunity = Opportunity.find(params[:opportunity_id])
+    deleted_opportunity = Opportunity.only_deleted.editable_by(current_user).find(params[:opportunity_id])
+    if Opportunity.restore(deleted_opportunity.id)
+      @opportunity = Opportunity.find(deleted_opportunity.id)
       redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> successfully restored."
     else
       render :edit, { flash: { error: 'Unable to restore opportunity.' } }
     end
   end
 
-  def get_opportunity # rubocop:disable Naming/AccessorMethodName
-    @opportunity = Opportunity.find(params[:id])
-  end
-
   private def opportunity_scope
     Opportunity.where(success: false, available: true).
       joins(:voucher).
-      where(vouchers: { available: true })
+      where(vouchers: { available: true }).
+      where(id: Opportunity.visible_by(current_user).select(:id))
   end
+
   # Use callbacks to share common setup or constraints between actions.
   private def set_opportunity
-    @opportunity = Opportunity.find(params[:id])
+    source = action_name.in?(['show']) ? Opportunity.visible_by(current_user) : Opportunity.editable_by(current_user)
+    @opportunity = source.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
