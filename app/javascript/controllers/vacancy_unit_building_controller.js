@@ -7,13 +7,24 @@
 import { Controller } from '@hotwired/stimulus'
 
 // Shows the selected building's name and full address below the building
-// dropdown. select2 fires a native `change` on the underlying select, so the
-// change action wires straight through.
+// dropdown. select2 announces selections with a jQuery-triggered `change`,
+// which native listeners (including Stimulus actions) never receive.
 export default class extends Controller {
   static targets = ['select', 'display']
 
   connect() {
+    if (typeof $ !== 'undefined') {
+      $(this.selectTarget).on('change.vacancy-unit-building', () => this.render())
+    } else {
+      this.selectTarget.addEventListener('change', () => this.render())
+    }
     this.render()
+  }
+
+  disconnect() {
+    if (typeof $ !== 'undefined') {
+      $(this.selectTarget).off('change.vacancy-unit-building')
+    }
   }
 
   render() {
