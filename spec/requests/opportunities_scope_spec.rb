@@ -69,7 +69,7 @@ RSpec.describe 'Opportunities program scope', type: :request do
 
   describe 'DELETE /opportunities/:id' do
     it 'does not delete an opportunity in another program' do
-      expect { delete opportunity_path(other_opportunity) }.not_to change { Opportunity.where(id: other_opportunity.id).count }
+      expect { delete opportunity_path(other_opportunity) }.not_to(change { Opportunity.where(id: other_opportunity.id).count })
       expect(response).to have_http_status(:not_found)
     end
 

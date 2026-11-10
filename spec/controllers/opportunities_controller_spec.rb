@@ -91,7 +91,7 @@ RSpec.describe OpportunitiesController, type: :controller do
         create(:sub_program, program: other_program, program_type: 'Project-Based', building: foreign_building)
         expect do
           post :create, params: { opportunity: { program: project_sub_program.id.to_s, building: foreign_building.id.to_s, units: '1' } }
-        end.not_to change { [Unit.count, Voucher.count] }
+        end.not_to(change { [Unit.count, Voucher.count] })
         expect(response).to render_template(:new)
       end
     end
