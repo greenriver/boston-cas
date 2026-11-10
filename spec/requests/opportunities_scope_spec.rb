@@ -10,6 +10,7 @@ require 'rails_helper'
 
 RSpec.describe 'Opportunities program scope', type: :request do
   let(:user) { create(:user) }
+  let(:own_program_editable) { true }
   let(:route) { create(:default_route) }
   let(:route_tab_id) { route.title.parameterize.dasherize }
   let(:own_program) { create(:program, name: 'Own Agency Program', match_route: route) }
@@ -32,7 +33,7 @@ RSpec.describe 'Opportunities program scope', type: :request do
 
   before do
     user.roles << role
-    EntityViewPermission.create!(entity: own_program, agency: user.agency, editable: true)
+    EntityViewPermission.create!(entity: own_program, agency: user.agency, editable: own_program_editable)
     own_opportunity
     other_opportunity
     sign_in user
@@ -43,6 +44,18 @@ RSpec.describe 'Opportunities program scope', type: :request do
       get opportunities_path(tab: route_tab_id)
       expect(response.body).to include(own_program.name)
       expect(response.body).not_to include(other_program.name)
+    end
+
+    context 'when the user can view all programs' do
+      let(:role) { create(:role, can_view_programs: true, can_view_opportunities: true) }
+
+      before { EntityViewPermission.where(agency: user.agency).destroy_all }
+
+      it 'lists opportunities in every program without agency permissions' do
+        get opportunities_path(tab: route_tab_id)
+        expect(response.body).to include(own_program.name)
+        expect(response.body).to include(other_program.name)
+      end
     end
   end
 
@@ -92,14 +105,44 @@ RSpec.describe 'Opportunities program scope', type: :request do
       expect(Opportunity.find_by(id: own_opportunity.id)).to eq(own_opportunity)
     end
 
-    context 'with only the view permission' do
-      let(:role) { create(:role, can_view_programs: true, can_view_opportunities: true) }
+    context 'without the opportunity edit permission' do
+      let(:role) do
+        create(:role, can_view_assigned_programs: true, can_edit_assigned_programs: true, can_view_opportunities: true)
+      end
 
       it 'does not restore an opportunity' do
         own_opportunity.destroy
         post opportunity_restore_path(own_opportunity)
+        expect(response).to redirect_to(root_path)
         expect(Opportunity.with_deleted.find(own_opportunity.id).deleted_at).not_to be_nil
       end
+    end
+  end
+
+  context 'when the own program is visible but not editable' do
+    let(:own_program_editable) { false }
+
+    it 'shows the opportunity' do
+      get opportunity_path(own_opportunity)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'does not update the opportunity' do
+      patch opportunity_path(own_opportunity), params: { opportunity: { available: false } }
+      expect(response).to have_http_status(:not_found)
+      expect(own_opportunity.reload.available).to be(true)
+    end
+
+    it 'does not delete the opportunity' do
+      expect { delete opportunity_path(own_opportunity) }.not_to(change { Opportunity.where(id: own_opportunity.id).count })
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'does not restore the opportunity' do
+      own_opportunity.destroy
+      post opportunity_restore_path(own_opportunity)
+      expect(response).to have_http_status(:not_found)
+      expect(Opportunity.with_deleted.find(own_opportunity.id).deleted_at).not_to be_nil
     end
   end
 
