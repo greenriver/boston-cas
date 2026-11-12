@@ -145,7 +145,7 @@ class VacancySubmissionsController < ApplicationController
     end
     sub_program = allowed_sub_programs(vacancy_submission).find(params[:sub_program_id])
     vacancy_submission.required_document_names = Array(params[:required_document_names]) if params[:required_document_names].present?
-    vacancy_submission.units = normalize_units(params[:units]) if params[:units].present?
+    vacancy_submission.units = normalize_units(params[:units], stored_submission: vacancy_submission) if params[:units].present?
 
     locals = config.call(sub_program, vacancy_submission)
     render partial: locals.delete(:partial), locals: locals
@@ -203,7 +203,7 @@ class VacancySubmissionsController < ApplicationController
       'sub_program_id' => sub_program.id,
       'route' => VacancySubmission.derive_route(sub_program),
       'is_voucher' => VacancySubmission.derive_is_voucher(sub_program),
-      'units' => normalize_units(submission_params[:units]),
+      'units' => normalize_units(submission_params[:units], stored_submission: @submission),
       'required_document_names' => Array(submission_params[:required_document_names]),
       'notes' => submission_params[:notes].to_s.strip.presence,
     }
@@ -248,7 +248,7 @@ class VacancySubmissionsController < ApplicationController
     params.require(:vacancy_submission).permit(
       :program_id, :sub_program_id, :notes,
       units: [
-        :name, :building_id, :unit_number,
+        :uid, :name, :building_id, :unit_number,
         :date_ready, :age_limit, :bedrooms, :notes,
         shared_spaces: [],
         amenities: [],
@@ -261,23 +261,31 @@ class VacancySubmissionsController < ApplicationController
     )
   end
 
-  def normalize_units(units_params)
+  # Users without can_assign_requirements keep each unit's stored requirements;
+  # whatever requirements they post are ignored.
+  def normalize_units(units_params, stored_submission: nil)
     return [] if units_params.blank?
 
+    stored_requirements = stored_submission&.persisted? ? stored_submission.requirements_by_unit_uid : {}
     units_params.values.map do |unit|
       h = unit.respond_to?(:to_unsafe_h) ? unit.to_unsafe_h : unit.to_h
       h['attributes'] = Array(h['attributes']&.values)
       h['media_links'] = Array(h['media_links']&.values)
-      # requirements_attributes comes from the form submit; requirements (as a
-      # numeric-keyed hash) comes from forward-params on re-render after failure.
-      h['requirements'] = if h.key?('requirements_attributes')
-        normalize_requirements(h.delete('requirements_attributes'))
-      else
-        reqs = h['requirements']
-        reqs.is_a?(Hash) ? reqs.values : Array(reqs)
-      end
+      h['uid'] = h['uid'].presence || SecureRandom.uuid
+      posted_requirements = posted_unit_requirements(h)
+      # Removed from the hash so a uid posted twice keeps its requirements on one unit only.
+      h['requirements'] = can_assign_requirements? ? posted_requirements : stored_requirements.delete(h['uid']) || []
       h
     end
+  end
+
+  # requirements_attributes comes from the form submit; requirements (as a
+  # numeric-keyed hash) comes from forward-params on re-render after failure.
+  def posted_unit_requirements(unit_hash)
+    return normalize_requirements(unit_hash.delete('requirements_attributes')) if unit_hash.key?('requirements_attributes')
+
+    reqs = unit_hash['requirements']
+    reqs.is_a?(Hash) ? reqs.values : Array(reqs)
   end
 
   def normalize_requirements(reqs_params)

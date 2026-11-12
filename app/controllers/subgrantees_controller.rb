@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright Green River Data Group, Inc.
 #
@@ -31,7 +33,7 @@ class SubgranteesController < ApplicationController
   end
 
   def create
-    if @subgrantee = Subgrantee.create(subgrantee_params)
+    if (@subgrantee = Subgrantee.create(subgrantee_params))
       flash[:notice] = "#{@subgrantee.name} was successfully added."
       redirect_to subgrantee_path @subgrantee
     else
@@ -56,37 +58,39 @@ class SubgranteesController < ApplicationController
   end
 
   private
-    def subgrantee_scope
-      Subgrantee
-    end
 
-    def building_scope
-      Building
-    end
+  def subgrantee_scope
+    Subgrantee
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def subgrantee_params
-      params_base = params[:subgrantee] || ActionController::Parameters.new
-      params_base.permit(
-        :name,
-        service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  def building_scope
+    Building
+  end
 
-    def set_subgrantee
-      @subgrantee = subgrantee_scope.find(params[:id])
-    end
+  # Only allow-listed parameters pass through.
+  def subgrantee_params
+    params_base = params[:subgrantee] || ActionController::Parameters.new
+    permitted = params_base.permit(
+      :name,
+      service_ids: [],
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+    assignable_requirements(permitted)
+  end
 
-    def sort_column
-      Subgrantee.column_names.include?(params[:sort]) ? params[:sort] : 'id'
-    end
+  def set_subgrantee
+    @subgrantee = subgrantee_scope.find(params[:id])
+  end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
+  def sort_column
+    Subgrantee.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+  end
 
-    def query_string
-      "%#{@query}%"
-    end
+  def sort_direction
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def query_string
+    "%#{@query}%"
+  end
 end

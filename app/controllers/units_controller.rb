@@ -131,7 +131,7 @@ class UnitsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def unit_params
-    params.require(:unit).permit(
+    permitted = params.require(:unit).permit(
       :name,
       :available,
       :building_id,
@@ -139,6 +139,7 @@ class UnitsController < ApplicationController
       :notes,
       requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
     )
+    assignable_requirements(permitted)
   end
 
   def filter_params

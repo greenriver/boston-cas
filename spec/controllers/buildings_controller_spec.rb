@@ -46,4 +46,17 @@ RSpec.describe BuildingsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update requirements' do
+    let(:requirement_owner) { create(:building, name: 'Old Name') }
+    let(:changed_attributes) { { name: 'New Name' } }
+    let(:minimal_role_attributes) { { can_view_buildings: true, can_edit_buildings: true } }
+    let(:send_request) do
+      ->(requirements) do
+        patch :update, params: { id: requirement_owner.id, building: { name: 'New Name', requirements_attributes: requirements } }
+      end
+    end
+
+    it_behaves_like 'assignable requirements'
+  end
 end

@@ -1,23 +1,6 @@
 - unless local_assigns[:show_label] == false
   %label Inherited Requirements
-- if inheritee.inherited_requirements_by_source.values.none?(&:present?)
-  %p (none)
-- else
-  .table-responsive
-    %table.table
-      %thead
-        %tr
-          %th Type
-          %th Rule
-          %th Source
-      %tbody
-        - inheritee.inherited_requirements_by_source.each do |requirement_source, requirements|
-          - requirements.each do |requirement|
-            %tr
-              %td
-                %div{class: ['badge', requirement.modal_verb_class]}= requirement.modal_verb
-              %td
-                = requirement.rule_text
-                - if requirement.variable.present?
-                  = requirement.display_for_variable
-              %td= requirement_source.name
+- sources = {}
+- inheritee.inherited_requirements_by_source.each do |requirement_source, requirements|
+  - requirements.each { |requirement| sources[requirement] = requirement_source }
+= render 'requirement_manager/requirements_table', requirements: sources.keys, sources: sources

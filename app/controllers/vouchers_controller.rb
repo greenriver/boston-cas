@@ -171,22 +171,24 @@ class VouchersController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   private def voucher_params
-    params.require(:sub_program).
+    permitted = params.require(:sub_program).
       permit(
         :sub_program_id,
         :add_vouchers,
         vouchers_attributes: [:id, :available, :unit_id, :date_available],
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
       )
+    assignable_requirements(permitted)
   end
 
   private def requirement_params
     return {} unless params[:voucher].present?
 
-    params.require(:voucher).
+    permitted = params.require(:voucher).
       permit(
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
       )
+    assignable_requirements(permitted)
   end
 
   def search_scope

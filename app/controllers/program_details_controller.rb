@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright Green River Data Group, Inc.
 #
@@ -29,7 +31,7 @@ class ProgramDetailsController < ApplicationController
   end
 
   private def program_params
-    params.require(:program).
+    permitted = params.require(:program).
       permit(
         :name,
         :description,
@@ -48,5 +50,6 @@ class ProgramDetailsController < ApplicationController
           :_destroy,
         ],
       )
+    assignable_requirements(permitted)
   end
 end
