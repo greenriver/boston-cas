@@ -19,15 +19,14 @@ RSpec.describe 'Rule#variable_options', type: :model do
     JSON.parse(rule.variable_options.to_json)
   end
 
-  # CI has no warehouse tables, so warehouse records can't be created there.
+  # CI has no warehouse tables. stub_const keeps the models out of play entirely:
+  # any allow(...) on an ActiveRecord class makes rspec-rails load its columns.
   def stub_warehouse_queries
     allow(Warehouse::Base).to receive(:enabled?).and_return(true)
-    allow(Warehouse::Tag).to receive(:pluck).with(:name).and_return(['Veteran'])
-    allow(Warehouse::Cohort).to receive(:visible_in_cas).
-      and_return(double(active: double(pluck: [[1, 'Cohort', nil]])))
+    stub_const('Warehouse::Tag', double(pluck: ['Veteran']))
+    stub_const('Warehouse::Cohort', double(visible_in_cas: double(active: double(pluck: [[1, 'Cohort', nil]]))))
     project = double(id: 1, ProjectName: 'Project', organization: double(OrganizationName: 'Org'))
-    allow(Warehouse::Project).to receive(:joins).with(:organization).
-      and_return(double(preload: [project]))
+    stub_const('Warehouse::Project', double(joins: double(preload: [project])))
   end
 
   it 'discovers the select-type rules, including those backed by the database' do
