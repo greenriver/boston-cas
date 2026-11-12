@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class MatchDecisionAcknowledgmentsController < ApplicationController
   include HasMatchAccessContext
 
@@ -31,9 +33,14 @@ class MatchDecisionAcknowledgmentsController < ApplicationController
 
   private def find_decision!
     @decision = @match.decision_from_param params[:decision_id]
+    head :not_found unless @decision
   end
 
   private def authorize_decision!
-    # TODO ensure that the current contact can authorize this decision
+    return if @decision.accessible_by?(current_contact) &&
+      @decision.editable? &&
+      @decision.status.in?(['pending', 'expiration_update'])
+
+    head :forbidden
   end
 end

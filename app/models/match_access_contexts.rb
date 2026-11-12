@@ -4,20 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 module MatchAccessContexts
-  # Matches can either be accessed directly if the user is signed in,
-  # or via a notification code in a link.
-
-  # The classes in this module provide controllers and views with
-  # logic that is dependent on the way the match is being accessed
-
+  # Every match route requires a signed-in user, whose contact is the acting contact.
+  # Routes under a notification link do too; the notification code grants no access.
   def self.build controller
-    # Commenting this logic out disables the notification code access control
-    # if controller.params[:notification_id].present? then
-    #   Notification.new(controller)
-    # else
-      AuthenticatedUser.new(controller)
-    # end
+    AuthenticatedUser.new(controller)
   end
-
 end
