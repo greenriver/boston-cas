@@ -8,6 +8,8 @@
 
 class NonHmisAssessmentsController < ApplicationController
   before_action :set_client
+  before_action :require_client_permission!, only: [:index, :new, :create]
+  before_action :require_can_edit_client!, only: [:new, :create]
   before_action :set_assessment, only: [:show, :edit, :update, :destroy, :unlock]
   before_action :require_can_see_assessment!, only: [:show]
   before_action :require_can_edit_assessment!, only: [:edit, :update, :destroy]
@@ -24,6 +26,8 @@ class NonHmisAssessmentsController < ApplicationController
 
   def create
     @assessment = build_assessment
+    return redirect_to new_polymorphic_path([@non_hmis_client, :non_hmis_assessment]) if @assessment.requires_assessment_type_choice? && @assessment.assessment_type.blank?
+
     opts = clean_assessment_params(@assessment.assessment_params(params))
 
     @assessment.update(opts)
@@ -104,6 +108,9 @@ class NonHmisAssessmentsController < ApplicationController
 
     assessment_params[:user_id] = current_user.id
 
+    # The assessment type is set when the assessment is built, never from the body.
+    assessment_params.delete(:assessment_type)
+
     assessment_params[:required_number_of_bedrooms] = nil if assessment_params[:required_number_of_bedrooms] == 'on'
     assessment_params[:sro_ok] = nil if assessment_params[:sro_ok] == 'on'
 
@@ -117,6 +124,22 @@ class NonHmisAssessmentsController < ApplicationController
     end
 
     assessment_params
+  end
+
+  private def require_client_permission!
+    return if current_user.can_edit_all_clients?
+    return if action_name == 'index' && current_user.can_view_all_covid_pathways?
+
+    permitted = if @non_hmis_client.is_a?(IdentifiedClient)
+      current_user.can_enter_identified_clients? || current_user.can_manage_identified_clients? || current_user.can_manage_all_identified_clients?
+    else
+      current_user.can_enter_deidentified_clients? || current_user.can_manage_deidentified_clients? || current_user.can_manage_all_deidentified_clients?
+    end
+    not_authorized! unless permitted
+  end
+
+  private def require_can_edit_client!
+    not_authorized! unless @non_hmis_client.editable_by?(current_user)
   end
 
   private def require_can_edit_assessment!
@@ -133,9 +156,10 @@ class NonHmisAssessmentsController < ApplicationController
 
   private def build_assessment
     assessment = @non_hmis_client.assessment_type.constantize.new(agency_id: current_user.agency_id, non_hmis_client_id: @non_hmis_client.id)
-    return assessment unless assessment.requires_assessment_type_choice? && assessment.assessment_type.blank? && params[:assessment_type].present?
+    return assessment unless assessment.requires_assessment_type_choice?
 
-    assessment.assessment_type = params[:assessment_type]
+    requested_type = params[:assessment_type].to_s
+    assessment.assessment_type = requested_type if assessment.assessment_type_options.keys.map(&:to_s).include?(requested_type)
     assessment
   end
 
