@@ -25,6 +25,7 @@ export default class extends Controller {
 
   connect() {
     this.isInitializing = true
+    this.sectionRequestIds = {}
     this.programMap = {}
     this.programsValue.forEach((p) => {
       this.programMap[p.id] = p
@@ -88,9 +89,11 @@ export default class extends Controller {
 
     sub.disabled = false
     if (typeof $ !== 'undefined') {
+      // Runs onSubProgramChange, which refreshes the sections.
       $(sub).trigger('change')
+    } else {
+      this.refreshAll()
     }
-    this.refreshAll()
   }
 
   static sectionDefs = [
@@ -111,6 +114,11 @@ export default class extends Controller {
     if (!this[hasProp]) return
 
     const containerProp = `${target}Target`
+    // Responses can arrive out of order; only the latest request per section
+    // may replace the container, or it would discard what the user entered.
+    const requestId = (this.sectionRequestIds[target] || 0) + 1
+    this.sectionRequestIds[target] = requestId
+
     const subProgramId = this.subProgramSelectTarget.value
     if (!subProgramId) {
       this[containerProp].innerHTML = emptyHtml
@@ -127,8 +135,20 @@ export default class extends Controller {
       delete this[containerProp].dataset.forwardParams
     }
 
-    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-    this[containerProp].innerHTML = await response.text()
+    let html
+    try {
+      const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      if (!response.ok) throw new Error(`${section} section request failed with status ${response.status}`)
+      html = await response.text()
+    } catch (error) {
+      if (this.sectionRequestIds[target] !== requestId) return
+      console.error(error)
+      this[containerProp].innerHTML = '<p class="text-danger">This section could not be loaded. Reload the page to try again.</p>'
+      return
+    }
+    if (this.sectionRequestIds[target] !== requestId) return
+
+    this[containerProp].innerHTML = html
     this.applyErrors(this[containerProp])
   }
 
