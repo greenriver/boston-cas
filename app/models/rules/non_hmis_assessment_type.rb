@@ -24,7 +24,7 @@ class Rules::NonHmisAssessmentType < Rule
   end
 
   def variable_options
-    available_assessments
+    available_assessments.to_a
   end
 
   def available_assessments

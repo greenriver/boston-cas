@@ -24,7 +24,7 @@ class Rules::RankBelow < Rule
   end
 
   def variable_options
-    available_ranks
+    available_ranks.map { |i| [i, i] }
   end
 
   def available_ranks

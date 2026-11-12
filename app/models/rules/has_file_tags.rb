@@ -31,8 +31,8 @@ class Rules::HasFileTags < Rule
     return [] unless Warehouse::Base.enabled?
 
     Warehouse::Tag.pluck(:name).map do |name|
-      [name, name] # The front end requires a map, so we construct one
-    end.to_h
+      [name, name]
+    end
   end
 
   def display_for_variable(value)

@@ -63,6 +63,7 @@ class Rule < ApplicationRecord
     nil
   end
 
+  # Array of [value, label] pairs. The requirement forms iterate options as |value, label|.
   def variable_options
     []
   end
