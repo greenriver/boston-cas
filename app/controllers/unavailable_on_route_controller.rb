@@ -4,10 +4,12 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class UnavailableOnRouteController < ApplicationController
   before_action :authenticate_user!
-  before_action :some_clients_editable!
   before_action :set_client
+  before_action :require_client_editable!
   before_action :set_unavailable_for
 
   def destroy
@@ -31,12 +33,11 @@ class UnavailableOnRouteController < ApplicationController
     @unavailable_for = @client.unavailable_as_candidate_fors.find(params[:id].to_i)
   end
 
-  def some_clients_editable!
-    Client.editable_by(current_user).where(id: params[:client_id].to_i).exists?
+  def require_client_editable!
+    not_authorized! unless @client.editable_by?(current_user)
   end
 
   def flash_interpolation_options
     { resource_name: 'Match Route' }
   end
-
 end
