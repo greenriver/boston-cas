@@ -19,6 +19,17 @@ RSpec.describe 'Rule#variable_options', type: :model do
     JSON.parse(rule.variable_options.to_json)
   end
 
+  # CI has no warehouse tables, so warehouse records can't be created there.
+  def stub_warehouse_queries
+    allow(Warehouse::Base).to receive(:enabled?).and_return(true)
+    allow(Warehouse::Tag).to receive(:pluck).with(:name).and_return(['Veteran'])
+    allow(Warehouse::Cohort).to receive(:visible_in_cas).
+      and_return(double(active: double(pluck: [[1, 'Cohort', nil]])))
+    project = double(id: 1, ProjectName: 'Project', organization: double(OrganizationName: 'Org'))
+    allow(Warehouse::Project).to receive(:joins).with(:organization).
+      and_return(double(preload: [project]))
+  end
+
   it 'discovers the select-type rules, including those backed by the database' do
     expect(rule_classes).to include(
       Rules::RankBelow,
@@ -35,11 +46,7 @@ RSpec.describe 'Rule#variable_options', type: :model do
     before do
       create(:neighborhood_cambridge)
       create(:tag)
-      Warehouse::Tag.create!(name: 'Veteran')
-      Warehouse::Cohort.create!(name: 'Cohort', visible_in_cas: true, active_cohort: true)
-      data_source = Warehouse::DataSource.create!(name: 'Data Source')
-      Warehouse::Organization.create!(OrganizationID: 'O1', OrganizationName: 'Org', data_source_id: data_source.id)
-      Warehouse::Project.create!(ProjectID: 'P1', ProjectName: 'Project', OrganizationID: 'O1', data_source_id: data_source.id)
+      stub_warehouse_queries
     end
 
     rule_classes.each do |klass|
@@ -72,8 +79,7 @@ RSpec.describe 'Rule#variable_options', type: :model do
   end
 
   it 'HasFileTags offers warehouse tag names as both value and label' do
-    allow(Warehouse::Base).to receive(:enabled?).and_return(true)
-    Warehouse::Tag.create!(name: 'Veteran')
+    stub_warehouse_queries
 
     parsed = option_pairs(Rules::HasFileTags.new)
     expect(parsed).to be_an(Array)
