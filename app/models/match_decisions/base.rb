@@ -208,6 +208,17 @@ module MatchDecisions
       false
     end
 
+    # Cancel and step back are the cancel-match functionality granted by can_reject_matches.
+    # A contact who reaches the step only through declineable_by? may only decline it.
+    def status_allowed_for?(status, contact)
+      return false if status == 'acknowledged' && !saved_status.in?(['pending', 'expiration_update'])
+      return contact&.user_can_reject_matches? || false if status.in?(['canceled', 'back'])
+      return contact&.user_can_delete_matches? || false if status == 'destroy'
+      return declineable_by?(contact) if status == 'shelter_declined'
+
+      accessible_by?(contact)
+    end
+
     # Override to return true for a step where more than one contact type can
     # independently act on it (e.g. both a shelter agency contact and an HSA
     # contact can decline it), each seeing a different, audience-scoped set of reasons.

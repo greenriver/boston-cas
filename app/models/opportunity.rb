@@ -211,6 +211,9 @@ class Opportunity < ApplicationRecord
   scope :editable_by, ->(user) {
     joins(:sub_program).merge(SubProgram.editable_by(user))
   }
+  scope :visible_or_editable_by, ->(user) {
+    joins(:sub_program).where(sub_programs: { program_id: Program.visible_or_editable_by(user).select(:id) })
+  }
 
   # NOTE: This cleans up the opportunity and all associated items
   # making it as though this never happened.  Use with extreme caution

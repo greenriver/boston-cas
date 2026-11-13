@@ -192,6 +192,41 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         expect(response).to render_template(:new)
       end
     end
+
+    context 'with unit requirements' do
+      let(:rule) { create(:bedroom_exact) }
+      let(:params_with_requirement) do
+        valid_params.deep_merge(
+          vacancy_submission: {
+            units: {
+              '0' => {
+                requirements_attributes: {
+                  '0' => { rule_id: rule.id.to_s, positive: 'true', variable: '2' },
+                },
+              },
+            },
+          },
+        )
+      end
+
+      it 'stores the requirements when the user can assign requirements' do
+        post :create, params: params_with_requirement
+
+        expect(VacancySubmission.last.draft_data['units'].first['requirements']).to eq(
+          [{ 'rule_id' => rule.id.to_s, 'positive' => 'true', 'variable' => '2' }],
+        )
+      end
+
+      it 'saves the unit without its requirements when the user cannot assign requirements' do
+        user.roles = [create(:admin_role, can_assign_requirements: false)]
+
+        post :create, params: params_with_requirement
+
+        unit = VacancySubmission.last.draft_data['units'].first
+        expect(unit['unit_number']).to eq('1A')
+        expect(unit['requirements']).to eq([])
+      end
+    end
   end
 
   describe 'GET #sub_program_section (vacancy section)' do
@@ -235,6 +270,67 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       sub_program = create(:sub_program, program: confidential_program, program_type: 'Project-Based', building: building, confidential: false)
       get_vacancy_section(sub_program)
       expect(response.body).to include('This program is confidential, do not enter a real address as the unit number')
+    end
+
+    context 'for a submission whose unit has requirements' do
+      let(:rule) { create(:bedroom_exact) }
+      let(:submission) { create(:vacancy_submission, :changes_requested) }
+
+      before do
+        submission.units = [submission.units.first.merge('requirements' => [{ 'rule_id' => rule.id.to_s, 'positive' => 'true', 'variable' => '2' }])]
+        submission.save!
+      end
+
+      def request_submission_vacancy_section
+        get :sub_program_section, params: { section: 'vacancy', sub_program_id: submission.sub_program_id, vacancy_submission_id: submission.id }
+      end
+
+      it 'renders requirement inputs and no read-only list when the user can assign requirements' do
+        request_submission_vacancy_section
+
+        expect(response.body).to include('name="vacancy_submission[units][0][requirements_attributes][0][rule_id]"')
+        expect(response.body).not_to include('Must have Bedroom exact')
+      end
+
+      it 'lists the requirements without inputs when the user cannot assign requirements' do
+        user.roles = [create(:admin_role, can_assign_requirements: false)]
+
+        request_submission_vacancy_section
+
+        expect(response.body).to include('vacancy_submission[units][0][unit_number]')
+        expect(response.body).to include('Must have Bedroom exact')
+        expect(response.body).not_to include('requirements_attributes')
+      end
+
+      # The edit form loads this section with the stored units forwarded as params.
+      it 'lists the stored requirements when forwarded units omit them and the user cannot assign requirements' do
+        user.roles = [create(:admin_role, can_assign_requirements: false)]
+
+        get :sub_program_section, params: {
+          section: 'vacancy',
+          sub_program_id: submission.sub_program_id,
+          vacancy_submission_id: submission.id,
+          units: { '0' => { building_id: submission.units.first['building_id'], unit_number: '1A', uid: 'position-0' } },
+        }
+
+        expect(response.body).to include('Must have Bedroom exact')
+      end
+
+      it 'renders the fallback uid of a stored unit saved without one as a hidden field' do
+        request_submission_vacancy_section
+
+        expect(response.body).to match(/name="vacancy_submission\[units\]\[0\]\[uid\]"[^>]*value="position-0"|value="position-0"[^>]*name="vacancy_submission\[units\]\[0\]\[uid\]"/)
+      end
+
+      it 'renders the stored uid of a voucher as a hidden field' do
+        voucher_submission = create(:vacancy_submission, :voucher, :changes_requested)
+        voucher_submission.units = [{ 'name' => 'Voucher 1', 'uid' => 'voucher-a' }]
+        voucher_submission.save!
+
+        get :sub_program_section, params: { section: 'vacancy', sub_program_id: voucher_submission.sub_program_id, vacancy_submission_id: voucher_submission.id }
+
+        expect(response.body).to match(/name="vacancy_submission\[units\]\[0\]\[uid\]"[^>]*value="voucher-a"|value="voucher-a"[^>]*name="vacancy_submission\[units\]\[0\]\[uid\]"/)
+      end
     end
   end
 
@@ -369,6 +465,98 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: { program_id: program.id },
       }
       expect(response).to render_template(:edit)
+    end
+
+    context 'when a unit already has requirements' do
+      let(:existing_rule) { create(:bedroom_exact) }
+      let(:posted_rule) { create(:bedroom_exact, name: 'Posted rule') }
+      let(:params_with_requirement) do
+        update_params.deep_merge(
+          vacancy_submission: {
+            units: {
+              '0' => {
+                requirements_attributes: {
+                  '0' => { rule_id: posted_rule.id.to_s, positive: 'false', variable: '3' },
+                },
+              },
+            },
+          },
+        )
+      end
+
+      before do
+        submission.units = [submission.units.first.merge('requirements' => [{ 'rule_id' => existing_rule.id.to_s, 'positive' => 'true', 'variable' => '2' }])]
+        submission.save!
+      end
+
+      it 'replaces the requirements with the posted ones when the user can assign requirements' do
+        patch :update, params: params_with_requirement
+
+        expect(submission.reload.draft_data['units'].first['requirements']).to eq(
+          [{ 'rule_id' => posted_rule.id.to_s, 'positive' => 'false', 'variable' => '3' }],
+        )
+      end
+
+      it 'saves the unit and keeps its stored requirements when the user cannot assign requirements' do
+        user.roles = [create(:admin_role, can_assign_requirements: false)]
+
+        patch :update, params: params_with_requirement.deep_merge(vacancy_submission: { units: { '0' => { uid: 'position-0' } } })
+
+        expect(response).to redirect_to(vacancy_submission_path(submission))
+        unit = submission.reload.draft_data['units'].first
+        expect(unit['unit_number']).to eq('2B')
+        expect(unit['requirements']).to eq(
+          [{ 'rule_id' => existing_rule.id.to_s, 'positive' => 'true', 'variable' => '2' }],
+        )
+      end
+    end
+
+    context 'when a user without can_assign_requirements edits units that have uids' do
+      let(:rule_a) { create(:bedroom_exact, name: 'Rule A') }
+      let(:rule_b) { create(:bedroom_exact, name: 'Rule B') }
+      let(:requirements_a) { [{ 'rule_id' => rule_a.id.to_s, 'positive' => 'true', 'variable' => '1' }] }
+      let(:requirements_b) { [{ 'rule_id' => rule_b.id.to_s, 'positive' => 'true', 'variable' => '2' }] }
+
+      def patch_units(units)
+        patch :update, params: { id: submission.id, vacancy_submission: { program_id: program.id, sub_program_id: sub_program.id, units: units } }
+      end
+
+      before do
+        user.roles = [create(:admin_role, can_assign_requirements: false)]
+        submission.units = [
+          { 'building_id' => building.id, 'unit_number' => '1A', 'uid' => 'unit-a', 'requirements' => requirements_a },
+          { 'building_id' => building.id, 'unit_number' => '1B', 'uid' => 'unit-b', 'requirements' => requirements_b },
+        ]
+        submission.save!
+      end
+
+      it 'keeps each remaining unit paired with its own requirements after another unit is removed' do
+        patch_units('1' => { building_id: building.id, unit_number: '1B', uid: 'unit-b' })
+
+        units = submission.reload.draft_data['units']
+        expect(units.map { |u| [u['uid'], u['unit_number'], u['requirements']] }).to eq([['unit-b', '1B', requirements_b]])
+      end
+
+      it 'gives stored requirements only to the first unit that posts their uid' do
+        patch_units(
+          '0' => { building_id: building.id, unit_number: '1A', uid: 'unit-a' },
+          '1' => { building_id: building.id, unit_number: '1C', uid: 'unit-a' },
+        )
+
+        units = submission.reload.draft_data['units']
+        expect(units.map { |u| [u['unit_number'], u['requirements']] }).to eq([['1A', requirements_a], ['1C', []]])
+      end
+
+      it 'saves a new unit with no requirements and a generated uid' do
+        patch_units(
+          '0' => { building_id: building.id, unit_number: '1A', uid: 'unit-a' },
+          '2' => { building_id: building.id, unit_number: '3C' },
+        )
+
+        new_unit = submission.reload.draft_data['units'].last
+        expect(new_unit['requirements']).to eq([])
+        expect(new_unit['uid']).to match(/\A\h{8}-\h{4}-\h{4}-\h{4}-\h{12}\z/)
+      end
     end
   end
 

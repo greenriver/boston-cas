@@ -105,6 +105,19 @@ class VacancySubmission < ApplicationRecord
     is_voucher
   end
 
+  # Units have no database id. The form posts each unit's uid so the controller can
+  # find the stored unit it came from. A unit saved without a uid gets one from its
+  # stored position, which holds until the next successful save.
+  def units_with_uids
+    Array(units).each_with_index.map do |unit, index|
+      unit['uid'].present? ? unit : unit.merge('uid' => "position-#{index}")
+    end
+  end
+
+  def requirements_by_unit_uid
+    units_with_uids.to_h { |unit| [unit['uid'], Array(unit['requirements'])] }
+  end
+
   def site_display
     return ['N/A'] if voucher?
 

@@ -39,7 +39,7 @@ export const RequirementVariableMixin = {
     }
     container.hidden = false
     const type = selected?.dataset.variableType || 'text'
-    const options = JSON.parse(selected?.dataset.variableOptions || '[]')
+    const options = this.normalizeVariableOptions(JSON.parse(selected?.dataset.variableOptions || '[]'))
     const label = selected?.dataset.variableLabel || ''
     const varName = container.dataset.variableName
     const currentValue = container.querySelector('[data-req-variable]')?.value || ''
@@ -75,6 +75,13 @@ export const RequirementVariableMixin = {
       input.value = currentValue
       container.appendChild(input)
     }
+  },
+
+  // Returns [value, label] pairs. Accepts an object as { value: label }; any other non-array yields no options.
+  normalizeVariableOptions(raw) {
+    if (Array.isArray(raw)) return raw.map((o) => (Array.isArray(o) ? o : [o, o]))
+    if (raw && typeof raw === 'object') return Object.entries(raw)
+    return []
   },
 
   buildSelectInput(container, varName, options, currentValue, multiple) {

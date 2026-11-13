@@ -24,7 +24,7 @@ class Rules::NonHmisAssessmentType < Rule
   end
 
   def variable_options
-    available_assessments
+    available_assessments.to_a
   end
 
   def available_assessments
@@ -39,9 +39,12 @@ class Rules::NonHmisAssessmentType < Rule
   def clients_that_fit(scope, requirement, _opportunity)
     raise RuleDatabaseStructureMissing.new("clients.assessment_name missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:assessment_name.to_s)
 
-    where = "'#{value_as_array(requirement.variable)}'::jsonb ? assessment_name"
-    where = "not(#{where}) OR assessment_name is null" unless requirement.positive
-    scope.where(where)
+    values = value_as_array(requirement.variable)
+    if requirement.positive
+      scope.where(assessment_name: values)
+    else
+      scope.where.not(assessment_name: values).or(scope.where(assessment_name: nil))
+    end
   end
 
   private def value_as_array(value)

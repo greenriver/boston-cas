@@ -32,17 +32,17 @@ class Rules::TaggedWith < Rule
   end
 
   def display_for_variable value
-    Tag.find(value)&.name
+    Tag.find_by(id: value)&.name || value
   end
 
   def clients_that_fit(scope, requirement, _opportunity)
     raise RuleDatabaseStructureMissing.new("clients.tags missing. Cannot check clients against #{self.class}.") unless Client.column_names.include?(:tags.to_s)
 
+    key = requirement.variable.to_s
     if requirement.positive
-      where = "tags ->>'#{requirement.variable}' is not null"
+      scope.where('tags ->> ? is not null', key)
     else
-      where = "not(tags ->>'#{requirement.variable}' is not null) OR tags is null"
+      scope.where('not(tags ->> ? is not null) OR tags is null', key)
     end
-    scope.where(where)
   end
 end

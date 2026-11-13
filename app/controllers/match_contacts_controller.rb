@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class MatchContactsController < ApplicationController
   include AjaxModalRails::Controller
   include HasMatchAccessContext
@@ -28,9 +30,8 @@ class MatchContactsController < ApplicationController
       flash[:notice] = 'Match Contacts updated'
       redirect_to match_path(@match)
     else
-      raise @match_contacts.errors.full_messages.inspect
-      flash[:error] = 'Please review the form problems below.' # rubocop:disable Lint/UnreachableCode
-      redirect_to :edit
+      flash.now[:error] = 'Please review the form problems below.'
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -81,10 +82,6 @@ class MatchContactsController < ApplicationController
 
   def match_contacts_method_for input_name
     match_contact_methods[input_name] || input_name
-  end
-
-  def match_scope
-    ClientOpportunityMatch.all
   end
 
   def set_match

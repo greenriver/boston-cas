@@ -43,9 +43,8 @@ class MatchDecisionsController < ApplicationController
     @sub_program = @match.sub_program
     @types = MatchRoutes::Base.match_steps
 
-    @match_contacts.update match_contacts_params if params[:match_contacts].present?
-
-    # If the match is already expired, and we're un-expiring it, then allow it
+    # If the match is already expired, and we're un-expiring it, then allow it.
+    # This branch runs before the status_allowed_for? check below, so it must check its own permission.
     if @match.expired? && params[:commit] == 'Save Expiration Date' && can_reject_matches? && decision_params[:shelter_expiration].present?
       original_status = @decision.status
       change_expiration
@@ -65,6 +64,10 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = 'Sorry, that match has already been closed.'
       redirect_to access_context.match_path(@match)
 
+    elsif !@decision.status_allowed_for?(decision_params[:status], current_contact)
+      flash[:alert] = 'Sorry, you are not authorized to access that.'
+      redirect_to access_context.match_path(@match)
+
     # If we've been asked to park the client and match is accepted
     elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == 'accepted'
       flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
@@ -75,9 +78,8 @@ class MatchDecisionsController < ApplicationController
       flash[:error] = 'An override reason is required for to override a decline.'
       render 'matches/show'
 
-    # If cancel reason is provided and match is declined or accepted
-    elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == 'accepted' ||
-          decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] == 'declined'
+    # If cancel reason is provided and match is not being canceled
+    elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] != 'canceled'
       flash[:error] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
       render 'matches/show'
 
@@ -133,7 +135,7 @@ class MatchDecisionsController < ApplicationController
             @decision.run_status_callback!(user: current_user)
           end
 
-          if decision_params[:disable_opportunity] == '1'
+          if can_reject_matches? && decision_params[:disable_opportunity] == '1'
             voucher = @match.opportunity.voucher
             voucher.update(available: false, date_available: nil) if voucher.present?
             @match.opportunity.update(available: false, available_candidate: false)
@@ -234,40 +236,5 @@ class MatchDecisionsController < ApplicationController
     d_p = @decision.whitelist_params_for_update(params)
     d_p.merge!(params.require(:decision).permit(:shelter_expiration)) if can_reject_matches?
     d_p
-  end
-
-  private def match_contacts_params
-    base_params = params[:match_contacts] || ActionController::Parameters.new
-    base_params.permit(
-      shelter_agency_contact_ids: [],
-      housing_subsidy_admin_contact_ids: [],
-      dnd_staff_contact_ids: [],
-      client_contact_ids: [],
-      ssp_contact_ids: [],
-      hsp_contact_ids: [],
-      do_contact_ids: [],
-    ).tap do |result|
-      if current_contact.user_can_edit_match_contacts?
-        result[:shelter_agency_contact_ids] ||= []
-        result[:client_contact_ids] ||= []
-        result[:dnd_staff_contact_ids] ||= []
-        result[:housing_subsidy_admin_contact_ids] ||= []
-        result[:ssp_contact_ids] ||= []
-        result[:hsp_contact_ids] ||= []
-        result[:do_contact_ids] ||= []
-      elsif hsa_can_edit_contacts?
-        # only allow editing of the hsa contacts
-        result[:shelter_agency_contact_ids] ||= @match.shelter_agency_contact_ids
-        result[:client_contact_ids] ||= @match.client_contact_ids
-        result[:dnd_staff_contact_ids] ||= @match.dnd_staff_contact_ids
-        result[:housing_subsidy_admin_contact_ids] ||= []
-        result[:ssp_contact_ids] ||= @match.ssp_contact_ids
-        result[:hsp_contact_ids] ||= @match.hsp_contact_ids
-        result[:do_contact_ids] ||= @match.do_contact_ids
-
-        # always add self
-        result[:housing_subsidy_admin_contact_ids] << current_contact.id
-      end
-    end
   end
 end

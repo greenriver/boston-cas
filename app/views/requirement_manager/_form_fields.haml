@@ -73,3 +73,7 @@
                   %button.btn.btn-sm.btn-outline-danger{type: 'button', data: { action: 'requirements#removeReq' }} Remove
                 .mt-1{ data: { 'req-variable-container': '', 'variable-name': "#{base_name}[requirements_attributes][__REQ__]" }, hidden: true }
             %button.btn.btn-sm.btn-outline-secondary.mt-2{type: 'button', data: { action: 'requirements#addReq' }} + Add Rule
+        - else
+          - unless hide_inherited
+            %label= local_assigns.fetch(:selected_requirements_heading, section_header)
+          = render 'requirement_manager/requirements_table', requirements: requirements, on_unit: on_unit

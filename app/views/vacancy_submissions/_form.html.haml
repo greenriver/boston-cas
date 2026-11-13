@@ -42,7 +42,7 @@
 
   / ── Section 2: Vacancy ──
   - units_errors = vacancy_submission.errors[:units]
-  %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json, 'forward-params': { units: Array(vacancy_submission.units) }.to_json }}
+  %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json, 'forward-params': { units: vacancy_submission.units_with_uids }.to_json }}
     %p.text-muted Select a sub-program to see unit type information.
 
   / ── General Notes ──

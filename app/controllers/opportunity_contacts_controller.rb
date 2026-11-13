@@ -4,20 +4,20 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
-class OpportunityContactsController < AssociatedContactsController
+# frozen_string_literal: true
 
+class OpportunityContactsController < AssociatedContactsController
   private
 
-    def contact_owner_source
-      Opportunity
-    end
+  def contact_owner_source
+    Opportunity.visible_or_editable_by(current_user)
+  end
 
-    def contact_join_model_source
-      @contact_owner.opportunity_contacts
-    end
+  def contact_join_model_source
+    @contact_owner.opportunity_contacts
+  end
 
-    def join_model_class
-      OpportunityContact
-    end
-
+  def join_model_class
+    OpportunityContact
+  end
 end
