@@ -8,7 +8,7 @@
       .icon-checkmark
     .c-tag__content
       %span.c-tag__label=@client.available_text
-      - if can_reject_matches?
+      - if can_reject_matches? && client_editable?
         .c-tag__action
           = render 'park_client_form'
 %hr

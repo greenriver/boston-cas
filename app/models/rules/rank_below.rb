@@ -24,7 +24,7 @@ class Rules::RankBelow < Rule
   end
 
   def variable_options
-    available_ranks
+    available_ranks.map { |i| [i, i] }
   end
 
   def available_ranks
@@ -43,10 +43,13 @@ class Rules::RankBelow < Rule
     tag_id = opportunity.match_route.tag_id
     return scope unless tag_id
 
+    threshold = Integer(requirement.variable.to_s, 10, exception: false)
+    return scope.none if threshold.nil?
+
     if requirement.positive
-      scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int < #{requirement.variable}"))
+      scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int < #{threshold}"))
     else
-      scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int >= #{requirement.variable}"))
+      scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int >= #{threshold}"))
     end
   end
 end

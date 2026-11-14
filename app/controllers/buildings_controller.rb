@@ -119,7 +119,7 @@ class BuildingsController < ApplicationController
   end
 
   def building_params
-    params.require(:building).permit(
+    permitted = params.require(:building).permit(
       :name,
       :building_type,
       :subgrantee_id,
@@ -137,6 +137,7 @@ class BuildingsController < ApplicationController
         :_destroy,
       ],
     )
+    assignable_requirements(permitted)
   end
 
   def sort_column

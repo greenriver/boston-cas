@@ -14,6 +14,8 @@
     - else
       %h2{data: (readonly ? {} : { 'unit-card-title': '' })}= "Unit #{number}"
   .c-card__content
+    - unless readonly
+      %input{type: 'hidden', name: "vacancy_submission[units][#{index}][uid]", value: unit['uid']}
     = render 'vacancy_submissions/unit_address', unit: unit, index: index, readonly: readonly, default_building_id: default_building_id, confidential: confidential
     = render 'vacancy_submissions/unit_details', unit: unit, index: index, readonly: readonly
     = render 'vacancy_submissions/unit_amenities', unit: unit, index: index, amenity_names: amenity_names, readonly: readonly

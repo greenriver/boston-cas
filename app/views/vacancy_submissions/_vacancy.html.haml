@@ -1,4 +1,4 @@
-- unit_list = Array(vacancy_submission.units).presence || [{}]
+- unit_list = vacancy_submission.units_with_uids.presence || [{}]
 - if is_voucher
   = render 'vacancy_submissions/vacancy_vouchers', unit_list: unit_list
 - else

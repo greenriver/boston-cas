@@ -4,9 +4,11 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe Rules::ActiveInCohort, type: :model do
+RSpec.describe Rules::TaggedWith, type: :model do
   describe 'clients_that_fit' do
     let!(:tag_id_1) { 3 }
     let!(:tag_id_2) { 5 }
@@ -60,5 +62,33 @@ RSpec.describe Rules::ActiveInCohort, type: :model do
       end
     end
 
+    context 'when the stored value contains a quote' do
+      let!(:quoted_key_client) { create :client, first_name: 'Quinn', tags: {"#{tag_id_1}'" => 4} }
+      let!(:quoted_positive) { create :requirement, rule: rule, positive: true, variable: "#{tag_id_1}'" }
+      let!(:quoted_negative) { create :requirement, rule: rule, positive: false, variable: "#{tag_id_1}'" }
+
+      it 'matches only the client holding the quoted key for a positive requirement' do
+        expect(quoted_positive.clients_that_fit(Client.all).ids).to contain_exactly(quoted_key_client.id)
+      end
+
+      it 'matches every other client for a negative requirement' do
+        expect(quoted_negative.clients_that_fit(Client.all).ids).to contain_exactly(bob.id, roy.id, mary.id, sue.id)
+      end
+    end
+  end
+
+  describe 'display_for_variable' do
+    let(:rule) { create :tagged_with }
+    let!(:tag) { create :tag, name: 'Family' }
+
+    it 'returns the tag name for a stored tag id' do
+      expect(rule.display_for_variable(tag.id.to_s)).to eq('Family')
+    end
+
+    it 'returns the stored value when no tag has that id' do
+      missing_id = (tag.id + 1).to_s
+
+      expect(rule.display_for_variable(missing_id)).to eq(missing_id)
+    end
   end
 end

@@ -164,7 +164,7 @@ module Admin
     end
 
     def user_params
-      params.require(:user).permit(
+      permitted = params.require(:user).permit(
         :first_name,
         :last_name,
         :email,
@@ -176,6 +176,7 @@ module Admin
         contact_attributes: [:id, :first_name, :last_name, :phone, :email, :role],
         requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
       )
+      assignable_requirements(permitted)
     end
 
     def sanitized_search_params

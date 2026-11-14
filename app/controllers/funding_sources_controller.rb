@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright Green River Data Group, Inc.
 #
@@ -5,7 +7,6 @@
 ###
 
 class FundingSourcesController < ApplicationController
-
   before_action :authenticate_user!
   before_action :require_can_view_funding_sources!
   before_action :require_can_edit_funding_sources!, only: [:update, :destroy, :create]
@@ -41,25 +42,25 @@ class FundingSourcesController < ApplicationController
   end
 
   private
-    def funding_source_scope
-      funding_source_source.all
-    end
 
-    def find_funding_source
-      @funding_source = funding_source_source.find params[:id]
-    end
+  def funding_source_scope
+    funding_source_source.all
+  end
 
-    def funding_source_source
-      FundingSource
-    end
+  def find_funding_source
+    @funding_source = funding_source_source.find params[:id]
+  end
 
-    def funding_source_params
-      params.require(:funding_source).permit(
-        :name,
-        service_ids: [],
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  def funding_source_source
+    FundingSource
+  end
 
-
+  def funding_source_params
+    permitted = params.require(:funding_source).permit(
+      :name,
+      service_ids: [],
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+    assignable_requirements(permitted)
+  end
 end
