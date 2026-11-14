@@ -55,5 +55,30 @@ RSpec.describe Rules::RankBelow, type: :model do
         expect(clients_that_dont_fit.ids).to include roy.id
       end
     end
+
+    context 'when the stored value is not an integer' do
+      let!(:quoted_positive) { create :requirement, rule: rule, positive: true, variable: "10'" }
+      let!(:quoted_negative) { create :requirement, rule: rule, positive: false, variable: "10'" }
+
+      it 'matches no clients for a positive requirement' do
+        expect(quoted_positive.clients_that_fit(Client.all, bob_match.opportunity).ids).to be_empty
+      end
+
+      it 'matches no clients for a negative requirement' do
+        expect(quoted_negative.clients_that_fit(Client.all, roy_match.opportunity).ids).to be_empty
+      end
+    end
+
+    context 'when a client is ranked exactly at the threshold' do
+      let!(:cy) { create :client, first_name: 'Cy', tags: {1 => 10} }
+
+      it 'excludes the client from a positive requirement' do
+        expect(positive.clients_that_fit(Client.all, bob_match.opportunity).ids).to contain_exactly(bob.id)
+      end
+
+      it 'includes the client in a negative requirement' do
+        expect(negative.clients_that_fit(Client.all, roy_match.opportunity).ids).to contain_exactly(roy.id, cy.id)
+      end
+    end
   end
 end

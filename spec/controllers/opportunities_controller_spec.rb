@@ -42,8 +42,99 @@ RSpec.describe OpportunitiesController, type: :controller do
       end
     end
 
+    context 'when user can only view opportunities' do
+      let(:viewer) { create(:user) }
+
+      before do
+        viewer.roles << create(:role, name: 'viewer', can_view_opportunities: true, can_view_programs: true)
+        authenticate(viewer)
+      end
+
+      it 'does not create vacancies' do
+        sub_program = create(:sub_program, program: program)
+        expect do
+          post :create, params: { opportunity: { program: sub_program.id.to_s, units: '1' } }
+        end.not_to change(Voucher, :count)
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'when user can add vacancies for assigned programs only' do
+      let(:assigned_user) { create(:user) }
+      let(:other_program) { create(:program, name: 'Other Agency Program', match_route: route) }
+      let(:own_sub_program) { create(:sub_program, program: program) }
+
+      before do
+        assigned_user.roles << create(:role, name: 'assigned_vacancy', can_add_vacancies: true, can_view_assigned_programs: true)
+        EntityViewPermission.create!(entity: program, agency: assigned_user.agency)
+        authenticate(assigned_user)
+      end
+
+      it 'does not create vouchers in a sub-program outside the user programs' do
+        other_sub_program = create(:sub_program, program: other_program)
+        expect do
+          post :create, params: { opportunity: { program: other_sub_program.id.to_s, units: '1' } }
+        end.not_to change(Voucher, :count)
+        expect(response).to render_template(:new)
+      end
+
+      it 'creates vouchers in a sub-program in the user programs' do
+        expect do
+          post :create, params: { opportunity: { program: own_sub_program.id.to_s, units: '1' } }
+        end.to change(Voucher, :count).by(1)
+      end
+
+      it 'lists only sub-programs and buildings in the user programs on new' do
+        own_building = create(:building)
+        own_project = create(:sub_program, program: program, program_type: 'Project-Based', building: own_building)
+        foreign_building = create(:building)
+        foreign_project = create(:sub_program, program: other_program, program_type: 'Project-Based', building: foreign_building)
+        get :new
+        expect(assigns(:programs)).to include(own_project)
+        expect(assigns(:programs)).not_to include(foreign_project)
+        expect(assigns(:buildings)).to include(own_building)
+        expect(assigns(:buildings)).not_to include(foreign_building)
+      end
+
+      it 'creates one unit and one voucher for a building in the user programs' do
+        own_building = create(:building)
+        project_sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: own_building)
+        expect do
+          post :create, params: { opportunity: { program: project_sub_program.id.to_s, building: own_building.id.to_s, units: '1' } }
+        end.to change(Unit, :count).by(1).and change(Voucher, :count).by(1)
+      end
+
+      it 'does not create units in a building outside the user sub-programs' do
+        own_building = create(:building)
+        project_sub_program = create(:sub_program, program: program, program_type: 'Project-Based', building: own_building)
+        foreign_building = create(:building)
+        create(:sub_program, program: other_program, program_type: 'Project-Based', building: foreign_building)
+        expect do
+          post :create, params: { opportunity: { program: project_sub_program.id.to_s, building: foreign_building.id.to_s, units: '1' } }
+        end.not_to(change { [Unit.count, Voucher.count] })
+        expect(response).to render_template(:new)
+      end
+    end
+
+    context 'when user can add vacancies for editable programs only' do
+      let(:editor) { create(:user) }
+
+      before do
+        editor.roles << create(:role, name: 'editable_vacancy', can_add_vacancies: true, can_edit_assigned_programs: true)
+        EntityViewPermission.create!(entity: program, agency: editor.agency, editable: true)
+        authenticate(editor)
+      end
+
+      it 'creates vouchers in an editable program' do
+        sub_program = create(:sub_program, program: program)
+        expect do
+          post :create, params: { opportunity: { program: sub_program.id.to_s, units: '1' } }
+        end.to change(Voucher, :count).by(1)
+      end
+    end
+
     context 'when user has can_add_vacancies' do
-      let(:vacancy_role) { create(:role, name: 'vacancy_manager', can_add_vacancies: true) }
+      let(:vacancy_role) { create(:role, name: 'vacancy_manager', can_add_vacancies: true, can_view_programs: true) }
       let(:vacancy_user) { create(:user) }
 
       before do

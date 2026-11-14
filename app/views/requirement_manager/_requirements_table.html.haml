@@ -1,0 +1,24 @@
+- on_unit = local_assigns.fetch(:on_unit, false)
+- sources = local_assigns[:sources]
+- if requirements.empty?
+  %p (none)
+- else
+  .table-responsive
+    %table.table
+      %thead
+        %tr
+          %th Type
+          %th Rule
+          - if sources
+            %th Source
+      %tbody
+        - requirements.each do |requirement|
+          %tr
+            %td
+              %div{class: ['badge', requirement.modal_verb_class]}= requirement.modal_verb
+            %td
+              = requirement.rule_text(on_unit: on_unit)
+              - if requirement.variable.present?
+                = requirement.display_for_variable
+            - if sources
+              %td= sources[requirement].name

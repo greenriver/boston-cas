@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright Green River Data Group, Inc.
 #
@@ -6,7 +8,7 @@
 
 module ControllerAuthorization
   extend ActiveSupport::Concern
-  delegate *Role.permissions.map{|m| "#{m}?".to_sym}, to: :current_user, allow_nil: true
+  delegate(*Role.permissions.map { |m| "#{m}?".to_sym }, to: :current_user, allow_nil: true)
 
   # This builds useful methods in the form:
   # require_permission!
@@ -24,6 +26,12 @@ module ControllerAuthorization
   end
 
   def require_can_see_some_alternate_matches!
-      not_authorized! unless can_see_alternate_matches? || can_see_all_alternate_matches?
+    not_authorized! unless can_see_alternate_matches? || can_see_all_alternate_matches?
+  end
+
+  private def assignable_requirements(permitted)
+    return permitted if can_assign_requirements?
+
+    permitted.except(:requirements_attributes)
   end
 end

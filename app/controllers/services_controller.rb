@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###
 # Copyright Green River Data Group, Inc.
 #
@@ -15,7 +17,7 @@ class ServicesController < ApplicationController
     @services = Service.all
   end
 
-    # GET /services/new
+  # GET /services/new
   def new
     @service = Service.new
   end
@@ -53,16 +55,18 @@ class ServicesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_service
-      @service = Service.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def service_params
-      params.require(:service).permit(
-        :name,
-        requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_service
+    @service = Service.find(params[:id])
+  end
+
+  # Only allow-listed parameters pass through.
+  def service_params
+    permitted = params.require(:service).permit(
+      :name,
+      requirements_attributes: [:id, :rule_id, :positive, :variable, :_destroy],
+    )
+    assignable_requirements(permitted)
+  end
 end

@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Rules::NonHmisAssessmentType, type: :model do
@@ -84,6 +86,20 @@ RSpec.describe Rules::NonHmisAssessmentType, type: :model do
       end
       it 'contains Zelda' do
         expect(clients_that_fit_multi.ids).to include zelda.id
+      end
+    end
+
+    context 'when the stored value contains a quote' do
+      let!(:obrien) { create :client, first_name: 'Quinn', assessment_name: "O'Brien" }
+      let!(:quoted_positive) { create :requirement, rule: rule, positive: true, variable: "IdentifiedClientAssessment,O'Brien" }
+      let!(:quoted_negative) { create :requirement, rule: rule, positive: false, variable: "IdentifiedClientAssessment,O'Brien" }
+
+      it 'matches clients with any listed assessment name' do
+        expect(quoted_positive.clients_that_fit(Client.all).ids).to contain_exactly(bob.id, obrien.id)
+      end
+
+      it 'matches clients without a listed assessment, including those with none' do
+        expect(quoted_negative.clients_that_fit(Client.all).ids).to contain_exactly(roy.id, mary.id, sue.id, zelda.id)
       end
     end
   end

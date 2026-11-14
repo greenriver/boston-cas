@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class MatchProgressUpdateNotesController < ApplicationController
   include HasMatchAccessContext
   include AjaxModalRails::Controller
@@ -47,7 +49,7 @@ class MatchProgressUpdateNotesController < ApplicationController
   end
 
   def set_update!
-    @update = MatchProgressUpdates::Base.find params[:id].to_i
+    @update = @match.status_updates.find params[:id].to_i
   end
 
   def authorize_note_editable!
@@ -58,5 +60,4 @@ class MatchProgressUpdateNotesController < ApplicationController
     params.require(:update).
       permit(:note)
   end
-
 end

@@ -12,8 +12,9 @@ class ClientsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :require_some_clients_viewable!
-  before_action :require_some_clients_editable!, only: [:update, :destroy]
-  before_action :set_client, only: [:show, :edit, :update, :destroy, :unavailable]
+  before_action :require_some_clients_editable!, only: [:update]
+  before_action :set_client, only: [:show, :update]
+  before_action :require_client_editable!, only: [:update]
 
   helper_method :sort_column, :sort_direction
 
@@ -128,10 +129,10 @@ class ClientsController < ApplicationController
     if @client.update(client_params)
       # If we have a future prevent_matching_until date, remove the client from
       # any current matches
-      prevent_matching_until = params[:client].try(:[], :prevent_matching_until)
-      should_prevent_matching = prevent_matching_until.present? && prevent_matching_until.to_date > Date.current
+      prevent_matching_until = requested_prevent_matching_until
+      should_prevent_matching = prevent_matching_until.present? && prevent_matching_until > Date.current
 
-      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: prevent_matching_until.to_date, user: current_user) if should_prevent_matching
+      @client.unavailable(permanent: false, contact_id: current_contact.id, cancel_all: true, expires_at: prevent_matching_until, user: current_user) if should_prevent_matching
 
       if request.xhr?
         head :ok
@@ -141,17 +142,6 @@ class ClientsController < ApplicationController
     else
       render :show, { flash: { error: 'Unable update client.' } }
     end
-  end
-
-  # PATCH /clients/:id/unavailable
-  # Find any matches where the client is the active client
-  # Remove the client from the match
-  # Activate the next client
-  # Remove the client from any other proposed matches
-  # Mark the Client as available = false
-  def unavailable
-    @client.unavailable(permanent: true, user: current_user)
-    redirect_to action: :show
   end
 
   private
@@ -188,15 +178,15 @@ class ClientsController < ApplicationController
   end
 
   def client_params
-    params.require(:client).
-      permit(
-        :source,
-        :release_of_information,
-        :dmh_eligible,
-        :va_eligible,
-        :hues_eligible,
-        :confidential,
-      )
+    permitted = [
+      :source,
+      :release_of_information,
+      :dmh_eligible,
+      :va_eligible,
+      :hues_eligible,
+    ]
+    permitted << :confidential if can_view_client_confidentiality?
+    params.require(:client).permit(*permitted)
   end
 
   def sort_column
@@ -217,6 +207,25 @@ class ClientsController < ApplicationController
 
   def require_some_clients_editable!
     not_authorized! unless Client.editable_by(current_user).exists?
+  end
+
+  def require_client_editable!
+    not_authorized! unless client_editable?
+  end
+
+  def client_editable?
+    return @client_editable if defined?(@client_editable)
+
+    @client_editable = @client.editable_by?(current_user)
+  end
+  helper_method :client_editable?
+
+  def requested_prevent_matching_until
+    return unless can_reject_matches?
+
+    params[:client].try(:[], :prevent_matching_until)&.to_date
+  rescue Date::Error
+    nil
   end
 
   private def handle_search_query
