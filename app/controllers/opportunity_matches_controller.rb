@@ -8,12 +8,11 @@
 
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
+  before_action :find_opportunity!
   before_action :require_access_to_opportunity!
   before_action :require_can_activate_matches!, only: [:create, :update]
   before_action :set_heading
   before_action :set_show_confidential_names
-
-  prepend_before_action :find_opportunity!
 
   def index
     clients_for_route = Client.available_for_matching(@opportunity.match_route)

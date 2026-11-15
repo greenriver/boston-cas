@@ -138,6 +138,18 @@ RSpec.describe 'Match activation is limited to the eligible client list', type: 
     end
   end
 
+  context 'when signed out' do
+    before { sign_out user }
+
+    it 'redirects to sign in for both an existing and a missing opportunity id' do
+      get opportunity_matches_path(opportunity)
+      expect(response).to redirect_to(new_user_session_path)
+
+      get opportunity_matches_path(opportunity_id: Opportunity.maximum(:id) + 1)
+      expect(response).to redirect_to(new_user_session_path)
+    end
+  end
+
   describe 'the CSV export' do
     context 'when the user has the activate matches permission' do
       it 'returns the export content' do
