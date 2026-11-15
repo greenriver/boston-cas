@@ -11,9 +11,9 @@ class OpportunitiesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :require_can_view_opportunities!, except: [:new, :create]
-  before_action :require_can_edit_opportunities!, only: [:update, :destroy, :restore]
+  before_action :require_can_edit_opportunities!, only: [:destroy, :restore]
   before_action :require_can_add_vacancies!, only: [:new, :create]
-  before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
+  before_action :set_opportunity, only: [:show, :destroy]
   helper_method :sort_column, :sort_direction
 
   # GET /hmis/opportunities
@@ -102,10 +102,6 @@ class OpportunitiesController < ApplicationController
     @buildings = building_scope
   end
 
-  # GET /hmis/opportunities/1/edit
-  def edit
-  end
-
   # Bulk create available units with associated available vouchers
   def create
     @opportunity = Opportunity.new(opportunity_params)
@@ -161,23 +157,12 @@ class OpportunitiesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /hmis/opportunities/1
-  def update
-    if @opportunity.update(opportunity_params)
-      redirect_to opportunity_path(@opportunity), notice: "Opportunity #{@opportunity[:id]} was successfully updated."
-    else
-      flash.now[:error] = "Unable to update opportunity #{@opportunity[:id]}."
-      render :edit
-    end
-  end
-
   # DELETE /hmis/opportunities/1
   def destroy
     if @opportunity.destroy
       redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} was successfully deleted."
     else
-      flash.now[:error] = "Unable to delete opportunity #{@opportunity[:id]}."
-      render :edit
+      redirect_to opportunity_path(@opportunity), flash: { error: "Unable to delete opportunity #{@opportunity.id}." }
     end
   end
 
@@ -187,8 +172,7 @@ class OpportunitiesController < ApplicationController
     if @opportunity.restore
       redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} successfully restored."
     else
-      flash.now[:error] = 'Unable to restore opportunity.'
-      render :edit
+      redirect_to opportunities_path, flash: { error: 'Unable to restore opportunity.' }
     end
   end
 

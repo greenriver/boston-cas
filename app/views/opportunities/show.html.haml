@@ -9,7 +9,6 @@
             %th Available
             %th= "#{Building.model_name.human} & Unit"
             %th= "Voucher (#{Building.model_name.human} & Unit)"
-            %th Edit
             %th Delete
         %tbody
           %tr
@@ -24,7 +23,6 @@
                 = "#{@opportunity.voucher.sub_program.program.name}"
                 - unless @opportunity.voucher.unit.nil?
                   = "(#{@opportunity.voucher.unit.try(:building).try(:name)}: #{@opportunity.voucher.unit.try(:name)})"
-            %th= link_to "Edit", edit_opportunity_path(@opportunity)
             %td= link_to "Delete", opportunity_path(@opportunity), method: :delete
   .row
     %p= link_to 'Manage Contacts', opportunity_contacts_path(@opportunity)
