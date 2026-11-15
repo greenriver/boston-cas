@@ -64,7 +64,7 @@ RSpec.describe 'Opportunities', type: :request do
   # failure is forced. The controller loads its own record, so the stub has to
   # be on any instance.
   describe 'DELETE /opportunities/:id when the delete fails' do
-    before { allow_any_instance_of(Opportunity).to receive(:destroy).and_return(false) } # rubocop:disable RSpec/AnyInstance
+    before { allow_any_instance_of(Opportunity).to receive(:destroy).and_return(false) }
 
     it 'redirects to the opportunity and shows the error' do
       delete opportunity_path(opportunity)
@@ -81,7 +81,7 @@ RSpec.describe 'Opportunities', type: :request do
   describe 'POST /opportunities/:id/restore when the restore fails' do
     before do
       opportunity.destroy
-      allow_any_instance_of(Opportunity).to receive(:restore).and_return(false) # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(Opportunity).to receive(:restore).and_return(false)
     end
 
     it 'redirects to the opportunity list and shows the error' do
