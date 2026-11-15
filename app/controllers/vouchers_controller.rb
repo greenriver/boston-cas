@@ -9,7 +9,7 @@
 class VouchersController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_vouchers!
-  before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update, :restore]
+  before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update, :archive, :restore]
   before_action :require_can_reject_matches!, only: [:unavailable]
   before_action :require_can_edit_voucher_rules!, only: [:edit, :update]
   before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable, :archive, :restore]
