@@ -70,6 +70,11 @@ RSpec.describe VacancySubmission, type: :model do
         end
       end
 
+      it 'accepts a blank-url link alongside an https link' do
+        vs = submission_with_media_urls('', 'https://example.com/photo.jpg')
+        expect(vs).to be_valid
+      end
+
       it 'rejects a unit whose second media link is not http or https' do
         vs = submission_with_media_urls('https://example.com/photo.jpg', 'ftp://example.com/photo2.jpg')
         expect(vs).not_to be_valid
@@ -187,6 +192,33 @@ RSpec.describe VacancySubmission, type: :model do
       expect(unit_errors(vs)).to contain_exactly(
         unit_index: 0, field: 'requirements_attributes[1][variable]', field_message: 'Bedroom exact requires a value',
         full_message: 'Unit 1 requirement Bedroom exact requires a value'
+      )
+    end
+
+    it 'reports errors on the second of two units under that unit index' do
+      variable_rule = create(:bedroom_exact)
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => sub_program.id,
+          'is_voucher' => false,
+          'units' => [
+            { 'building_id' => building.id, 'unit_number' => '1A' },
+            {
+              'building_id' => building.id, 'unit_number' => '2A',
+              'media_links' => [{ 'url' => 'ftp://example.com/photo.jpg', 'label' => 'Photo' }],
+              'requirements' => [{ 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' }]
+            },
+          ],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(unit_errors(vs)).to contain_exactly(
+        { unit_index: 1, field: 'media_links[0][url]', field_message: 'Must be an http or https URL',
+          full_message: 'Unit 2 media link 1 must be an http or https URL' },
+        { unit_index: 1, field: 'requirements_attributes[0][variable]', field_message: 'Bedroom exact requires a value',
+          full_message: 'Unit 2 requirement Bedroom exact requires a value' },
       )
     end
 

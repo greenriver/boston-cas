@@ -270,7 +270,7 @@ class VacancySubmissionsController < ApplicationController
     units_params.values.map do |unit|
       h = unit.respond_to?(:to_unsafe_h) ? unit.to_unsafe_h : unit.to_h
       h['attributes'] = Array(h['attributes']&.values)
-      h['media_links'] = Array(h['media_links']&.values)
+      h['media_links'] = Array(h['media_links']&.values).reject { |l| l['url'].blank? && l['label'].blank? }
       h['uid'] = h['uid'].presence || SecureRandom.uuid
       posted_requirements = posted_unit_requirements(h)
       # Removed from the hash so a uid posted twice keeps its requirements on one unit only.

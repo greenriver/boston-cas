@@ -180,9 +180,12 @@ export default class extends Controller {
 
     const unitEntries = container.querySelectorAll('[data-unit-entry]')
     errors.forEach((error) => {
-      const field = error.field && container.querySelector(
-        `[name="vacancy_submission[units][${error.unit_index}][${error.field}]"]:not([type="hidden"])`
+      const named = error.field && container.querySelector(
+        `[name="vacancy_submission[units][${error.unit_index}][${error.field}]"]`
       )
+      const field = named?.type === 'hidden'
+        ? named.closest('[data-req-entry]')?.querySelector('[data-req-multi-display]')
+        : named
       if (field) {
         this.markInvalid(field, error.field_message)
       } else {
@@ -198,14 +201,32 @@ export default class extends Controller {
 
   markInvalid(el, message) {
     el.classList.add('is-invalid')
-    const select2Container = el.nextElementSibling?.classList.contains('select2-container')
-      ? el.nextElementSibling
-      : null
-    if (select2Container) select2Container.classList.add('is-invalid')
     const feedback = document.createElement('div')
     feedback.className = 'invalid-feedback'
     feedback.textContent = message
-    ;(select2Container || el).after(feedback)
+
+    const select2Container = this.select2ContainerFor(el)
+    if (select2Container) {
+      select2Container.classList.add('is-invalid')
+      select2Container.after(feedback)
+      return
+    }
+    el.after(feedback)
+
+    // select2 wraps selects after this runs, so move the feedback behind its container once it exists.
+    if (el.tagName === 'SELECT') {
+      setTimeout(() => {
+        const container = this.select2ContainerFor(el)
+        if (!container) return
+        container.classList.add('is-invalid')
+        container.after(feedback)
+      }, 0)
+    }
+  }
+
+  select2ContainerFor(el) {
+    const sibling = el.nextElementSibling
+    return sibling?.classList.contains('select2-container') ? sibling : null
   }
 
   showMessage(target, message) {

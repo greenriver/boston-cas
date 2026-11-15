@@ -521,6 +521,35 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       end
     end
 
+    context 'when blank media link rows precede a link with an error' do
+      render_views
+
+      it 'indexes the error by the rows that remain' do
+        params = update_params.deep_merge(
+          vacancy_submission: {
+            units: {
+              '0' => {
+                media_links: {
+                  '0' => { url: '', label: '' },
+                  '1' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' },
+                },
+              },
+            },
+          },
+        )
+
+        patch :update, params: params
+
+        container = Nokogiri::HTML(response.body).at_css('[data-field-errors]')
+        expect(JSON.parse(container['data-field-errors'])).to contain_exactly(
+          'unit_index' => 0,
+          'field' => 'media_links[0][url]',
+          'field_message' => 'Must be an http or https URL',
+          'message' => 'Unit 1 media link 1 must be an http or https URL',
+        )
+      end
+    end
+
     context 'when a unit already has requirements' do
       let(:existing_rule) { create(:bedroom_exact) }
       let(:posted_rule) { create(:bedroom_exact, name: 'Posted rule') }
@@ -665,6 +694,16 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
         expect(response).to redirect_to(vacancy_submission_path(submission))
         expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'names the unit and field when a unit has no building' do
+        submission.units = [{ 'building_id' => '', 'unit_number' => '1A' }]
+        submission.save!(validate: false)
+
+        post :approve, params: { id: submission.id }
+
+        expect(flash[:alert]).to include('Unit 1 needs a building')
         expect(submission.reload.status).to eq('awaiting_approval')
       end
 
