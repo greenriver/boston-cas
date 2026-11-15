@@ -78,6 +78,38 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
       end
     end
 
+    context 'when the voucher is unavailable and its only match is active but closed unsuccessfully' do
+      before(:each) do
+        user.roles << editor_role
+        create(:client_opportunity_match, opportunity: voucher.opportunity, active: true, closed: true, closed_reason: 'rejected')
+      end
+
+      it 'refuses to archive and redirects to the vouchers index with an error flash' do
+        patch archive_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(vouchers_index_path)
+        expect(flash[:error]).to eq('Vouchers cannot be archived if there is an active match')
+        expect(voucher.reload.archived_at).to be_nil
+      end
+    end
+
+    context 'when the voucher is already archived' do
+      let(:archived_time) { 2.days.ago.change(usec: 0) }
+
+      before(:each) do
+        user.roles << editor_role
+        voucher.update_column(:archived_at, archived_time)
+      end
+
+      it 'refuses to archive again and leaves archived_at unchanged' do
+        patch archive_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(vouchers_index_path)
+        expect(flash[:error]).to eq('Voucher is already archived')
+        expect(voucher.reload.archived_at).to eq(archived_time)
+      end
+    end
+
     context 'when the voucher is available' do
       before(:each) do
         user.roles << editor_role
