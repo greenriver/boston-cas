@@ -142,4 +142,19 @@ RSpec.describe 'Flash message escaping', type: :request do
       end
     end
   end
+
+  describe 'updating account name and email schedule together' do
+    before { sign_in actor }
+
+    it 'renders each note on its own line in the flash' do
+      patch account_path, params: { user: { first_name: 'Renamed', last_name: actor.last_name, email_schedule: 'daily' } }
+      follow_redirect!
+
+      alert = Nokogiri::HTML(response.body).at_css('.alert.notice')
+      aggregate_failures do
+        expect(alert.css('br').size).to eq(1)
+        expect(alert.text).to include("Account name was updated.\nEmail schedule was updated.")
+      end
+    end
+  end
 end
