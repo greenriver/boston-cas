@@ -63,7 +63,7 @@ class VouchersController < ApplicationController
   # Set the Voucher as available = false
   def unavailable
     opportunity = @voucher.opportunity
-    if opportunity.active_matches.exists?
+    if opportunity&.active_matches&.exists?
       matches = opportunity.client_opportunity_matches
       Client.transaction do
         matches.each do |m|
@@ -88,7 +88,7 @@ class VouchersController < ApplicationController
     opportunity = @voucher.opportunity
     if @voucher.available
       flash[:error] = 'Vouchers must be unavailable to be archived'
-    elsif opportunity.active_matches.exists?
+    elsif opportunity&.active_matches&.exists?
       flash[:error] = 'Vouchers be archived if there is an active match'
     else
       @voucher.update(archived_at: Time.current)
