@@ -49,14 +49,21 @@ RSpec.describe 'Opportunities', type: :request do
   end
 
   describe 'removed edit and update routes' do
-    it 'does not route GET /opportunities/:id/edit' do
-      expect { Rails.application.routes.recognize_path("/opportunities/#{opportunity.id}/edit", method: :get) }.
-        to raise_error(ActionController::RoutingError)
+    it 'returns not found for GET /opportunities/:id/edit' do
+      get "/opportunities/#{opportunity.id}/edit"
+
+      expect(response).to have_http_status(:not_found)
     end
 
-    it 'does not route PATCH /opportunities/:id' do
-      expect { Rails.application.routes.recognize_path("/opportunities/#{opportunity.id}", method: :patch) }.
-        to raise_error(ActionController::RoutingError)
+    it 'returns not found for PATCH /opportunities/:id and leaves the record unchanged' do
+      original = opportunity.available
+
+      patch opportunity_path(opportunity), params: { opportunity: { available: !original } }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:not_found)
+        expect(opportunity.reload.available).to be(original)
+      end
     end
   end
 
