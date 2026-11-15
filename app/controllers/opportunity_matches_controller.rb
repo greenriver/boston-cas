@@ -50,8 +50,9 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def create
-    client_ids_to_activate = params[:checkboxes]&.select { |_key, value| value == '1' }&.keys&.map(&:to_i)
     return not_authorized! unless @opportunity.match_route.allow_multiple_active_matches
+
+    client_ids_to_activate = params[:checkboxes]&.select { |_key, value| value == '1' }&.keys&.map(&:to_i)
 
     eligible_client_ids(client_ids_to_activate || []).each do |client_id|
       match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).

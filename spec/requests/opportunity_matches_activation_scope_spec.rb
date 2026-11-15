@@ -71,6 +71,13 @@ RSpec.describe 'Match activation is limited to the eligible client list', type: 
       end.not_to(change { ClientOpportunityMatch.where(client: rejected_client, opportunity: opportunity).count })
     end
 
+    it 'activates only the eligible client when posted together with a rejected client' do
+      post opportunity_matches_path(opportunity), params: { checkboxes: { eligible_client.id.to_s => '1', rejected_client.id.to_s => '1' } }
+
+      expect(ClientOpportunityMatch.find_by(client: eligible_client, opportunity: opportunity)&.active).to eq(true)
+      expect(ClientOpportunityMatch.where(client: rejected_client, opportunity: opportunity)).to be_empty
+    end
+
     it 'activates a match for a client on the eligible list' do
       post opportunity_matches_path(opportunity), params: { checkboxes: { eligible_client.id.to_s => '1' } }
 
@@ -92,6 +99,15 @@ RSpec.describe 'Match activation is limited to the eligible client list', type: 
       expect(response).to redirect_to(root_path)
       expect(match.reload.active).to eq(true)
       expect(ClientOpportunityMatch.where(client: rejected_client)).to be_empty
+    end
+
+    it 'keeps the current active match when the requested client is unavailable for matching' do
+      match.activate!
+      patch opportunity_match_path(opportunity, ineligible_client.id)
+
+      expect(response).to redirect_to(root_path)
+      expect(match.reload.active).to eq(true)
+      expect(ClientOpportunityMatch.where(client: ineligible_client)).to be_empty
     end
 
     it 'leaves the active match untouched when the requested client already holds it' do
