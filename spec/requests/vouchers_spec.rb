@@ -108,6 +108,15 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
         expect(flash[:error]).to eq('Voucher is already archived')
         expect(voucher.reload.archived_at).to eq(archived_time)
       end
+
+      it 'reports the voucher as already archived even when it is also available' do
+        voucher.update_column(:available, true)
+
+        patch archive_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(flash[:error]).to eq('Voucher is already archived')
+        expect(voucher.reload.archived_at).to eq(archived_time)
+      end
     end
 
     context 'when the voucher is available' do

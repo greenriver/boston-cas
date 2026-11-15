@@ -86,12 +86,14 @@ class VouchersController < ApplicationController
     if @voucher.can_be_archived?
       @voucher.update(archived_at: Time.current)
       flash[:notice] = 'Voucher archived'
-    elsif @voucher.available
-      flash[:error] = 'Vouchers must be unavailable to be archived'
     elsif @voucher.archived?
       flash[:error] = 'Voucher is already archived'
-    else
+    elsif @voucher.available
+      flash[:error] = 'Vouchers must be unavailable to be archived'
+    elsif @voucher.active_matches?
       flash[:error] = 'Vouchers cannot be archived if there is an active match'
+    else
+      flash[:error] = 'Voucher cannot be archived'
     end
     redirect_to action: :index
   end
