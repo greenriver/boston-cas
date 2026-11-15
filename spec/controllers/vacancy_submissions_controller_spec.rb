@@ -614,6 +614,18 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         expect(submission.reload.status).to eq('awaiting_approval')
       end
 
+      it 'shows an unparsable ready date as escaped text in the alert' do
+        submission.units = [submission.units.first.merge('date_ready' => '<b>soon</b>')]
+        submission.save!
+
+        post :approve, params: { id: submission.id }
+
+        expect(flash[:alert]).to include('is not a valid ready date')
+        expect(flash[:alert]).to include('&lt;b&gt;soon&lt;/b&gt;')
+        expect(flash[:alert]).not_to include('<b>')
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
       it 'rescues an unexpected error and surfaces a generic alert instead of raising' do
         # The real approval path converts its domain failures into RecordInvalid, so
         # an arbitrary non-domain error (e.g. an infrastructure fault) can only be

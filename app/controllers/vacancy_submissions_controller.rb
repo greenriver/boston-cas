@@ -157,7 +157,7 @@ class VacancySubmissionsController < ApplicationController
     @submission.approve!(user: current_user)
     redirect_to vacancy_submission_path(@submission), notice: 'Submission approved.'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to vacancy_submission_path(@submission), alert: "Could not approve: #{e.message}"
+    redirect_to vacancy_submission_path(@submission), alert: "Could not approve: #{ERB::Util.html_escape(e.message)}"
   rescue StandardError => e
     Rails.logger.error("VacancySubmission ##{@submission.id} approval failed: #{e.class}: #{e.message}")
     redirect_to vacancy_submission_path(@submission),
