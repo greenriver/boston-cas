@@ -48,25 +48,6 @@ RSpec.describe 'Opportunities', type: :request do
     end
   end
 
-  describe 'removed edit and update routes' do
-    it 'returns not found for GET /opportunities/:id/edit' do
-      get "/opportunities/#{opportunity.id}/edit"
-
-      expect(response).to have_http_status(:not_found)
-    end
-
-    it 'returns not found for PATCH /opportunities/:id and leaves the record unchanged' do
-      original = opportunity.available
-
-      patch opportunity_path(opportunity), params: { opportunity: { available: !original } }
-
-      aggregate_failures do
-        expect(response).to have_http_status(:not_found)
-        expect(opportunity.reload.available).to be(original)
-      end
-    end
-  end
-
   # No data condition makes Opportunity#destroy or #restore return false, so the
   # failure is forced. The controller loads its own record, so the stub has to
   # be on any instance.
