@@ -49,7 +49,7 @@ class SubProgramsController < ApplicationController
         end
       end
       redirect_to action: :edit
-      flash[:notice] = "Program \"<a href=\"#{edit_program_sub_program_path(@subprogram.program, @subprogram)}\">#{@subprogram.program.name}</a>\" updated."
+      flash[:notice] = helpers.safe_join(['Program "', helpers.link_to(@subprogram.program.name, edit_program_sub_program_path(@subprogram.program, @subprogram)), '" updated.'])
     else
       flash[:error] = 'Please review the form problems below.'
       render :new

@@ -35,4 +35,29 @@ RSpec.describe 'Flash message escaping', type: :request do
       end
     end
   end
+
+  describe 'creating a unit from a program' do
+    let(:route) { create(:default_route) }
+    let(:program) { create(:program, match_route: route) }
+    let(:sub_program) { create(:sub_program, program: program) }
+    let(:building) { create(:building, name: marker) }
+
+    before do
+      actor.roles << create(:admin_role)
+      sign_in actor
+    end
+
+    it 'keeps the building link and escapes the building name' do
+      post program_sub_program_unit_for_building_index_path(program, sub_program),
+           params: { unit_for_building: { name: 'U-1', available: true, building_id: building.id } }
+      follow_redirect!
+
+      link = Nokogiri::HTML(response.body).at_css(".alert a[href='#{building_path(building)}']")
+      aggregate_failures do
+        expect(link).not_to be_nil
+        expect(link.inner_html).to eq(escaped_marker)
+        expect(flash_html).not_to include(marker)
+      end
+    end
+  end
 end

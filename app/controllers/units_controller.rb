@@ -66,7 +66,7 @@ class UnitsController < ApplicationController
       end
       @unit.apply_default_housing_attributes
       redirect_to building_path(@unit.building)
-      flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> in <a href=\"#{building_path(@unit.building)}\">#{@unit.building.name}</a> was successfully created."
+      flash[:notice] = "Unit #{@unit[:name]} in #{@unit.building.name} was successfully created."
     else
       render :new
     end
@@ -82,9 +82,9 @@ class UnitsController < ApplicationController
         # op = Opportunity.where(unit_id: @unit[:id]).first_or_create(unit: @unit, available: true)
       end
       redirect_to building_path(@unit.building) unless ajax_modal_request?
-      flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> was successfully updated."
+      flash[:notice] = "Unit #{@unit[:name]} was successfully updated."
     else
-      render :edit, { flash: { error: "Unable to update unit <strong>#{@unit[:name]}</strong>." } }
+      render :edit, { flash: { error: "Unable to update unit #{@unit[:name]}." } }
     end
   end
 
@@ -98,9 +98,9 @@ class UnitsController < ApplicationController
     end
 
     if @unit.destroy
-      redirect_to next_url, notice: "Unit <strong>#{@unit[:name]}</strong> was successfully deleted."
+      redirect_to next_url, notice: "Unit #{@unit[:name]} was successfully deleted."
     else
-      redirect_to next_url, { flash: { error: "Unable to delete unit <strong>#{@unit[:name]}</strong>." } }
+      redirect_to next_url, { flash: { error: "Unable to delete unit #{@unit[:name]}." } }
     end
   end
 
@@ -108,14 +108,14 @@ class UnitsController < ApplicationController
   def restore
     @unit = Unit.find(params[:id])
     @unit.update(active: true)
-    redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was restored.")
+    redirect_back(fallback_location: units_path, notice: "Unit #{@unit[:name]} was restored.")
   end
 
   # POST /hmis/units/1/deactivate
   def deactivate
     @unit = Unit.find(params[:unit_id])
     @unit.update(active: false)
-    redirect_back(fallback_location: units_path, notice: "Unit <strong>#{@unit[:name]}</strong> was deactivated.")
+    redirect_back(fallback_location: units_path, notice: "Unit #{@unit[:name]} was deactivated.")
   end
 
   private

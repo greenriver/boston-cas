@@ -164,18 +164,18 @@ class OpportunitiesController < ApplicationController
   # PATCH/PUT /hmis/opportunities/1
   def update
     if @opportunity.update(opportunity_params)
-      redirect_to opportunity_path(@opportunity), notice: "Opportunity <strong>#{@opportunity[:id]}</strong> was successfully updated."
+      redirect_to opportunity_path(@opportunity), notice: "Opportunity #{@opportunity[:id]} was successfully updated."
     else
-      render :edit, { flash: { error: "Unable to update opportunity <strong>#{@opportunity[:name]}</strong>." } }
+      render :edit, { flash: { error: "Unable to update opportunity #{@opportunity[:name]}." } }
     end
   end
 
   # DELETE /hmis/opportunities/1
   def destroy
     if @opportunity.destroy
-      redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> was successfully deleted."
+      redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} was successfully deleted."
     else
-      render :edit, { flash: { error: "Unable to delete opportunity <strong>#{@opportunity[:name]}</strong>." } }
+      render :edit, { flash: { error: "Unable to delete opportunity #{@opportunity[:name]}." } }
     end
   end
 
@@ -183,7 +183,7 @@ class OpportunitiesController < ApplicationController
   def restore
     @opportunity = Opportunity.only_deleted.visible_or_editable_by(current_user).find(params[:opportunity_id])
     if @opportunity.restore
-      redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> successfully restored."
+      redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} successfully restored."
     else
       render :edit, { flash: { error: 'Unable to restore opportunity.' } }
     end

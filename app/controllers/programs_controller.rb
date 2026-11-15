@@ -70,7 +70,7 @@ class ProgramsController < ApplicationController
       # there should only be one sub-program immediately after a program create
       @sub_program = @program.sub_programs.first
       redirect_to action: :index
-      flash[:notice] = "New program \"<a href=\"#{edit_program_sub_program_path(@program, @sub_program)}\">#{@program.name}</a>\" created"
+      flash[:notice] = helpers.safe_join(['New program "', helpers.link_to(@program.name, edit_program_sub_program_path(@program, @sub_program)), '" created'])
     else
       flash[:error] = 'Please review the form problems below.'
       render :new
