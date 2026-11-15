@@ -37,24 +37,78 @@ RSpec.describe 'Flash message escaping', type: :request do
   end
 
   describe 'creating a unit from a program' do
+    let(:unit_marker) { '<b>unit</b>' }
+    let(:escaped_unit_marker) { '&lt;b&gt;unit&lt;/b&gt;' }
+    let(:building_marker) { '<b>bldg</b>' }
+    let(:escaped_building_marker) { '&lt;b&gt;bldg&lt;/b&gt;' }
     let(:route) { create(:default_route) }
     let(:program) { create(:program, match_route: route) }
     let(:sub_program) { create(:sub_program, program: program) }
-    let(:building) { create(:building, name: marker) }
+    let(:building) { create(:building, name: building_marker) }
 
     before do
       actor.roles << create(:admin_role)
       sign_in actor
     end
 
-    it 'keeps the building link and escapes the building name' do
+    it 'keeps the building link and escapes both the unit and building names' do
       post program_sub_program_unit_for_building_index_path(program, sub_program),
-           params: { unit_for_building: { name: 'U-1', available: true, building_id: building.id } }
+           params: { unit_for_building: { name: unit_marker, available: true, building_id: building.id } }
       follow_redirect!
 
       link = Nokogiri::HTML(response.body).at_css(".alert a[href='#{building_path(building)}']")
       aggregate_failures do
-        expect(link).not_to be_nil
+        expect(link).to be_present
+        expect(link.inner_html).to eq(escaped_building_marker)
+        expect(flash_html).to include("Unit #{escaped_unit_marker} in ")
+        expect(flash_html).not_to include(unit_marker)
+        expect(flash_html).not_to include(building_marker)
+      end
+    end
+  end
+
+  describe 'creating a program' do
+    before do
+      actor.roles << create(:admin_role)
+      sign_in actor
+    end
+
+    it 'links to the new sub-program and escapes the program name' do
+      post programs_path, params: {
+        program: {
+          name: marker,
+          match_route_id: MatchRoutes::Default.first.id,
+          sub_programs_attributes: [{ program_type: 'Sponsor-Based' }],
+        },
+      }
+      follow_redirect!
+
+      sub_program = Program.find_by!(name: marker).sub_programs.first
+      link = Nokogiri::HTML(response.body).at_css(".alert a[href='#{edit_program_sub_program_path(sub_program.program, sub_program)}']")
+      aggregate_failures do
+        expect(link).to be_present
+        expect(link.inner_html).to eq(escaped_marker)
+        expect(flash_html).not_to include(marker)
+      end
+    end
+  end
+
+  describe 'updating a sub-program' do
+    let(:program) { create(:program, name: marker, match_route: create(:default_route)) }
+    let(:sub_program) { create(:sub_program, program: program) }
+
+    before do
+      actor.roles << create(:admin_role)
+      sign_in actor
+    end
+
+    it 'links to the sub-program and escapes the program name' do
+      patch program_sub_program_path(program, sub_program), params: { sub_program: { name: 'Renamed', file_tag_ids: [''] } }
+      follow_redirect!
+
+      link = Nokogiri::HTML(response.body).at_css(".alert a[href='#{edit_program_sub_program_path(program, sub_program)}']")
+      aggregate_failures do
+        expect(link).to be_present
         expect(link.inner_html).to eq(escaped_marker)
         expect(flash_html).not_to include(marker)
       end
@@ -75,6 +129,16 @@ RSpec.describe 'Flash message escaping', type: :request do
       aggregate_failures do
         expect(response).to have_http_status(:ok)
         expect(Nokogiri::HTML(response.body).css('.alert.error').text).to include('Unable to update unit')
+      end
+    end
+
+    it 'does not carry the error flash into the next request' do
+      patch unit_path(unit), params: { unit: { name: '' } }
+      get units_path
+
+      aggregate_failures do
+        expect(response).to have_http_status(:ok)
+        expect(flash_html).not_to include('Unable to update unit')
       end
     end
   end
