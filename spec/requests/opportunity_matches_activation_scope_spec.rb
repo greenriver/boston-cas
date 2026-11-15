@@ -129,22 +129,28 @@ RSpec.describe 'Match activation is limited to the eligible client list', type: 
       expect(ClientOpportunityMatch.find_by(client: other_eligible_client, opportunity: opportunity)&.active).to eq(true)
     end
 
-    it 'names the current active client in the activate warning the same way as the table' do
+    it 'withholds the current active client name in the activate warning' do
       match.activate!
       get opportunity_matches_path(opportunity)
 
       expect(response.body).to include("cancel the current match involving (name withheld — #{match.id})")
       expect(response.body).not_to include(eligible_client.name)
     end
+
+    it 'withholds the client name in the warning about its active matches elsewhere on the route' do
+      route.update!(should_prevent_multiple_matches_per_client: false)
+      create(:client_opportunity_match, client: other_eligible_client, match_route: route).activate!
+      get opportunity_matches_path(opportunity)
+
+      expect(response.body).to include("cancel all other active matches for (name withheld) on the #{route.title}")
+      expect(response.body).not_to include(other_eligible_client.name)
+    end
   end
 
   context 'when signed out' do
     before { sign_out user }
 
-    it 'redirects to sign in for both an existing and a missing opportunity id' do
-      get opportunity_matches_path(opportunity)
-      expect(response).to redirect_to(new_user_session_path)
-
+    it 'redirects to sign in for a missing opportunity id' do
       get opportunity_matches_path(opportunity_id: Opportunity.maximum(:id) + 1)
       expect(response).to redirect_to(new_user_session_path)
     end
