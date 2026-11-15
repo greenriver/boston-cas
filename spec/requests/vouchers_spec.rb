@@ -73,7 +73,7 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
         patch archive_program_sub_program_voucher_path(program, sub_program, voucher)
 
         expect(response).to redirect_to(vouchers_index_path)
-        expect(flash[:error]).to eq('Vouchers be archived if there is an active match')
+        expect(flash[:error]).to eq('Vouchers cannot be archived if there is an active match')
         expect(voucher.reload.archived_at).to be_nil
       end
     end
