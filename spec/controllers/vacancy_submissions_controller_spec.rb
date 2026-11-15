@@ -498,7 +498,27 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       expect { patch :update, params: params }.not_to(change { submission.reload.draft_data })
       expect(response).to render_template(:edit)
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(assigns(:submission).errors[:units]).to include('each media link must be an http or https URL')
+      expect(assigns(:submission).errors.full_messages).to include('Unit 1 media link 1 must be an http or https URL')
+    end
+
+    context 'when the edit form re-renders with a unit error' do
+      render_views
+
+      it 'gives the form each unit error with its unit and field' do
+        params = update_params.deep_merge(
+          vacancy_submission: { units: { '0' => { media_links: { '0' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' } } } } },
+        )
+
+        patch :update, params: params
+
+        container = Nokogiri::HTML(response.body).at_css('[data-field-errors]')
+        expect(JSON.parse(container['data-field-errors'])).to contain_exactly(
+          'unit_index' => 0,
+          'field' => 'media_links[0][url]',
+          'field_message' => 'Must be an http or https URL',
+          'message' => 'Unit 1 media link 1 must be an http or https URL',
+        )
+      end
     end
 
     context 'when a unit already has requirements' do

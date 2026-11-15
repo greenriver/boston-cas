@@ -178,17 +178,40 @@ export default class extends Controller {
     delete container.dataset.fieldErrors
     if (!errors.length) return
 
-    container.querySelectorAll('input[required], select[required]').forEach((el) => {
-      if (el.value.trim() !== '') return
-      el.classList.add('is-invalid')
-      const select2Container = el.nextElementSibling?.classList.contains('select2-container')
-        ? el.nextElementSibling
-        : null
-      if (select2Container) select2Container.classList.add('is-invalid')
-      const feedback = document.createElement('div')
-      feedback.className = 'invalid-feedback'
-      feedback.textContent = 'This field is required.'
-      ;(select2Container || el).after(feedback)
+    const unitEntries = container.querySelectorAll('[data-unit-entry]')
+    errors.forEach((error) => {
+      const field = error.field && container.querySelector(
+        `[name="vacancy_submission[units][${error.unit_index}][${error.field}]"]:not([type="hidden"])`
+      )
+      if (field) {
+        this.markInvalid(field, error.field_message)
+      } else {
+        this.showMessage(unitEntries[error.unit_index] || container, error.message)
+      }
     })
+
+    container.querySelectorAll('input[required], select[required]').forEach((el) => {
+      if (el.value.trim() !== '' || el.classList.contains('is-invalid')) return
+      this.markInvalid(el, 'This field is required.')
+    })
+  }
+
+  markInvalid(el, message) {
+    el.classList.add('is-invalid')
+    const select2Container = el.nextElementSibling?.classList.contains('select2-container')
+      ? el.nextElementSibling
+      : null
+    if (select2Container) select2Container.classList.add('is-invalid')
+    const feedback = document.createElement('div')
+    feedback.className = 'invalid-feedback'
+    feedback.textContent = message
+    ;(select2Container || el).after(feedback)
+  }
+
+  showMessage(target, message) {
+    const alert = document.createElement('div')
+    alert.className = 'alert alert-danger py-2 mb-2'
+    alert.textContent = message
+    target.prepend(alert)
   }
 }

@@ -15,6 +15,12 @@ RSpec.describe VacancySubmission, type: :model do
   let(:tenant_based_sub_program) { create(:sub_program, program: program, program_type: 'Tenant-Based') }
 
   describe 'validations' do
+    def unit_errors(submission)
+      submission.errors.where(:units).map do |error|
+        error.options.slice(:unit_index, :field, :field_message).merge(full_message: error.full_message)
+      end
+    end
+
     it 'is valid with required fields' do
       vs = described_class.new(
         status: 'awaiting_approval',
@@ -42,8 +48,6 @@ RSpec.describe VacancySubmission, type: :model do
         )
       end
 
-      let(:media_link_error) { 'each media link must be an http or https URL' }
-
       ['https://example.com/photo.jpg', 'http://example.com/photo.jpg'].each do |url|
         it "accepts #{url}" do
           expect(submission_with_media_urls(url)).to be_valid
@@ -59,14 +63,20 @@ RSpec.describe VacancySubmission, type: :model do
         it "rejects #{url}" do
           vs = submission_with_media_urls(url)
           expect(vs).not_to be_valid
-          expect(vs.errors[:units]).to include(media_link_error)
+          expect(unit_errors(vs)).to contain_exactly(
+            unit_index: 0, field: 'media_links[0][url]', field_message: 'Must be an http or https URL',
+            full_message: 'Unit 1 media link 1 must be an http or https URL'
+          )
         end
       end
 
       it 'rejects a unit whose second media link is not http or https' do
         vs = submission_with_media_urls('https://example.com/photo.jpg', 'ftp://example.com/photo2.jpg')
         expect(vs).not_to be_valid
-        expect(vs.errors[:units]).to include(media_link_error)
+        expect(unit_errors(vs)).to contain_exactly(
+          unit_index: 0, field: 'media_links[1][url]', field_message: 'Must be an http or https URL',
+          full_message: 'Unit 1 media link 2 must be an http or https URL'
+        )
       end
     end
 
@@ -99,7 +109,7 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(full_message: 'Add at least one unit')
     end
 
     it 'is invalid when a physical unit is missing a building' do
@@ -113,7 +123,9 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(
+        unit_index: 0, field: 'building_id', field_message: 'Select a building', full_message: 'Unit 1 needs a building',
+      )
     end
 
     it 'is invalid when a physical unit is missing a unit number' do
@@ -127,7 +139,9 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(
+        unit_index: 0, field: 'unit_number', field_message: 'Enter a unit number', full_message: 'Unit 1 needs a unit number',
+      )
     end
 
     it 'is invalid when one of multiple physical units is missing its building or unit number' do
@@ -144,7 +158,10 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(
+        { unit_index: 1, field: 'building_id', field_message: 'Select a building', full_message: 'Unit 2 needs a building' },
+        { unit_index: 1, field: 'unit_number', field_message: 'Enter a unit number', full_message: 'Unit 2 needs a unit number' },
+      )
     end
 
     it 'is invalid when a requirement uses a variable-requiring rule but the variable is blank' do
@@ -159,6 +176,7 @@ RSpec.describe VacancySubmission, type: :model do
             {
               'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
+                { 'rule_id' => create(:homeless).id.to_s, 'positive' => 'true', 'variable' => '' },
                 { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
               ]
             },
@@ -166,7 +184,10 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(
+        unit_index: 0, field: 'requirements_attributes[1][variable]', field_message: 'Bedroom exact requires a value',
+        full_message: 'Unit 1 requirement Bedroom exact requires a value'
+      )
     end
 
     it 'is valid when a variable-requiring rule has its variable set' do
@@ -230,7 +251,10 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(
+        unit_index: 0, field: 'requirements_attributes[0][variable]', field_message: 'Bedroom exact requires a value',
+        full_message: 'Voucher 1 requirement Bedroom exact requires a value'
+      )
     end
 
     it 'is valid with a named voucher' do
@@ -246,6 +270,20 @@ RSpec.describe VacancySubmission, type: :model do
       expect(vs).to be_valid
     end
 
+    it 'is invalid when a voucher submission has no vouchers' do
+      vs = described_class.new(
+        status: 'awaiting_approval',
+        draft_data: {
+          'program_id' => program.id,
+          'sub_program_id' => tenant_based_sub_program.id,
+          'is_voucher' => true,
+          'units' => [],
+        },
+      )
+      expect(vs).not_to be_valid
+      expect(unit_errors(vs)).to contain_exactly(full_message: 'Add at least one voucher')
+    end
+
     it 'is invalid when a voucher unit has a blank name' do
       vs = described_class.new(
         status: 'awaiting_approval',
@@ -257,7 +295,9 @@ RSpec.describe VacancySubmission, type: :model do
         },
       )
       expect(vs).not_to be_valid
-      expect(vs.errors[:units]).to be_present
+      expect(unit_errors(vs)).to contain_exactly(
+        unit_index: 0, field: 'name', field_message: 'Enter a name', full_message: 'Voucher 1 needs a name',
+      )
     end
   end
 
