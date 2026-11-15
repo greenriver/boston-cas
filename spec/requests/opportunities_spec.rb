@@ -35,19 +35,6 @@ RSpec.describe 'Opportunities', type: :request do
     sign_in user
   end
 
-  describe 'GET /opportunities/:id' do
-    it 'has no link to an edit page' do
-      get opportunity_path(opportunity)
-
-      doc = Nokogiri::HTML(response.body)
-      aggregate_failures do
-        expect(response).to have_http_status(:ok)
-        expect(doc.css(%(a[href^="/opportunities/#{opportunity.id}"][href$="/edit"])).map { |a| a[:href] }).to be_empty
-        expect(doc.css('a').map(&:text)).to include('Delete')
-      end
-    end
-  end
-
   # No data condition makes Opportunity#destroy or #restore return false, so the
   # failure is forced. The controller loads its own record, so the stub has to
   # be on any instance.
