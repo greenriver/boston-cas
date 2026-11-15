@@ -166,7 +166,8 @@ class OpportunitiesController < ApplicationController
     if @opportunity.update(opportunity_params)
       redirect_to opportunity_path(@opportunity), notice: "Opportunity #{@opportunity[:id]} was successfully updated."
     else
-      render :edit, { flash: { error: "Unable to update opportunity #{@opportunity[:name]}." } }
+      flash.now[:error] = "Unable to update opportunity #{@opportunity[:name]}."
+      render :edit
     end
   end
 
@@ -175,7 +176,8 @@ class OpportunitiesController < ApplicationController
     if @opportunity.destroy
       redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} was successfully deleted."
     else
-      render :edit, { flash: { error: "Unable to delete opportunity #{@opportunity[:name]}." } }
+      flash.now[:error] = "Unable to delete opportunity #{@opportunity[:name]}."
+      render :edit
     end
   end
 
@@ -185,7 +187,8 @@ class OpportunitiesController < ApplicationController
     if @opportunity.restore
       redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} successfully restored."
     else
-      render :edit, { flash: { error: 'Unable to restore opportunity.' } }
+      flash.now[:error] = 'Unable to restore opportunity.'
+      render :edit
     end
   end
 

@@ -140,7 +140,8 @@ class ClientsController < ApplicationController
         redirect_to client_path(@client), notice: 'Client updated'
       end
     else
-      render :show, { flash: { error: 'Unable update client.' } }
+      flash.now[:error] = 'Unable update client.'
+      render :show
     end
   end
 

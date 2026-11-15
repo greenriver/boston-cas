@@ -84,7 +84,8 @@ class UnitsController < ApplicationController
       redirect_to building_path(@unit.building) unless ajax_modal_request?
       flash[:notice] = "Unit #{@unit[:name]} was successfully updated."
     else
-      render :edit, { flash: { error: "Unable to update unit #{@unit[:name]}." } }
+      flash.now[:error] = "Unable to update unit #{@unit[:name]}."
+      render :edit
     end
   end
 

@@ -60,4 +60,22 @@ RSpec.describe 'Flash message escaping', type: :request do
       end
     end
   end
+
+  describe 'updating a unit with invalid params' do
+    let(:unit) { create(:unit, name: 'Unit A', building: create(:building)) }
+
+    before do
+      actor.roles << create(:admin_role)
+      sign_in actor
+    end
+
+    it 'shows the error flash on the re-rendered form' do
+      patch unit_path(unit), params: { unit: { name: '' } }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:ok)
+        expect(Nokogiri::HTML(response.body).css('.alert.error').text).to include('Unable to update unit')
+      end
+    end
+  end
 end
