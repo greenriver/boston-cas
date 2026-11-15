@@ -153,7 +153,8 @@ RSpec.describe 'Flash message escaping', type: :request do
       alert = Nokogiri::HTML(response.body).at_css('.alert.notice')
       aggregate_failures do
         expect(alert.css('br').size).to eq(1)
-        expect(alert.text).to include("Account name was updated.\nEmail schedule was updated.")
+        expect(alert.at_css('br').previous.text.strip).to eq('Account name was updated.')
+        expect(alert.at_css('br').next.text.strip).to eq('Email schedule was updated.')
       end
     end
   end

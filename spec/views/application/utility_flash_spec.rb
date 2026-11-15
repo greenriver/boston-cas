@@ -19,7 +19,7 @@ RSpec.describe 'application/_utility', type: :view do
       expect(alert.inner_html).to include('&lt;b&gt;x&lt;/b&gt;')
       expect(alert.css('b')).to be_empty
       expect(alert.css('br').size).to eq(1)
-      expect(alert.text).to include('second')
+      expect(alert.inner_html).to match(/&lt;\/b&gt;\s*<br>\s*second/)
     end
   end
 
