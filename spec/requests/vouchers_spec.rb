@@ -94,102 +94,198 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
     end
   end
 
-  describe 'DELETE unavailable on a voucher with an active match' do
-    let!(:voucher) do
-      create(:voucher, sub_program: sub_program, available: false).tap do |v|
-        v.create_opportunity!(available: true, available_candidate: false)
-      end
-    end
-    let!(:match) { create(:client_opportunity_match, opportunity: voucher.opportunity, active: true, closed: false) }
-
+  describe 'DELETE unavailable' do
     before(:each) do
       user.roles << create(:role, can_view_vouchers: true, can_view_programs: true, can_reject_matches: true)
     end
 
-    it 'deletes the active match, marks the voucher unavailable, and redirects to the vouchers index' do
-      delete unavailable_program_sub_program_voucher_path(program, sub_program, voucher)
+    context 'when the voucher has an active match' do
+      let!(:voucher) do
+        create(:voucher, sub_program: sub_program, available: false).tap do |v|
+          v.create_opportunity!(available: true, available_candidate: false)
+        end
+      end
+      let!(:match) { create(:client_opportunity_match, opportunity: voucher.opportunity, active: true, closed: false) }
 
-      expect(response).to redirect_to(vouchers_index_path)
-      expect(ClientOpportunityMatch.exists?(match.id)).to be(false)
-      expect(voucher.reload.available).to be(false)
-      expect(voucher.opportunity.available).to be(false)
+      it 'deletes the active match, marks the voucher unavailable, and redirects to the vouchers index' do
+        delete unavailable_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(vouchers_index_path)
+        expect(ClientOpportunityMatch.exists?(match.id)).to be(false)
+        expect(voucher.reload.available).to be(false)
+        expect(voucher.opportunity.available).to be(false)
+      end
+    end
+
+    context 'when the voucher has no opportunity' do
+      let!(:voucher) { create(:voucher, sub_program: sub_program, available: false) }
+      let(:flash_message) { 'The selected voucher does not have an active match, and cannot be stopped.' }
+
+      it 'redirects to the vouchers index with an error flash' do
+        delete unavailable_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(vouchers_index_path)
+        expect(flash[:error]).to eq(flash_message)
+      end
+
+      it 'redirects to the in-progress vouchers index with an error flash when sent to the in-progress route' do
+        delete unavailable_program_sub_program_in_progress_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(program_sub_program_in_progress_vouchers_path(program, sub_program))
+        expect(flash[:error]).to eq(flash_message)
+      end
     end
   end
 
-  describe 'DELETE unavailable on a voucher with no opportunity' do
-    let!(:voucher) { create(:voucher, sub_program: sub_program, available: false) }
-    let(:flash_message) { 'The selected voucher does not have an active match, and cannot be stopped.' }
+  describe 'GET vouchers index controls' do
+    # Ids of the vouchers that have a form row, taken from the id field each row's fields_for emits.
+    let(:rendered_voucher_ids) do
+      page.css('input[type=hidden]').
+        select { |input| input['name'].to_s.match?(/\Asub_program\[vouchers_attributes\]\[\d+\]\[id\]\z/) }.
+        map { |input| input['value'].to_i }
+    end
+    let(:page) { Nokogiri::HTML(response.body) }
 
-    before(:each) do
-      user.roles << create(:role, can_view_vouchers: true, can_view_programs: true, can_reject_matches: true)
+    def delete_link(voucher)
+      page.css(%(a[data-method="delete"][href="#{program_sub_program_voucher_path(program, sub_program, voucher)}"]))
     end
 
-    it 'redirects to the vouchers index with an error flash' do
-      delete unavailable_program_sub_program_voucher_path(program, sub_program, voucher)
-
-      expect(response).to redirect_to(vouchers_index_path)
-      expect(flash[:error]).to eq(flash_message)
+    def archive_link(voucher)
+      page.css(%(a[data-method="patch"][href="#{archive_program_sub_program_voucher_path(program, sub_program, voucher)}"]))
     end
 
-    it 'redirects to the in-progress vouchers index with an error flash' do
-      delete unavailable_program_sub_program_in_progress_voucher_path(program, sub_program, voucher)
-
-      expect(response).to redirect_to(program_sub_program_in_progress_vouchers_path(program, sub_program))
-      expect(flash[:error]).to eq(flash_message)
-    end
-  end
-
-  describe 'GET the vouchers index' do
-    let!(:archivable_voucher) do
-      create(:voucher, sub_program: sub_program, available: false).tap do |v|
-        opportunity = v.create_opportunity!(available: false, available_candidate: false)
-        create(:client_opportunity_match, opportunity: opportunity, active: false, closed: true, closed_reason: 'canceled')
-      end
-    end
-    let!(:deletable_voucher) { create(:voucher, sub_program: sub_program, available: true) }
-    let(:archive_path) { archive_program_sub_program_voucher_path(program, sub_program, archivable_voucher) }
-    let(:delete_link_pattern) do
-      /<a[^>]*data-method="delete"[^>]*href="#{Regexp.escape(program_sub_program_voucher_path(program, sub_program, deletable_voucher))}"|<a[^>]*href="#{Regexp.escape(program_sub_program_voucher_path(program, sub_program, deletable_voucher))}"[^>]*data-method="delete"/
+    def restore_link(voucher)
+      page.css(%(a[data-method="patch"][href="#{restore_program_sub_program_archived_voucher_path(program, sub_program, voucher)}"]))
     end
 
-    context 'without can_edit_vouchers' do
-      before(:each) do
-        user.roles << view_only_role
-        get vouchers_index_path
-        expect(response).to have_http_status(:ok)
-        expect(response.body).to match(/<input[^>]*type="hidden"[^>]*value="#{archivable_voucher.id}"/)
-        expect(response.body).to match(/<input[^>]*type="hidden"[^>]*value="#{deletable_voucher.id}"/)
+    def update_button
+      page.css('input[type=submit][value="Update Vouchers"]')
+    end
+
+    describe 'on the available/unmatched tab' do
+      let(:tab_path) { program_sub_program_vouchers_path(program, sub_program) }
+      let!(:archivable_voucher) do
+        create(:voucher, sub_program: sub_program, available: false).tap do |v|
+          opportunity = v.create_opportunity!(available: false, available_candidate: false)
+          create(:client_opportunity_match, opportunity: opportunity, active: false, closed: true, closed_reason: 'canceled')
+        end
+      end
+      let!(:deletable_voucher) { create(:voucher, sub_program: sub_program, available: true) }
+
+      context 'without can_edit_vouchers' do
+        before(:each) do
+          user.roles << view_only_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(archivable_voucher.id, deletable_voucher.id)
+        end
+
+        it 'omits the Delete link' do
+          expect(delete_link(deletable_voucher)).to be_empty
+        end
+
+        it 'omits the Archive link' do
+          expect(archive_link(archivable_voucher)).to be_empty
+        end
+
+        it 'omits the Update Vouchers button' do
+          expect(update_button).to be_empty
+        end
       end
 
-      it 'omits the Archive link' do
-        expect(response.body).not_to include(archive_path)
-      end
+      context 'with can_edit_vouchers' do
+        before(:each) do
+          user.roles << editor_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(archivable_voucher.id, deletable_voucher.id)
+        end
 
-      it 'omits the Delete link' do
-        expect(response.body).not_to match(delete_link_pattern)
-      end
+        it 'shows the Delete link for a voucher with no matches' do
+          expect(delete_link(deletable_voucher).size).to eq(1)
+        end
 
-      it 'omits the Update Vouchers button' do
-        expect(response.body).not_to include('Update Vouchers')
+        it 'shows the Archive link for an unavailable voucher with only a closed match' do
+          expect(archive_link(archivable_voucher).size).to eq(1)
+        end
+
+        it 'shows the Update Vouchers button' do
+          expect(update_button.size).to eq(1)
+        end
       end
     end
 
-    context 'with can_edit_vouchers' do
-      before(:each) do
-        user.roles << editor_role
-        get vouchers_index_path
+    describe 'on the archived tab' do
+      let(:tab_path) { program_sub_program_archived_vouchers_path(program, sub_program) }
+      let!(:archived_voucher) do
+        create(:voucher, sub_program: sub_program, available: false, archived_at: 1.day.ago).tap do |v|
+          opportunity = v.create_opportunity!(available: false, available_candidate: false)
+          create(:client_opportunity_match, opportunity: opportunity, active: false, closed: true, closed_reason: 'canceled')
+        end
       end
 
-      it 'shows the Archive link' do
-        expect(response.body).to include(archive_path)
+      context 'without can_edit_vouchers' do
+        before(:each) do
+          user.roles << view_only_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(archived_voucher.id)
+        end
+
+        it 'omits the Restore link' do
+          expect(restore_link(archived_voucher)).to be_empty
+        end
+
+        it 'omits the Update Vouchers button' do
+          expect(update_button).to be_empty
+        end
       end
 
-      it 'shows the Delete link' do
-        expect(response.body).to match(delete_link_pattern)
+      context 'with can_edit_vouchers' do
+        before(:each) do
+          user.roles << editor_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(archived_voucher.id)
+        end
+
+        it 'shows the Restore link' do
+          expect(restore_link(archived_voucher).size).to eq(1)
+        end
+
+        it 'shows the Update Vouchers button' do
+          expect(update_button.size).to eq(1)
+        end
+      end
+    end
+
+    describe 'on the in-progress tab' do
+      let(:tab_path) { program_sub_program_in_progress_vouchers_path(program, sub_program) }
+      let!(:matched_voucher) do
+        create(:voucher, sub_program: sub_program, available: false).tap do |v|
+          opportunity = v.create_opportunity!(available: false, available_candidate: false)
+          create(:client_opportunity_match, opportunity: opportunity, active: true, closed: false)
+        end
       end
 
-      it 'shows the Update Vouchers button' do
-        expect(response.body).to include('Update Vouchers')
+      context 'without can_edit_vouchers' do
+        before(:each) do
+          user.roles << view_only_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(matched_voucher.id)
+        end
+
+        it 'omits the Update Vouchers button' do
+          expect(update_button).to be_empty
+        end
+      end
+
+      context 'with can_edit_vouchers' do
+        before(:each) do
+          user.roles << editor_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(matched_voucher.id)
+        end
+
+        it 'shows the Update Vouchers button' do
+          expect(update_button.size).to eq(1)
+        end
       end
     end
   end
