@@ -157,10 +157,11 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
         user.roles << view_only_role
         get vouchers_index_path
         expect(response).to have_http_status(:ok)
+        expect(response.body).to match(/<input[^>]*type="hidden"[^>]*value="#{archivable_voucher.id}"/)
+        expect(response.body).to match(/<input[^>]*type="hidden"[^>]*value="#{deletable_voucher.id}"/)
       end
 
       it 'omits the Archive link' do
-        expect(response.body).to match(/<input[^>]*type="hidden"[^>]*value="#{archivable_voucher.id}"/)
         expect(response.body).not_to include(archive_path)
       end
 
