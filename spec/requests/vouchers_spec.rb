@@ -62,6 +62,58 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
         expect(voucher.reload.archived_at).to be_within(1.minute).of(Time.current)
       end
     end
+
+    context 'when the voucher is unavailable but its opportunity has an active match' do
+      before(:each) do
+        user.roles << editor_role
+        create(:client_opportunity_match, opportunity: voucher.opportunity, active: true, closed: false)
+      end
+
+      it 'refuses to archive and redirects to the vouchers index with an error flash' do
+        patch archive_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(vouchers_index_path)
+        expect(flash[:error]).to eq('Vouchers be archived if there is an active match')
+        expect(voucher.reload.archived_at).to be_nil
+      end
+    end
+
+    context 'when the voucher is available' do
+      before(:each) do
+        user.roles << editor_role
+        voucher.update_column(:available, true)
+      end
+
+      it 'refuses to archive and redirects to the vouchers index with an error flash' do
+        patch archive_program_sub_program_voucher_path(program, sub_program, voucher)
+
+        expect(response).to redirect_to(vouchers_index_path)
+        expect(flash[:error]).to eq('Vouchers must be unavailable to be archived')
+        expect(voucher.reload.archived_at).to be_nil
+      end
+    end
+  end
+
+  describe 'DELETE unavailable on a voucher with an active match' do
+    let!(:voucher) do
+      create(:voucher, sub_program: sub_program, available: false).tap do |v|
+        v.create_opportunity!(available: true, available_candidate: false)
+      end
+    end
+    let!(:match) { create(:client_opportunity_match, opportunity: voucher.opportunity, active: true, closed: false) }
+
+    before(:each) do
+      user.roles << create(:role, can_view_vouchers: true, can_view_programs: true, can_reject_matches: true)
+    end
+
+    it 'deletes the active match, marks the voucher unavailable, and redirects to the vouchers index' do
+      delete unavailable_program_sub_program_voucher_path(program, sub_program, voucher)
+
+      expect(response).to redirect_to(vouchers_index_path)
+      expect(ClientOpportunityMatch.exists?(match.id)).to be(false)
+      expect(voucher.reload.available).to be(false)
+      expect(voucher.opportunity.available).to be(false)
+    end
   end
 
   describe 'DELETE unavailable on a voucher with no opportunity' do
@@ -104,6 +156,7 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
       before(:each) do
         user.roles << view_only_role
         get vouchers_index_path
+        expect(response).to have_http_status(:ok)
       end
 
       it 'omits the Archive link' do
