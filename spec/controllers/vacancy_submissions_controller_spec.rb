@@ -383,6 +383,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       before do
         links = [
           { 'url' => 'https://example.com/kitchen.jpg', 'label' => 'Kitchen' },
+          { 'url' => 'http://example.com/hall.jpg', 'label' => 'Hall' },
           { 'url' => 'ftp://example.com/bath.jpg', 'label' => 'Bath' },
         ]
         submission.update_column(:draft_data, submission.draft_data.merge('units' => [submission.units.first.merge('media_links' => links)]))
@@ -392,9 +393,10 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         get :show, params: { id: submission.id }
 
         page = Nokogiri::HTML(response.body)
-        expect(page.at_css('a[href="https://example.com/kitchen.jpg"]')).to be_present
+        expect(page.at_css('a[href="https://example.com/kitchen.jpg"]').text).to include('Kitchen')
+        expect(page.at_css('a[href="http://example.com/hall.jpg"]').text).to include('Hall')
         expect(page.at_css('a[href="ftp://example.com/bath.jpg"]')).to be_nil
-        expect(page.text).to include('ftp://example.com/bath.jpg')
+        expect(page.css('li').map(&:text)).to include(a_string_including('ftp://example.com/bath.jpg'))
       end
     end
 
@@ -486,6 +488,17 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: { program_id: program.id },
       }
       expect(response).to render_template(:edit)
+    end
+
+    it 'rejects a media link that is not http or https and re-renders edit' do
+      params = update_params.deep_merge(
+        vacancy_submission: { units: { '0' => { media_links: { '0' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' } } } } },
+      )
+
+      expect { patch :update, params: params }.not_to(change { submission.reload.draft_data })
+      expect(response).to render_template(:edit)
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(assigns(:submission).errors[:units]).to include('each media link must be an http or https URL')
     end
 
     context 'when a unit already has requirements' do

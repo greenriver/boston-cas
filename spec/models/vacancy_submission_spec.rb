@@ -29,26 +29,44 @@ RSpec.describe VacancySubmission, type: :model do
     end
 
     describe 'media link URLs' do
-      def submission_with_media_url(url)
+      def submission_with_media_urls(*urls)
+        links = urls.map { |url| { 'url' => url, 'label' => 'Photo' } }
         described_class.new(
           status: 'awaiting_approval',
           draft_data: {
             'program_id' => program.id,
             'sub_program_id' => sub_program.id,
             'is_voucher' => false,
-            'units' => [{ 'building_id' => building.id, 'unit_number' => '1A', 'media_links' => [{ 'url' => url, 'label' => 'Photo' }] }],
+            'units' => [{ 'building_id' => building.id, 'unit_number' => '1A', 'media_links' => links }],
           },
         )
       end
 
-      it 'accepts an https URL' do
-        expect(submission_with_media_url('https://example.com/photo.jpg')).to be_valid
+      let(:media_link_error) { 'each media link must be an http or https URL' }
+
+      ['https://example.com/photo.jpg', 'http://example.com/photo.jpg'].each do |url|
+        it "accepts #{url}" do
+          expect(submission_with_media_urls(url)).to be_valid
+        end
       end
 
-      it 'rejects a URL whose scheme is not http or https' do
-        vs = submission_with_media_url('ftp://example.com/photo.jpg')
+      [
+        'ftp://example.com/photo.jpg',
+        '//example.com/photo.jpg',
+        'http:/photo.jpg',
+        'http://exa mple.com',
+      ].each do |url|
+        it "rejects #{url}" do
+          vs = submission_with_media_urls(url)
+          expect(vs).not_to be_valid
+          expect(vs.errors[:units]).to include(media_link_error)
+        end
+      end
+
+      it 'rejects a unit whose second media link is not http or https' do
+        vs = submission_with_media_urls('https://example.com/photo.jpg', 'ftp://example.com/photo2.jpg')
         expect(vs).not_to be_valid
-        expect(vs.errors[:units]).to include('each media link must be an http or https URL')
+        expect(vs.errors[:units]).to include(media_link_error)
       end
     end
 
