@@ -180,8 +180,10 @@ export default class extends Controller {
 
     const unitEntries = container.querySelectorAll('[data-unit-entry]')
     errors.forEach((error) => {
-      const named = error.field && container.querySelector(
-        `[name="vacancy_submission[units][${error.unit_index}][${error.field}]"]`
+      // field is a path such as "media_links[0][url]"; the input name brackets its first key too.
+      const path = error.field?.replace(/^[^[]+/, (key) => `[${key}]`)
+      const named = path && container.querySelector(
+        `[name="vacancy_submission[units][${error.unit_index}]${path}"]`
       )
       const field = named?.type === 'hidden'
         ? named.closest('[data-req-entry]')?.querySelector('[data-req-multi-display]')

@@ -248,8 +248,8 @@ class VacancySubmission < ApplicationRecord
     end
   end
 
-  # unit_index and field locate the form input (vacancy_submission[units][<unit_index>][<field>])
-  # that the form marks with field_message.
+  # unit_index and field locate the form input that the form marks with field_message. field is a
+  # path under the unit: "media_links[0][url]" means vacancy_submission[units][<unit_index>][media_links][0][url].
   def add_unit_error(unit_index, field, message, field_message)
     label = "#{voucher? ? 'Voucher' : 'Unit'} #{unit_index + 1}"
     errors.add(:units, "#{label} #{message}", unit_index: unit_index, field: field, field_message: field_message)
