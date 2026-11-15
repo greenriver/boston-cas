@@ -28,6 +28,30 @@ RSpec.describe VacancySubmission, type: :model do
       expect(vs).to be_valid
     end
 
+    describe 'media link URLs' do
+      def submission_with_media_url(url)
+        described_class.new(
+          status: 'awaiting_approval',
+          draft_data: {
+            'program_id' => program.id,
+            'sub_program_id' => sub_program.id,
+            'is_voucher' => false,
+            'units' => [{ 'building_id' => building.id, 'unit_number' => '1A', 'media_links' => [{ 'url' => url, 'label' => 'Photo' }] }],
+          },
+        )
+      end
+
+      it 'accepts an https URL' do
+        expect(submission_with_media_url('https://example.com/photo.jpg')).to be_valid
+      end
+
+      it 'rejects a URL whose scheme is not http or https' do
+        vs = submission_with_media_url('ftp://example.com/photo.jpg')
+        expect(vs).not_to be_valid
+        expect(vs.errors[:units]).to include('each media link must be an http or https URL')
+      end
+    end
+
     it 'is invalid with an unknown status' do
       vs = described_class.new(status: 'invalid_status', draft_data: {})
       expect(vs).not_to be_valid

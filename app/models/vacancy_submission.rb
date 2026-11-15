@@ -93,6 +93,13 @@ class VacancySubmission < ApplicationRecord
     sub_program&.program_type == 'Tenant-Based'
   end
 
+  def self.http_url?(value)
+    uri = URI.parse(value.to_s)
+    uri.is_a?(URI::HTTP) && uri.host.present?
+  rescue URI::InvalidURIError
+    false
+  end
+
   def program_id
     super&.to_i
   end
@@ -238,6 +245,12 @@ class VacancySubmission < ApplicationRecord
       end
     end
     unit_list.each { |u| validate_requirement_variables(u) }
+    unit_list.each { |u| validate_media_link_urls(u) }
+  end
+
+  def validate_media_link_urls(unit)
+    urls = Array(unit['media_links']).map { |link| link['url'] }.select(&:present?)
+    errors.add(:units, 'each media link must be an http or https URL') unless urls.all? { |url| self.class.http_url?(url) }
   end
 
   # Requirements attached to a unit/voucher may reference a rule that needs a

@@ -377,6 +377,27 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       end
     end
 
+    context 'when a unit has media links' do
+      render_views
+
+      before do
+        links = [
+          { 'url' => 'https://example.com/kitchen.jpg', 'label' => 'Kitchen' },
+          { 'url' => 'ftp://example.com/bath.jpg', 'label' => 'Bath' },
+        ]
+        submission.update_column(:draft_data, submission.draft_data.merge('units' => [submission.units.first.merge('media_links' => links)]))
+      end
+
+      it 'links only http and https URLs' do
+        get :show, params: { id: submission.id }
+
+        page = Nokogiri::HTML(response.body)
+        expect(page.at_css('a[href="https://example.com/kitchen.jpg"]')).to be_present
+        expect(page.at_css('a[href="ftp://example.com/bath.jpg"]')).to be_nil
+        expect(page.text).to include('ftp://example.com/bath.jpg')
+      end
+    end
+
     context 'when user lacks both vacancy permissions' do
       let(:no_vacancy_role) { create(:role, name: 'no_vacancy') }
 
