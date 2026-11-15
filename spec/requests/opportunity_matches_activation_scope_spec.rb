@@ -128,6 +128,14 @@ RSpec.describe 'Match activation is limited to the eligible client list', type: 
       expect(match.reload.closed_reason).to eq('canceled')
       expect(ClientOpportunityMatch.find_by(client: other_eligible_client, opportunity: opportunity)&.active).to eq(true)
     end
+
+    it 'names the current active client in the activate warning the same way as the table' do
+      match.activate!
+      get opportunity_matches_path(opportunity)
+
+      expect(response.body).to include("cancel the current match involving (name withheld — #{match.id})")
+      expect(response.body).not_to include(eligible_client.name)
+    end
   end
 
   describe 'the CSV export' do
