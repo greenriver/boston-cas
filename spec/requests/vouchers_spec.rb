@@ -258,7 +258,7 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
     describe 'on the in-progress tab' do
       let(:tab_path) { program_sub_program_in_progress_vouchers_path(program, sub_program) }
       let!(:matched_voucher) do
-        create(:voucher, sub_program: sub_program, available: false).tap do |v|
+        create(:voucher, sub_program: sub_program, available: true).tap do |v|
           opportunity = v.create_opportunity!(available: false, available_candidate: false)
           create(:client_opportunity_match, opportunity: opportunity, active: true, closed: false)
         end
@@ -281,6 +281,54 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
           user.roles << editor_role
           get tab_path
           expect(rendered_voucher_ids).to contain_exactly(matched_voucher.id)
+        end
+
+        it 'shows the Update Vouchers button' do
+          expect(update_button.size).to eq(1)
+        end
+      end
+    end
+
+    describe 'on the successful tab' do
+      let(:tab_path) { program_sub_program_successful_vouchers_path(program, sub_program) }
+      let!(:successful_voucher) do
+        create(:voucher, sub_program: sub_program, available: false).tap do |v|
+          opportunity = v.create_opportunity!(available: false, available_candidate: false)
+          create(:client_opportunity_match, opportunity: opportunity, active: false, closed: true, closed_reason: 'success')
+        end
+      end
+      let!(:canceled_voucher) do
+        create(:voucher, sub_program: sub_program, available: false).tap do |v|
+          opportunity = v.create_opportunity!(available: false, available_candidate: false)
+          create(:client_opportunity_match, opportunity: opportunity, active: false, closed: true, closed_reason: 'canceled')
+        end
+      end
+
+      context 'without can_edit_vouchers' do
+        before(:each) do
+          user.roles << view_only_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(successful_voucher.id)
+        end
+
+        it 'omits the Archive link' do
+          expect(archive_link(successful_voucher)).to be_empty
+        end
+
+        it 'omits the Update Vouchers button' do
+          expect(update_button).to be_empty
+        end
+      end
+
+      context 'with can_edit_vouchers' do
+        before(:each) do
+          user.roles << editor_role
+          get tab_path
+          expect(rendered_voucher_ids).to contain_exactly(successful_voucher.id)
+        end
+
+        it 'shows the Archive link' do
+          expect(archive_link(successful_voucher).size).to eq(1)
         end
 
         it 'shows the Update Vouchers button' do
