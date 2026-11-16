@@ -70,33 +70,33 @@ class MatchDecisionsController < ApplicationController
 
     # If we've been asked to park the client and match is accepted
     elsif decision_params[:prevent_matching_until].present? && decision_params[:status] == 'accepted'
-      flash[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
+      flash.now[:error] = 'Sorry, if the client is parked, you cannot accept this match recommendation at this time.'
       render 'matches/show'
 
     # If we are overriding a decline, we must have a note
     elsif decision_params[:status].in?(['decline_overridden', 'decline_overridden_returned']) && decision_params[:note].blank?
-      flash[:error] = 'An override reason is required for to override a decline.'
+      flash.now[:error] = 'An override reason is required for to override a decline.'
       render 'matches/show'
 
     # If cancel reason is provided and match is not being canceled
     elsif decision_params[:administrative_cancel_reason_id].present? && decision_params[:status] != 'canceled'
-      flash[:error] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
+      flash.now[:error] = 'Sorry, if a cancel reason is specified, you can only cancel this match recommendation.'
       render 'matches/show'
 
     # If decline reason is provided and match is canceled or accepted
     elsif decision_params[:decline_reason_id].present? && decision_params[:status] == 'accepted' ||
           decision_params[:decline_reason_id].present? && decision_params[:status] == 'canceled'
-      flash[:error] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
+      flash.now[:error] = 'Sorry, if a decline reason is specified, you can only decline this match recommendation.'
       render 'matches/show'
 
     # If cancel reason is NOT provided and match is canceled
     elsif decision_params[:administrative_cancel_reason_id].blank? && decision_params[:status] == 'canceled'
-      flash[:error] = 'Sorry, you must provide a cancel reason to cancel this match.'
+      flash.now[:error] = 'Sorry, you must provide a cancel reason to cancel this match.'
       render 'matches/show'
 
     # If disable opportunity is set and no cancel reason is set
     elsif decision_params[:disable_opportunity] == '1' && decision_params[:administrative_cancel_reason_id].blank?
-      flash[:error] = 'Sorry, you can only disable a vacancy when cancelling a match'
+      flash.now[:error] = 'Sorry, you can only disable a vacancy when cancelling a match'
       render 'matches/show'
 
     elsif only_updating_expiration?
@@ -151,7 +151,7 @@ class MatchDecisionsController < ApplicationController
         end
       end
     else
-      flash[:error] = "Please review the form problems below.\n#{@decision.errors.full_messages.join("\n")}"
+      flash.now[:error] = "Please review the form problems below.\n#{@decision.errors.full_messages.join("\n")}"
       # @decision is the match's cached association, still holding the rejected attributes.
       # Reload so match-level status reads persisted decisions; the form keeps using @decision.
       @match.reload

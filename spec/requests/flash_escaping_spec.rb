@@ -143,6 +143,43 @@ RSpec.describe 'Flash message escaping', type: :request do
     end
   end
 
+  describe 'program and sub-program form errors' do
+    let(:program) { create(:program, match_route: create(:default_route)) }
+    let(:sub_program) { create(:sub_program, program: program) }
+
+    before do
+      actor.roles << create(:admin_role)
+      sign_in actor
+    end
+
+    def error_flash_text
+      Nokogiri::HTML(response.body).css('.alert.error').text
+    end
+
+    def expect_error_only_on_rerender
+      expect(response).to have_http_status(:ok)
+      expect(error_flash_text).to include('Please review the form problems below.')
+      get units_path
+      expect(response).to have_http_status(:ok)
+      expect(error_flash_text).not_to include('Please review the form problems below.')
+    end
+
+    it 'shows a program create error on the re-rendered form and not on the next page' do
+      post programs_path, params: { program: { name: '', match_route_id: MatchRoutes::Default.first.id } }
+      expect_error_only_on_rerender
+    end
+
+    it 'shows a sub-program create error on the re-rendered form and not on the next page' do
+      post program_sub_programs_path(program), params: { sub_program: { program_type: 'Project-Based', building_id: '' } }
+      expect_error_only_on_rerender
+    end
+
+    it 'shows a sub-program update error on the re-rendered form and not on the next page' do
+      patch program_sub_program_path(program, sub_program), params: { sub_program: { program_type: 'Project-Based', building_id: '' } }
+      expect_error_only_on_rerender
+    end
+  end
+
   describe 'updating account name and email schedule together' do
     before { sign_in actor }
 

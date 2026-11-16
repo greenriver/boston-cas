@@ -33,7 +33,7 @@ class SubProgramsController < ApplicationController
       redirect_to action: :index, controller: :programs
       flash[:notice] = "#{@subprogram.program.name} created."
     else
-      flash[:error] = 'Please review the form problems below.'
+      flash.now[:error] = 'Please review the form problems below.'
       render :new
     end
   end
@@ -51,7 +51,7 @@ class SubProgramsController < ApplicationController
       redirect_to action: :edit
       flash[:notice] = helpers.safe_join(['Program "', helpers.link_to(@subprogram.program.name, edit_program_sub_program_path(@subprogram.program, @subprogram)), '" updated.'])
     else
-      flash[:error] = 'Please review the form problems below.'
+      flash.now[:error] = 'Please review the form problems below.'
       render :new
     end
   end
