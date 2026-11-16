@@ -8,12 +8,11 @@
 
 class OpportunityMatchesController < ApplicationController
   before_action :authenticate_user!
+  before_action :find_opportunity!
   before_action :require_access_to_opportunity!
   before_action :require_can_activate_matches!, only: [:create, :update]
   before_action :set_heading
   before_action :set_show_confidential_names
-
-  prepend_before_action :find_opportunity!
 
   def index
     clients_for_route = Client.available_for_matching(@opportunity.match_route)
@@ -33,6 +32,8 @@ class OpportunityMatchesController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
+        return not_authorized! unless current_user.can_activate_matches?
+
         send_data @exporter.to_csv, filename: "prioritized-clients-#{@opportunity.id}-#{Time.now.strftime('%Y-%m-%d')}.csv"
       end
     end
@@ -48,8 +49,11 @@ class OpportunityMatchesController < ApplicationController
   end
 
   def create
+    return not_authorized! unless @opportunity.match_route.allow_multiple_active_matches
+
     client_ids_to_activate = params[:checkboxes]&.select { |_key, value| value == '1' }&.keys&.map(&:to_i)
-    client_ids_to_activate&.each do |client_id|
+
+    eligible_client_ids(client_ids_to_activate || []).each do |client_id|
       match = ClientOpportunityMatch.where(client_id: client_id, opportunity_id: @opportunity, closed: false).
         first_or_create(create_match_attributes(client_id))
       match.activate!(touch_referral_event: @opportunity.match_route.auto_initialize_event?, user: current_user)
@@ -59,6 +63,7 @@ class OpportunityMatchesController < ApplicationController
 
   def update
     client_id = params[:id].to_i
+    return not_authorized! unless eligible_client_ids([client_id]).include?(client_id)
 
     unless @opportunity.match_route.allow_multiple_active_matches
       @opportunity.active_matches.each do |active_match|
@@ -143,10 +148,10 @@ class OpportunityMatchesController < ApplicationController
     @show_confidential_names = can_view_client_confidentiality? && params[:confidential_override].present?
   end
 
-  def match_scope
-    ClientOpportunityMatch
-      .accessible_by_user(current_user)
-      .where(opportunity_id: @opportunity.id)
+  def eligible_client_ids(requested_ids)
+    eligible = @opportunity.matching_clients(Client.available_for_matching(@opportunity.match_route)).
+      where(id: requested_ids).pluck(:id)
+    eligible - @opportunity.active_matches.pluck(:client_id)
   end
 
   def find_opportunity!
