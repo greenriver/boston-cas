@@ -1,5 +1,5 @@
 ###
-# Copyright 2016 - 2025 Green River Data Analysis, LLC
+# Copyright Green River Data Group, Inc.
 #
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
@@ -203,6 +203,15 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
       page.css('input[type=submit][value="Update Vouchers"]')
     end
 
+    def add_vouchers_button
+      page.css('input[type=submit][value="Add vouchers"]')
+    end
+
+    def available_checkbox(voucher)
+      index = rendered_voucher_ids.index(voucher.id)
+      page.css(%(input[type=checkbox][name="sub_program[vouchers_attributes][#{index}][available]"]))
+    end
+
     describe 'on the available/unmatched tab' do
       let(:tab_path) { program_sub_program_vouchers_path(program, sub_program) }
       let!(:archivable_voucher) do
@@ -231,6 +240,14 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
         it 'omits the Update Vouchers button' do
           expect(update_button).to be_empty
         end
+
+        it 'omits the Add vouchers button' do
+          expect(add_vouchers_button).to be_empty
+        end
+
+        it 'disables the Available checkbox on a voucher with no match' do
+          expect(available_checkbox(deletable_voucher).map { |input| input['disabled'] }).to eq(['disabled'])
+        end
       end
 
       context 'with can_edit_vouchers' do
@@ -238,6 +255,14 @@ RSpec.describe 'Voucher archive and unavailable actions', type: :request do
           user.roles << editor_role
           get tab_path
           expect(rendered_voucher_ids).to contain_exactly(archivable_voucher.id, deletable_voucher.id)
+        end
+
+        it 'shows the Add vouchers button' do
+          expect(add_vouchers_button.size).to eq(1)
+        end
+
+        it 'enables the Available checkbox on a voucher with no match' do
+          expect(available_checkbox(deletable_voucher).map { |input| input['disabled'] }).to eq([nil])
         end
 
         it 'shows the Delete link for a voucher with no matches' do
