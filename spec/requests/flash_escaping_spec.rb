@@ -12,6 +12,12 @@ RSpec.describe 'Flash message escaping', type: :request do
   let(:marker) { '<b>x</b>' }
   let(:escaped_marker) { '&lt;b&gt;x&lt;/b&gt;' }
   let(:actor) { create(:user) }
+  let(:warehouse_project_options) { { 'Example Org (Example HMIS)' => [['Example Project', 1]] } }
+
+  # Warehouse tables don't exist in CI; allow(Warehouse::Project) would load columns and fail there.
+  def stub_warehouse_project_options
+    stub_const('Warehouse::Project', double(options_for_select: warehouse_project_options))
+  end
 
   def flash_html
     Nokogiri::HTML(response.body).css('.alert').map(&:inner_html).join
@@ -100,6 +106,7 @@ RSpec.describe 'Flash message escaping', type: :request do
     before do
       actor.roles << create(:admin_role)
       sign_in actor
+      stub_warehouse_project_options
     end
 
     it 'links to the sub-program and escapes the program name' do
@@ -150,6 +157,7 @@ RSpec.describe 'Flash message escaping', type: :request do
     before do
       actor.roles << create(:admin_role)
       sign_in actor
+      stub_warehouse_project_options
     end
 
     def error_flash_text
