@@ -178,17 +178,63 @@ export default class extends Controller {
     delete container.dataset.fieldErrors
     if (!errors.length) return
 
-    container.querySelectorAll('input[required], select[required]').forEach((el) => {
-      if (el.value.trim() !== '') return
-      el.classList.add('is-invalid')
-      const select2Container = el.nextElementSibling?.classList.contains('select2-container')
-        ? el.nextElementSibling
-        : null
-      if (select2Container) select2Container.classList.add('is-invalid')
-      const feedback = document.createElement('div')
-      feedback.className = 'invalid-feedback'
-      feedback.textContent = 'This field is required.'
-      ;(select2Container || el).after(feedback)
+    const unitEntries = container.querySelectorAll('[data-unit-entry]')
+    errors.forEach((error) => {
+      // field is a path such as "media_links[0][url]"; the input name brackets its first key too.
+      const path = error.field?.replace(/^[^[]+/, (key) => `[${key}]`)
+      const named = path && container.querySelector(
+        `[name="vacancy_submission[units][${error.unit_index}]${path}"]`
+      )
+      const field = named?.type === 'hidden'
+        ? named.closest('[data-req-entry]')?.querySelector('[data-req-multi-display]')
+        : named
+      if (field) {
+        this.markInvalid(field, error.field_message)
+      } else {
+        this.showMessage(unitEntries[error.unit_index] || container, error.message)
+      }
     })
+
+    container.querySelectorAll('input[required], select[required]').forEach((el) => {
+      if (el.value.trim() !== '' || el.classList.contains('is-invalid')) return
+      this.markInvalid(el, 'This field is required.')
+    })
+  }
+
+  markInvalid(el, message) {
+    el.classList.add('is-invalid')
+    const feedback = document.createElement('div')
+    feedback.className = 'invalid-feedback'
+    feedback.textContent = message
+
+    const select2Container = this.select2ContainerFor(el)
+    if (select2Container) {
+      select2Container.classList.add('is-invalid')
+      select2Container.after(feedback)
+      return
+    }
+    el.after(feedback)
+
+    // select2 wraps selects after this runs, so move the feedback behind its container once it exists.
+    if (el.tagName === 'SELECT') {
+      setTimeout(() => {
+        const container = this.select2ContainerFor(el)
+        if (!container) return
+        container.classList.add('is-invalid')
+        container.after(feedback)
+      }, 0)
+    }
+  }
+
+  select2ContainerFor(el) {
+    const sibling = el.nextElementSibling
+    return sibling?.classList.contains('select2-container') ? sibling : null
+  }
+
+  showMessage(target, message) {
+    const alert = document.createElement('div')
+    alert.className = 'alert alert-danger py-2 mb-2'
+    alert.textContent = message
+    target.prepend(alert)
   }
 }
