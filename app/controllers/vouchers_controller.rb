@@ -9,7 +9,7 @@
 class VouchersController < ApplicationController
   before_action :authenticate_user!
   before_action :require_can_view_vouchers!
-  before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update, :restore]
+  before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update, :archive, :restore]
   before_action :require_can_reject_matches!, only: [:unavailable]
   before_action :require_can_edit_voucher_rules!, only: [:edit, :update]
   before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable, :archive, :restore]
@@ -63,7 +63,7 @@ class VouchersController < ApplicationController
   # Set the Voucher as available = false
   def unavailable
     opportunity = @voucher.opportunity
-    if opportunity.active_matches.exists?
+    if opportunity&.active_matches&.exists?
       matches = opportunity.client_opportunity_matches
       Client.transaction do
         matches.each do |m|
@@ -83,17 +83,17 @@ class VouchersController < ApplicationController
   end
 
   def archive
-    # You can only archive vouchers that aren't available
-    # You can only archive vouchers that don't have an active match
-    opportunity = @voucher.opportunity
-    if @voucher.available
-      flash[:error] = 'Vouchers must be unavailable to be archived'
-    elsif opportunity.active_matches.exists?
-      flash[:error] = 'Vouchers be archived if there is an active match'
-    else
+    if @voucher.can_be_archived?
       @voucher.update(archived_at: Time.current)
       flash[:notice] = 'Voucher archived'
-
+    elsif @voucher.archived?
+      flash[:error] = 'Voucher is already archived'
+    elsif @voucher.available
+      flash[:error] = 'Vouchers must be unavailable to be archived'
+    elsif @voucher.active_matches?
+      flash[:error] = 'Vouchers cannot be archived if there is an active match'
+    else
+      flash[:error] = 'Voucher cannot be archived'
     end
     redirect_to action: :index
   end

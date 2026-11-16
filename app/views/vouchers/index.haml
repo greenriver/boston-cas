@@ -15,7 +15,8 @@
       = @subprogram.name
     .o-page__action
       .d-flex.flex-column.mr-8
-        = render 'bulk_add_form'
+        - if current_user.can_edit_vouchers
+          = render 'bulk_add_form'
         .text-right
           %p.mb-0.mt-1
             - if @subprogram.voucher_count.present? && @subprogram.voucher_count > 0
