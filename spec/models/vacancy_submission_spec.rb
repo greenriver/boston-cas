@@ -59,13 +59,14 @@ RSpec.describe VacancySubmission, type: :model do
         '//example.com/photo.jpg',
         'http:/photo.jpg',
         'http://exa mple.com',
+        'https://example.com/photo.jpg?size=a|b',
       ].each do |url|
         it "rejects #{url}" do
           vs = submission_with_media_urls(url)
           expect(vs).not_to be_valid
           expect(unit_errors(vs)).to contain_exactly(
-            unit_index: 0, field: 'media_links[0][url]', field_message: 'Must be an http or https URL',
-            full_message: 'Unit 1 media link 1 must be an http or https URL'
+            unit_index: 0, field: 'media_links[0][url]', field_message: 'Must be a valid http or https URL',
+            full_message: 'Unit 1 media link 1 must be a valid http or https URL'
           )
         end
       end
@@ -79,8 +80,8 @@ RSpec.describe VacancySubmission, type: :model do
         vs = submission_with_media_urls('https://example.com/photo.jpg', 'ftp://example.com/photo2.jpg')
         expect(vs).not_to be_valid
         expect(unit_errors(vs)).to contain_exactly(
-          unit_index: 0, field: 'media_links[1][url]', field_message: 'Must be an http or https URL',
-          full_message: 'Unit 1 media link 2 must be an http or https URL'
+          unit_index: 0, field: 'media_links[1][url]', field_message: 'Must be a valid http or https URL',
+          full_message: 'Unit 1 media link 2 must be a valid http or https URL'
         )
       end
     end
@@ -215,8 +216,8 @@ RSpec.describe VacancySubmission, type: :model do
       )
       expect(vs).not_to be_valid
       expect(unit_errors(vs)).to contain_exactly(
-        { unit_index: 1, field: 'media_links[0][url]', field_message: 'Must be an http or https URL',
-          full_message: 'Unit 2 media link 1 must be an http or https URL' },
+        { unit_index: 1, field: 'media_links[0][url]', field_message: 'Must be a valid http or https URL',
+          full_message: 'Unit 2 media link 1 must be a valid http or https URL' },
         { unit_index: 1, field: 'requirements_attributes[0][variable]', field_message: 'Bedroom exact requires a value',
           full_message: 'Unit 2 requirement Bedroom exact requires a value' },
       )

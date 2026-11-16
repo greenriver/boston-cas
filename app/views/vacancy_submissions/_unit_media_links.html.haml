@@ -8,7 +8,7 @@
         %dd.vs-field-value.mb-0
           %ul.mb-0.ps-3
             - links.each do |link|
-              - if VacancySubmission.http_url?(link['url'])
+              - if VacancySubmission.media_link_url?(link['url'])
                 %li= link_to(link['label'].presence || link['url'], link['url'], target: '_blank', rel: 'noopener')
               - else
                 %li= link['url']

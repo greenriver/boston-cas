@@ -93,11 +93,11 @@ class VacancySubmission < ApplicationRecord
     sub_program&.program_type == 'Tenant-Based'
   end
 
-  def self.http_url?(value)
-    uri = URI.parse(value.to_s)
-    uri.is_a?(URI::HTTP) && uri.host.present?
-  rescue URI::InvalidURIError
-    false
+  # Approval saves each media link as a HousingMediaLink, so a URL is valid here only if it is valid there.
+  def self.media_link_url?(value)
+    link = HousingMediaLink.new(url: value)
+    link.validate
+    link.errors[:url].empty?
   end
 
   def program_id
@@ -257,9 +257,9 @@ class VacancySubmission < ApplicationRecord
 
   def validate_media_link_urls(unit, unit_index)
     Array(unit['media_links']).each_with_index do |link, link_index|
-      next if link['url'].blank? || self.class.http_url?(link['url'])
+      next if link['url'].blank? || self.class.media_link_url?(link['url'])
 
-      add_unit_error(unit_index, "media_links[#{link_index}][url]", "media link #{link_index + 1} must be an http or https URL", 'Must be an http or https URL')
+      add_unit_error(unit_index, "media_links[#{link_index}][url]", "media link #{link_index + 1} must be a valid http or https URL", 'Must be a valid http or https URL')
     end
   end
 
