@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   resources :unavailable_clients, only: [:index]
   resources :unavailable_client_search_queries, only: [:create]
   get 'unavailable_client_search_queries/:id', to: 'unavailable_clients#search', as: :unavailable_client_search_query
-  resources :opportunities do
+  resources :opportunities, except: [:edit, :update] do
     post 'restore'
     resources :contacts, except: :show, controller: :opportunity_contacts, concerns: [:restorable]
     resources :matches, controller: 'opportunity_matches', only: [:index, :create, :update] do

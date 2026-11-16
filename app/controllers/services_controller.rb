@@ -32,7 +32,7 @@ class ServicesController < ApplicationController
 
     if @service.save
       redirect_to action: :index
-      flash[:notice] = "Service <strong>#{@service.name}</strong> was successfully created."
+      flash[:notice] = "Service #{@service.name} was successfully created."
     else
       render :new
     end
@@ -42,7 +42,7 @@ class ServicesController < ApplicationController
   def update
     if @service.update(service_params)
       redirect_to action: :index
-      flash[:notice] = "Service <strong>#{@service.name}</strong> was successfully updated."
+      flash[:notice] = "Service #{@service.name} was successfully updated."
     else
       render :edit
     end
@@ -51,7 +51,7 @@ class ServicesController < ApplicationController
   # DELETE /services/1
   def destroy
     @service.destroy
-    redirect_to services_url, notice: "Service <strong>#{@service.name}</strong> was successfully destroyed."
+    redirect_to services_url, notice: "Service #{@service.name} was successfully destroyed."
   end
 
   private

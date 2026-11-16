@@ -72,14 +72,6 @@ RSpec.describe 'Opportunities program scope', type: :request do
     end
   end
 
-  describe 'PATCH /opportunities/:id' do
-    it 'does not update an opportunity in another program' do
-      patch opportunity_path(other_opportunity), params: { opportunity: { available: false } }
-      expect(response).to have_http_status(:not_found)
-      expect(other_opportunity.reload.available).to be(true)
-    end
-  end
-
   describe 'DELETE /opportunities/:id' do
     it 'does not delete an opportunity in another program' do
       expect { delete opportunity_path(other_opportunity) }.not_to(change { Opportunity.where(id: other_opportunity.id).count })
@@ -128,12 +120,6 @@ RSpec.describe 'Opportunities program scope', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'updates the opportunity' do
-      expect do
-        patch opportunity_path(own_opportunity), params: { opportunity: { available: false } }
-      end.to change { own_opportunity.reload.available }.from(true).to(false)
-    end
-
     it 'deletes the opportunity' do
       expect { delete opportunity_path(own_opportunity) }.to change { Opportunity.where(id: own_opportunity.id).count }.by(-1)
       expect(response).to redirect_to(opportunities_path)
@@ -161,22 +147,6 @@ RSpec.describe 'Opportunities program scope', type: :request do
     it 'shows the opportunity' do
       get opportunity_path(own_opportunity)
       expect(response).to have_http_status(:ok)
-    end
-
-    it 'updates the opportunity in an editable program' do
-      expect do
-        patch opportunity_path(own_opportunity), params: { opportunity: { available: false } }
-      end.to change { own_opportunity.reload.available }.from(true).to(false)
-    end
-
-    context 'when the agency permission is not editable' do
-      let(:own_program_editable) { false }
-
-      it 'does not update the opportunity' do
-        patch opportunity_path(own_opportunity), params: { opportunity: { available: false } }
-        expect(response).to have_http_status(:not_found)
-        expect(own_opportunity.reload.available).to be(true)
-      end
     end
   end
 
