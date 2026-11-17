@@ -47,9 +47,9 @@ class Rules::RankBelow < Rule
     return scope.none if threshold.nil?
 
     if requirement.positive
-      scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int < #{threshold}"))
+      scope.where('(tags->>?)::int < ?', tag_id.to_i.to_s, threshold)
     else
-      scope.where(Arel.sql("(tags->>'#{tag_id.to_i}')::int >= #{threshold}"))
+      scope.where('(tags->>?)::int >= ?', tag_id.to_i.to_s, threshold)
     end
   end
 end
