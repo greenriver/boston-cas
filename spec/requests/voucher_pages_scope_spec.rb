@@ -39,10 +39,38 @@ RSpec.describe 'Voucher pages program and sub-program scope', type: :request do
       expect(response.body).to include(program_sub_program_voucher_path(own_sub_program.program, own_sub_program, own_voucher))
     end
 
-    it 'returns 404 for a sub-program the agency cannot view' do
-      get archived_path(other_sub_program)
+    ['vouchers', 'in_progress_vouchers', 'successful_vouchers', 'archived_vouchers'].each do |page|
+      it "renders the #{page} page for a sub-program the agency can view" do
+        get "/programs/#{own_sub_program.program_id}/sub_programs/#{own_sub_program.id}/#{page}"
 
-      expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(program_sub_program_archived_vouchers_path(own_sub_program.program, own_sub_program))
+      end
+
+      it "returns 404 on the #{page} page for a sub-program the agency cannot view" do
+        get "/programs/#{other_sub_program.program_id}/sub_programs/#{other_sub_program.id}/#{page}"
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'with can_edit_voucher_rules' do
+      before(:each) do
+        user.roles << create(:role, can_edit_voucher_rules: true)
+      end
+
+      it 'renders the voucher edit form in a sub-program the agency can view' do
+        get "/programs/#{own_sub_program.program_id}/sub_programs/#{own_sub_program.id}/vouchers/#{own_voucher.id}/edit"
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(program_sub_program_voucher_path(own_sub_program.program, own_sub_program, own_voucher))
+      end
+
+      it 'returns 404 for the voucher edit form in a sub-program the agency cannot view' do
+        get "/programs/#{other_sub_program.program_id}/sub_programs/#{other_sub_program.id}/vouchers/#{other_voucher.id}/edit"
+
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     it 'returns 404 when the sub-program belongs to a different program than the URL' do
