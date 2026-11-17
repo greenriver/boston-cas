@@ -31,7 +31,7 @@ class NotificationRegistrationsController < Devise::RegistrationsController
 
   private def load_contact!
     @contact = @notification.recipient
-    raise ActiveRecord::NotFound unless @contact
+    raise ActiveRecord::RecordNotFound unless @contact
   end
 
   private def ensure_contact_has_no_user!

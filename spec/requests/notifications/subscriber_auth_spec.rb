@@ -38,5 +38,14 @@ RSpec.describe 'Notification subscriber auth', type: :request do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it 'returns 404 when the recipient contact has been deleted' do
+      notification
+      recipient.destroy
+
+      get new_notification_registration_path(notification.code)
+
+      expect(response).to have_http_status(:not_found)
+    end
   end
 end
