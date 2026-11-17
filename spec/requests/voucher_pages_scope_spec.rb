@@ -237,15 +237,18 @@ RSpec.describe 'Voucher pages program and sub-program scope', type: :request do
       expect(response).to redirect_to(vouchers_path)
     end
 
-    it 'redirects to the index without changing vouchers while another bulk_update holds the lock' do
+    it 'redirects to the index with an alert, without changing vouchers, while another bulk_update holds the lock' do
       unavailable = create :voucher, sub_program: own_sub_program, available: false
+      # The gem treats a lock held by the same thread as reentrant, so the spec cannot hold it for real.
+      allow(Voucher).to receive(:with_advisory_lock_result).
+        with('voucher_bulk_update', timeout_seconds: 0).
+        and_return(WithAdvisoryLock::Result.new(lock_was_acquired: false))
 
-      Voucher.with_advisory_lock('voucher_bulk_update') do
-        patch "#{vouchers_path}/bulk_update",
-              params: { sub_program: { vouchers_attributes: { '0' => { id: unavailable.id, available: '1' } } } }
-      end
+      patch "#{vouchers_path}/bulk_update",
+            params: { sub_program: { vouchers_attributes: { '0' => { id: unavailable.id, available: '1' } } } }
 
       expect(response).to redirect_to(vouchers_path)
+      expect(flash[:alert]).to eq('Another voucher update is in progress. Please try again.')
       expect(unavailable.reload.available).to be false
     end
   end

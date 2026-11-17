@@ -99,12 +99,7 @@ class VouchersController < ApplicationController
   end
 
   def bulk_update
-    if Voucher.advisory_lock_exists?('voucher_bulk_update')
-      redirect_to action: :index
-      return
-    end
-
-    Voucher.with_advisory_lock('voucher_bulk_update') do
+    lock = Voucher.with_advisory_lock_result('voucher_bulk_update', timeout_seconds: 0) do
       @vouchers = []
       voucher_params[:vouchers_attributes].each do |_, v|
         voucher = @subprogram.vouchers.preload(:status_match).detect { |subp_voucher| subp_voucher.id == v[:id].to_i }
@@ -139,6 +134,10 @@ class VouchersController < ApplicationController
         render :index
       end
     end
+    return if lock.lock_was_acquired?
+
+    flash[:alert] = 'Another voucher update is in progress. Please try again.'
+    redirect_to action: :index
   end
 
   def destroy
