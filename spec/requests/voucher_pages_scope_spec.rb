@@ -8,7 +8,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Archived vouchers sub-program scope', type: :request do
+RSpec.describe 'Voucher pages program and sub-program scope', type: :request do
   let(:user) { create :user }
   let(:own_sub_program) { create :sub_program }
   let(:other_sub_program) { create :sub_program }
