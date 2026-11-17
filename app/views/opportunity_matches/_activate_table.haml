@@ -25,14 +25,15 @@
           - @matches.each do |client|
             - match = client.match_for_opportunity(@opportunity)
             - name = @exporter.client_name(client, view_type: :view)
+            - client_accessible = client.accessible_by_user?(current_user)
 
             %tr{class: active_client_ids.include?(client.id) ? 'client--match-active' : ''}
               %td
-                = link_to_if client.accessible_by_user?(current_user), name, client_path(client)
+                = link_to_if client_accessible, name, client_path(client)
               - prioritized_column_values(client).map do |value|
                 %td.text-center= value
               %td.text-center
-                = render 'client_match_routes', client: client
+                = render 'client_match_routes', client: client, link_routes: client_accessible && can_view_all_matches?
 
               - if active_client_ids.include?(client.id)
                 %td.text-center= link_to 'Current Active Match', match_path(match)

@@ -35,7 +35,11 @@ class ClientMatchesController < ApplicationController
   end
 
   def find_client!
-    @client = Client.find(params[:client_id].to_i)
+    @client = client_scope.find(params[:client_id].to_i)
+  end
+
+  def client_scope
+    Client.accessible_by_user(current_user)
   end
 
   def show_links_to_matches?
