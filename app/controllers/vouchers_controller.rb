@@ -99,7 +99,11 @@ class VouchersController < ApplicationController
   end
 
   def bulk_update
-    redirect_to action: :index if Voucher.advisory_lock_exists?('voucher_bulk_update')
+    if Voucher.advisory_lock_exists?('voucher_bulk_update')
+      redirect_to action: :index
+      return
+    end
+
     Voucher.with_advisory_lock('voucher_bulk_update') do
       @vouchers = []
       voucher_params[:vouchers_attributes].each do |_, v|

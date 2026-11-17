@@ -236,5 +236,17 @@ RSpec.describe 'Voucher pages program and sub-program scope', type: :request do
       expect(unavailable.reload.available).to be true
       expect(response).to redirect_to(vouchers_path)
     end
+
+    it 'redirects to the index without changing vouchers while another bulk_update holds the lock' do
+      unavailable = create :voucher, sub_program: own_sub_program, available: false
+
+      Voucher.with_advisory_lock('voucher_bulk_update') do
+        patch "#{vouchers_path}/bulk_update",
+              params: { sub_program: { vouchers_attributes: { '0' => { id: unavailable.id, available: '1' } } } }
+      end
+
+      expect(response).to redirect_to(vouchers_path)
+      expect(unavailable.reload.available).to be false
+    end
   end
 end
