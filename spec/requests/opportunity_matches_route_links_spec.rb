@@ -22,14 +22,18 @@ RSpec.describe 'Match route links on the opportunity matches page', type: :reque
   let(:opportunity) { match.opportunity }
   let(:client) { match.client }
   let!(:other_match) { create :client_opportunity_match, client: client, match_route: route }
+  let(:second_route) { MatchRoutes::ProviderOnly.first }
+  let!(:second_route_match) { create :client_opportunity_match, client: client, match_route: second_route }
   let(:route_text) { "#{route.title} (1)" }
+  let(:second_route_text) { "#{second_route.title} (1)" }
   let(:client_matches_href) { %(href="#{client_matches_path(client)}") }
   let!(:role) do
     create :role,
            can_see_all_alternate_matches: true,
            can_edit_assigned_programs: true,
            can_view_assigned_programs: true,
-           can_activate_matches: true
+           can_activate_matches: true,
+           can_view_all_matches: true
   end
 
   before do
@@ -39,11 +43,12 @@ RSpec.describe 'Match route links on the opportunity matches page', type: :reque
   end
 
   context 'when the user cannot view the client' do
-    it 'shows the route as plain text without a link to the client matches page' do
+    it 'shows every route as plain text without a link to the client matches page' do
       get opportunity_matches_path(opportunity)
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(route_text)
+      expect(response.body).to include(second_route_text)
       expect(response.body).not_to include(client_matches_href)
     end
   end
@@ -51,12 +56,26 @@ RSpec.describe 'Match route links on the opportunity matches page', type: :reque
   context 'when the user can view the client' do
     before { role.update!(can_view_all_clients: true) }
 
-    it 'links the route to the client matches page' do
+    it 'links every route to the client matches page' do
       get opportunity_matches_path(opportunity)
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(route_text)
-      expect(response.body).to include(client_matches_href)
+      expect(response.body).to include(second_route_text)
+      expect(response.body.scan(client_matches_href).size).to eq(2)
+    end
+
+    context 'without permission to view all matches' do
+      before { role.update!(can_view_all_matches: false) }
+
+      it 'shows every route as plain text without a link to the client matches page' do
+        get opportunity_matches_path(opportunity)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(route_text)
+        expect(response.body).to include(second_route_text)
+        expect(response.body).not_to include(client_matches_href)
+      end
     end
   end
 end

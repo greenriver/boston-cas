@@ -33,7 +33,7 @@
               - prioritized_column_values(client).map do |value|
                 %td.text-center= value
               %td.text-center
-                = render 'client_match_routes', client: client, client_accessible: client_accessible
+                = render 'client_match_routes', client: client, link_routes: client_accessible && can_view_all_matches?
 
               - if active_client_ids.include?(client.id)
                 %td.text-center= link_to 'Current Active Match', match_path(match)

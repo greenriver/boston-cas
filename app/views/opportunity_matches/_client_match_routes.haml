@@ -3,6 +3,6 @@
   - matches = route.last
   - anchor_text = "#{route_name} (#{matches})"
   - if index == 0
-    = link_to_if client_accessible, anchor_text, client_matches_path(client)
+    = link_to_if link_routes, anchor_text, client_matches_path(client)
   - else
-    %br= link_to_if client_accessible, anchor_text, client_matches_path(client)
+    %br= link_to_if link_routes, anchor_text, client_matches_path(client)
