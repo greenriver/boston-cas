@@ -1,0 +1,112 @@
+###
+# Copyright 2016 - 2025 Green River Data Analysis, LLC
+#
+# License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
+###
+
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe 'Archived vouchers sub-program scope', type: :request do
+  let(:user) { create :user }
+  let(:own_sub_program) { create :sub_program }
+  let(:other_sub_program) { create :sub_program }
+  let!(:own_voucher) { create :voucher, sub_program: own_sub_program, available: false, archived_at: 1.day.ago }
+  let!(:other_voucher) { create :voucher, sub_program: other_sub_program, available: false, archived_at: 1.day.ago }
+
+  def archived_path(sub_program, suffix = '')
+    "/programs/#{sub_program.program_id}/sub_programs/#{sub_program.id}/archived_vouchers#{suffix}"
+  end
+
+  def grant(**role_attributes)
+    user.roles << create(:role, **role_attributes)
+    sign_in user
+  end
+
+  context 'with can_view_assigned_programs' do
+    before(:each) do
+      grant(can_view_vouchers: true, can_edit_vouchers: true, can_reject_matches: true, can_view_assigned_programs: true)
+      EntityViewPermission.create!(entity: own_sub_program.program, agency: user.agency)
+    end
+
+    it 'lists vouchers in a sub-program the agency can view' do
+      get archived_path(own_sub_program)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(program_sub_program_voucher_path(own_sub_program.program, own_sub_program, own_voucher))
+    end
+
+    it 'returns 404 for a sub-program the agency cannot view' do
+      get archived_path(other_sub_program)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'returns 404 when the sub-program belongs to a different program than the URL' do
+      get "/programs/#{own_sub_program.program_id}/sub_programs/#{other_sub_program.id}/archived_vouchers"
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'returns 404 and leaves the voucher archived when restoring in a sub-program the agency cannot view' do
+      expect do
+        patch archived_path(other_sub_program, "/#{other_voucher.id}/restore")
+      end.not_to(change { other_voucher.reload.archived_at })
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'returns 404 and leaves the match in place when marking unavailable in a sub-program the agency cannot view' do
+      active_voucher = create :voucher, sub_program: other_sub_program
+      opportunity = create :opportunity, voucher: active_voucher
+      match = create :client_opportunity_match, opportunity: opportunity
+
+      delete archived_path(other_sub_program, "/#{active_voucher.id}/unavailable")
+
+      expect(response).to have_http_status(:not_found)
+      expect(ClientOpportunityMatch.exists?(match.id)).to be true
+      expect(opportunity.reload.available).to be true
+    end
+
+    it 'returns 404 and creates no vouchers when adding to a sub-program the agency cannot view' do
+      expect do
+        post archived_path(other_sub_program), params: { sub_program: { add_vouchers: '2' } }
+      end.not_to(change { Voucher.count })
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  context 'with can_edit_assigned_programs but not can_view_assigned_programs' do
+    before(:each) do
+      grant(can_view_vouchers: true, can_edit_vouchers: true, can_edit_assigned_programs: true)
+      EntityViewPermission.create!(entity: own_sub_program.program, agency: user.agency, editable: true)
+    end
+
+    it 'lists vouchers in a sub-program the agency can edit but not view' do
+      get archived_path(own_sub_program)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(program_sub_program_voucher_path(own_sub_program.program, own_sub_program, own_voucher))
+    end
+  end
+
+  it 'lists vouchers in any sub-program for a user who can view all programs' do
+    grant(can_view_programs: true, can_view_vouchers: true, can_edit_vouchers: true)
+
+    get archived_path(other_sub_program)
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include(program_sub_program_voucher_path(other_sub_program.program, other_sub_program, other_voucher))
+  end
+
+  it 'returns 404 for a user with neither program permission' do
+    grant(can_view_vouchers: true)
+    EntityViewPermission.create!(entity: own_sub_program.program, agency: user.agency)
+
+    get archived_path(own_sub_program)
+
+    expect(response).to have_http_status(:not_found)
+  end
+end

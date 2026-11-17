@@ -12,9 +12,9 @@ class VouchersController < ApplicationController
   before_action :require_can_edit_vouchers!, only: [:edit, :update, :destroy, :create, :bulk_update, :archive, :restore]
   before_action :require_can_reject_matches!, only: [:unavailable]
   before_action :require_can_edit_voucher_rules!, only: [:edit, :update]
+  before_action :set_program
+  before_action :set_sub_program
   before_action :set_voucher, only: [:edit, :update, :destroy, :unavailable, :archive, :restore]
-  before_action :set_sub_program, only: [:edit, :update, :create, :index, :bulk_update, :unavailable, :archive, :restore]
-  before_action :set_program, only: [:edit, :update, :index, :bulk_update, :unavailable, :archive, :restore]
   before_action :set_show_confidential_names
   include AjaxModalRails::Controller
   include Search
@@ -158,11 +158,15 @@ class VouchersController < ApplicationController
   end
 
   private def set_sub_program
-    @subprogram = SubProgram.find(params[:sub_program_id].to_i)
+    @subprogram = @program.sub_programs.find(params[:sub_program_id])
+  end
+
+  private def program_scope
+    Program.visible_or_editable_by(current_user)
   end
 
   private def set_program
-    @program = Program.find(params[:program_id].to_i)
+    @program = program_scope.find(params[:program_id])
   end
 
   private def set_show_confidential_names
