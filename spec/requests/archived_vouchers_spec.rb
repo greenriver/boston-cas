@@ -109,4 +109,43 @@ RSpec.describe 'Archived vouchers sub-program scope', type: :request do
 
     expect(response).to have_http_status(:not_found)
   end
+
+  context 'when the voucher id belongs to another sub-program' do
+    let(:sub_program_a) { create :sub_program }
+    let(:sub_program_b) { create :sub_program }
+    let!(:voucher_b) { create :voucher, sub_program: sub_program_b, available: false, archived_at: 1.day.ago }
+
+    before(:each) do
+      grant(can_view_programs: true, can_view_vouchers: true, can_edit_vouchers: true)
+    end
+
+    it 'returns 404 and leaves the voucher archived when restoring under the other sub-program URL' do
+      expect do
+        patch archived_path(sub_program_a, "/#{voucher_b.id}/restore")
+      end.not_to(change { voucher_b.reload.archived_at })
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'restores a voucher that belongs to the sub-program in the URL' do
+      patch archived_path(sub_program_b, "/#{voucher_b.id}/restore")
+
+      expect(voucher_b.reload.archived_at).to be_nil
+    end
+
+    it 'returns 404 and keeps the voucher when destroying under the other sub-program URL' do
+      delete archived_path(sub_program_a, "/#{voucher_b.id}")
+
+      expect(response).to have_http_status(:not_found)
+      expect(Voucher.exists?(voucher_b.id)).to be true
+    end
+
+    it 'returns 404 and leaves the voucher unchanged when bulk_update names one from another sub-program' do
+      patch archived_path(sub_program_a, '/bulk_update'),
+            params: { sub_program: { vouchers_attributes: { '0' => { id: voucher_b.id, available: '1' } } } }
+
+      expect(response).to have_http_status(:not_found)
+      expect(voucher_b.reload.available).to be false
+    end
+  end
 end

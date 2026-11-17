@@ -104,7 +104,7 @@ class VouchersController < ApplicationController
       @vouchers = []
       voucher_params[:vouchers_attributes].each do |_, v|
         voucher = @subprogram.vouchers.preload(:status_match).detect { |subp_voucher| subp_voucher.id == v[:id].to_i }
-        raise ActiveRecord::NotFound unless voucher
+        raise ActiveRecord::RecordNotFound unless voucher
 
         voucher.assign_attributes(v)
         @vouchers << voucher
@@ -154,7 +154,7 @@ class VouchersController < ApplicationController
   helper_method :show_confidential_names?
 
   private def set_voucher
-    @voucher = Voucher.find(params[:id].to_i)
+    @voucher = @subprogram.vouchers.find(params[:id])
   end
 
   private def set_sub_program
