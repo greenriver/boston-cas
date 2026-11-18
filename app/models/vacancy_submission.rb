@@ -242,6 +242,9 @@ class VacancySubmission < ApplicationRecord
       else
         add_unit_error(index, 'building_id', 'needs a building', 'Select a building') if unit['building_id'].blank?
         add_unit_error(index, 'unit_number', 'needs a unit number', 'Enter a unit number') if unit['unit_number'].blank?
+        add_unit_error(index, 'date_ready', 'needs a ready date', 'Enter the date the unit will be ready') if unit['date_ready'].blank?
+        add_unit_error(index, 'age_limit', 'needs an age limit', 'Select an age limit') if unit['age_limit'].blank?
+        add_unit_error(index, 'bedrooms', 'needs a number of bedrooms', 'Select the number of bedrooms') if unit['bedrooms'].blank?
       end
       validate_requirement_variables(unit, index)
       validate_media_link_urls(unit, index)
