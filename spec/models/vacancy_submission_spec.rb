@@ -13,6 +13,7 @@ RSpec.describe VacancySubmission, type: :model do
   let(:building) { create(:building) }
   let(:sub_program) { create(:sub_program, program: program, program_type: 'Project-Based', building: building) }
   let(:tenant_based_sub_program) { create(:sub_program, program: program, program_type: 'Tenant-Based') }
+  let(:unit_details) { { 'date_ready' => Date.current.iso8601, 'age_limit' => 'N/A', 'bedrooms' => 'One bedroom' } }
 
   describe 'validations' do
     def unit_errors(submission)
@@ -28,7 +29,7 @@ RSpec.describe VacancySubmission, type: :model do
           'program_id' => program.id,
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
-          'units' => [{ 'building_id' => building.id, 'unit_number' => '1A' }],
+          'units' => [{ **unit_details, 'building_id' => building.id, 'unit_number' => '1A' }],
         },
       )
       expect(vs).to be_valid
@@ -43,7 +44,7 @@ RSpec.describe VacancySubmission, type: :model do
             'program_id' => program.id,
             'sub_program_id' => sub_program.id,
             'is_voucher' => false,
-            'units' => [{ 'building_id' => building.id, 'unit_number' => '1A', 'media_links' => links }],
+            'units' => [{ **unit_details, 'building_id' => building.id, 'unit_number' => '1A', 'media_links' => links }],
           },
         )
       end
@@ -125,7 +126,7 @@ RSpec.describe VacancySubmission, type: :model do
           'program_id' => program.id,
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
-          'units' => [{ 'building_id' => '', 'unit_number' => '1A' }],
+          'units' => [{ **unit_details, 'building_id' => '', 'unit_number' => '1A' }],
         },
       )
       expect(vs).not_to be_valid
@@ -141,13 +142,35 @@ RSpec.describe VacancySubmission, type: :model do
           'program_id' => program.id,
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
-          'units' => [{ 'building_id' => building.id, 'unit_number' => '' }],
+          'units' => [{ **unit_details, 'building_id' => building.id, 'unit_number' => '' }],
         },
       )
       expect(vs).not_to be_valid
       expect(unit_errors(vs)).to contain_exactly(
         unit_index: 0, field: 'unit_number', field_message: 'Enter a unit number', full_message: 'Unit 1 needs a unit number',
       )
+    end
+
+    [
+      ['date_ready', 'Enter the date the unit will be ready', 'Unit 1 needs a ready date'],
+      ['age_limit', 'Select an age limit', 'Unit 1 needs an age limit'],
+      ['bedrooms', 'Select the number of bedrooms', 'Unit 1 needs a number of bedrooms'],
+    ].each do |field, field_message, full_message|
+      it "is invalid when a physical unit with a unit number is missing #{field}" do
+        vs = described_class.new(
+          status: 'awaiting_approval',
+          draft_data: {
+            'program_id' => program.id,
+            'sub_program_id' => sub_program.id,
+            'is_voucher' => false,
+            'units' => [{ **unit_details, 'building_id' => building.id, 'unit_number' => '1A', field => '' }],
+          },
+        )
+        expect(vs).not_to be_valid
+        expect(unit_errors(vs)).to contain_exactly(
+          unit_index: 0, field: field, field_message: field_message, full_message: full_message,
+        )
+      end
     end
 
     it 'is invalid when one of multiple physical units is missing its building or unit number' do
@@ -158,8 +181,8 @@ RSpec.describe VacancySubmission, type: :model do
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
           'units' => [
-            { 'building_id' => building.id, 'unit_number' => '1A' },
-            { 'building_id' => '', 'unit_number' => '' },
+            { **unit_details, 'building_id' => building.id, 'unit_number' => '1A' },
+            { **unit_details, 'building_id' => '', 'unit_number' => '' },
           ],
         },
       )
@@ -180,6 +203,7 @@ RSpec.describe VacancySubmission, type: :model do
           'is_voucher' => false,
           'units' => [
             {
+              **unit_details,
               'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
                 { 'rule_id' => create(:homeless).id.to_s, 'positive' => 'true', 'variable' => '' },
@@ -205,8 +229,9 @@ RSpec.describe VacancySubmission, type: :model do
           'sub_program_id' => sub_program.id,
           'is_voucher' => false,
           'units' => [
-            { 'building_id' => building.id, 'unit_number' => '1A' },
+            { **unit_details, 'building_id' => building.id, 'unit_number' => '1A' },
             {
+              **unit_details,
               'building_id' => building.id, 'unit_number' => '2A',
               'media_links' => [{ 'url' => 'ftp://example.com/photo.jpg', 'label' => 'Photo' }],
               'requirements' => [{ 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' }]
@@ -233,6 +258,7 @@ RSpec.describe VacancySubmission, type: :model do
           'is_voucher' => false,
           'units' => [
             {
+              **unit_details,
               'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
                 { 'rule_id' => variable_rule.id.to_s, 'positive' => 'true', 'variable' => '2' },
@@ -254,6 +280,7 @@ RSpec.describe VacancySubmission, type: :model do
           'is_voucher' => false,
           'units' => [
             {
+              **unit_details,
               'building_id' => building.id, 'unit_number' => '1A',
               'requirements' => [
                 { 'rule_id' => non_variable_rule.id.to_s, 'positive' => 'true', 'variable' => '' },
@@ -730,6 +757,7 @@ RSpec.describe VacancySubmission, type: :model do
         before do
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'notes' => 'Newly renovated',
@@ -763,8 +791,8 @@ RSpec.describe VacancySubmission, type: :model do
 
         it 'creates a Unit on the submitted building for each unit entry, without creating buildings' do
           physical_submission.units = [
-            { 'building_id' => building.id, 'unit_number' => '1A' },
-            { 'building_id' => building.id, 'unit_number' => '1B' },
+            { **unit_details, 'building_id' => building.id, 'unit_number' => '1A' },
+            { **unit_details, 'building_id' => building.id, 'unit_number' => '1B' },
           ]
           physical_submission.save!
 
@@ -774,7 +802,7 @@ RSpec.describe VacancySubmission, type: :model do
         end
 
         it 'raises RecordInvalid and rolls back when the submitted building cannot be found' do
-          physical_submission.units = [{ 'building_id' => 0, 'unit_number' => '1A' }]
+          physical_submission.units = [{ **unit_details, 'building_id' => 0, 'unit_number' => '1A' }]
           physical_submission.save!
 
           expect { physical_submission.approve!(user: user) }.to raise_error(ActiveRecord::RecordInvalid)
@@ -801,6 +829,7 @@ RSpec.describe VacancySubmission, type: :model do
         it 'sets Unit#elevator_accessible to true when accessibility includes Ground floor unit' do
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'accessibility' => ['Ground floor unit'],
@@ -815,6 +844,7 @@ RSpec.describe VacancySubmission, type: :model do
         it 'sets Unit#elevator_accessible to false when accessibility does not include an elevator option' do
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'accessibility' => ['Wheelchair accessible unit'],
@@ -847,6 +877,7 @@ RSpec.describe VacancySubmission, type: :model do
         it 'creates an exclusionary Requirement when positive is submitted as false' do
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'requirements' => [
@@ -864,6 +895,7 @@ RSpec.describe VacancySubmission, type: :model do
         it 'defaults a Requirement to positive when positive is omitted' do
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'requirements' => [
@@ -881,6 +913,7 @@ RSpec.describe VacancySubmission, type: :model do
         it 'creates exactly one Rules::Wheelchair Requirement when both wheelchair accessibility options are selected' do
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'accessibility' => ['Wheelchair accessible unit', 'Wheelchair accessible building'],
@@ -901,6 +934,7 @@ RSpec.describe VacancySubmission, type: :model do
           # matching consumes directly. Approval must not depend on a Rules::Elevator rule.
           physical_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'accessibility' => ['Elevator to unit', 'Ground floor unit'],
@@ -911,7 +945,7 @@ RSpec.describe VacancySubmission, type: :model do
           expect { physical_submission.approve!(user: user) }.not_to raise_error
           unit = Unit.last
           expect(unit.elevator_accessible).to eq(true)
-          expect(unit.requirements).to be_empty
+          expect(unit.requirements.map { |r| r.rule.type }).to eq(['Rules::BedroomExact'])
         end
 
         context 'bedrooms' do
@@ -925,6 +959,7 @@ RSpec.describe VacancySubmission, type: :model do
             it "creates the expected Requirement for bedrooms: #{bedroom_option}" do
               physical_submission.units = [
                 {
+                  **unit_details,
                   'building_id' => building.id,
                   'unit_number' => '1A',
                   'bedrooms' => bedroom_option,
@@ -952,6 +987,7 @@ RSpec.describe VacancySubmission, type: :model do
             it "creates the expected Requirement for age_limit: #{age_limit_option}" do
               physical_submission.units = [
                 {
+                  **unit_details,
                   'building_id' => building.id,
                   'unit_number' => '1A',
                   'age_limit' => age_limit_option,
@@ -960,9 +996,9 @@ RSpec.describe VacancySubmission, type: :model do
               physical_submission.save!
 
               physical_submission.approve!(user: user)
-              unit = Unit.last
-              expect(unit.requirements.count).to eq(1)
-              requirement = unit.requirements.last
+              age_requirements = Unit.last.requirements.reject { |r| r.rule.is_a?(Rules::BedroomExact) }
+              expect(age_requirements.size).to eq(1)
+              requirement = age_requirements.last
               expect(requirement.rule.type).to eq(send(rule_let).type)
               expect(requirement.positive).to eq(true)
             end
@@ -971,6 +1007,7 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates no Requirement when age_limit is N/A' do
             physical_submission.units = [
               {
+                **unit_details,
                 'building_id' => building.id,
                 'unit_number' => '1A',
                 'age_limit' => 'N/A',
@@ -979,20 +1016,7 @@ RSpec.describe VacancySubmission, type: :model do
             physical_submission.save!
 
             physical_submission.approve!(user: user)
-            expect(Unit.last.requirements.count).to eq(0)
-          end
-
-          it 'creates no Requirement when age_limit is blank' do
-            physical_submission.units = [
-              {
-                'building_id' => building.id,
-                'unit_number' => '1A',
-              },
-            ]
-            physical_submission.save!
-
-            physical_submission.approve!(user: user)
-            expect(Unit.last.requirements.count).to eq(0)
+            expect(Unit.last.requirements.map { |r| r.rule.type }).to eq(['Rules::BedroomExact'])
           end
         end
 
@@ -1000,6 +1024,7 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingAttribute with include_value: false for each shared space' do
             physical_submission.units = [
               {
+                **unit_details,
                 'building_id' => building.id,
                 'unit_number' => '1A',
                 'shared_spaces' => ['Laundry room', 'Common kitchen'],
@@ -1017,6 +1042,7 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingAttribute with include_value: false for each amenity' do
             physical_submission.units = [
               {
+                **unit_details,
                 'building_id' => building.id,
                 'unit_number' => '1A',
                 'amenities' => ['Dishwasher', 'Air conditioning'],
@@ -1034,6 +1060,7 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingAttribute with include_value: true for each name/value attribute, skipping blank names' do
             physical_submission.units = [
               {
+                **unit_details,
                 'building_id' => building.id,
                 'unit_number' => '1A',
                 'attributes' => [
@@ -1056,6 +1083,7 @@ RSpec.describe VacancySubmission, type: :model do
           it 'skips attributes with a blank value instead of raising' do
             physical_submission.units = [
               {
+                **unit_details,
                 'building_id' => building.id,
                 'unit_number' => '1A',
                 'attributes' => [
@@ -1076,6 +1104,7 @@ RSpec.describe VacancySubmission, type: :model do
           it 'creates a HousingMediaLink for each media link, skipping blank urls, defaulting blank labels to Photo' do
             physical_submission.units = [
               {
+                **unit_details,
                 'building_id' => building.id,
                 'unit_number' => '1A',
                 'media_links' => [
@@ -1113,6 +1142,7 @@ RSpec.describe VacancySubmission, type: :model do
         it 'raises RecordInvalid and rolls back everything when a unit ready date is unparseable' do
           failing_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'date_ready' => 'not-a-date',
@@ -1133,6 +1163,7 @@ RSpec.describe VacancySubmission, type: :model do
           Rule.where(type: 'Rules::Wheelchair').destroy_all
           failing_submission.units = [
             {
+              **unit_details,
               'building_id' => building.id,
               'unit_number' => '1A',
               'accessibility' => ['Wheelchair accessible unit'],
@@ -1196,8 +1227,8 @@ RSpec.describe VacancySubmission, type: :model do
 
           it 'applies weighting rules once per voucher for multi-unit submissions' do
             physical_submission.units = [
-              { 'building_id' => building.id, 'unit_number' => '1A' },
-              { 'building_id' => building.id, 'unit_number' => '1B' },
+              { **unit_details, 'building_id' => building.id, 'unit_number' => '1A' },
+              { **unit_details, 'building_id' => building.id, 'unit_number' => '1B' },
             ]
             physical_submission.save!
 
