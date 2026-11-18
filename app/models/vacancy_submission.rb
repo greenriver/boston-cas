@@ -93,6 +93,13 @@ class VacancySubmission < ApplicationRecord
     sub_program&.program_type == 'Tenant-Based'
   end
 
+  # Approval saves each media link as a HousingMediaLink, so a URL is valid here only if it is valid there.
+  def self.media_link_url?(value)
+    link = HousingMediaLink.new(url: value)
+    link.validate
+    link.errors[:url].empty?
+  end
+
   def program_id
     super&.to_i
   end
@@ -226,32 +233,48 @@ class VacancySubmission < ApplicationRecord
   def validate_units
     unit_list = Array(units)
     if unit_list.empty?
-      errors.add(:units, :blank)
+      errors.add(:units, voucher? ? 'Add at least one voucher' : 'Add at least one unit')
       return
     end
-    if voucher?
-      unit_list.each { |u| errors.add(:units, 'each voucher must have a name') if u['name'].blank? }
-    else
-      unit_list.each do |u|
-        errors.add(:units, 'each unit must have a building') if u['building_id'].blank?
-        errors.add(:units, 'each unit must have a unit number') if u['unit_number'].blank?
+    unit_list.each_with_index do |unit, index|
+      if voucher?
+        add_unit_error(index, 'name', 'needs a name', 'Enter a name') if unit['name'].blank?
+      else
+        add_unit_error(index, 'building_id', 'needs a building', 'Select a building') if unit['building_id'].blank?
+        add_unit_error(index, 'unit_number', 'needs a unit number', 'Enter a unit number') if unit['unit_number'].blank?
       end
+      validate_requirement_variables(unit, index)
+      validate_media_link_urls(unit, index)
     end
-    unit_list.each { |u| validate_requirement_variables(u) }
+  end
+
+  # unit_index and field locate the form input that the form marks with field_message. field is a
+  # path under the unit: "media_links[0][url]" means vacancy_submission[units][<unit_index>][media_links][0][url].
+  def add_unit_error(unit_index, field, message, field_message)
+    label = "#{voucher? ? 'Voucher' : 'Unit'} #{unit_index + 1}"
+    errors.add(:units, "#{label} #{message}", unit_index: unit_index, field: field, field_message: field_message)
+  end
+
+  def validate_media_link_urls(unit, unit_index)
+    Array(unit['media_links']).each_with_index do |link, link_index|
+      next if link['url'].blank? || self.class.media_link_url?(link['url'])
+
+      add_unit_error(unit_index, "media_links[#{link_index}][url]", "media link #{link_index + 1} must be a valid http or https URL", 'Must be a valid http or https URL')
+    end
   end
 
   # Requirements attached to a unit/voucher may reference a rule that needs a
   # variable (e.g. bedroom count, HMIS projects). The draft form can submit
   # such a rule with a blank variable, so guard it here rather than deferring
   # the failure to approval time.
-  def validate_requirement_variables(unit)
-    Array(unit['requirements']).each do |req|
+  def validate_requirement_variables(unit, unit_index)
+    Array(unit['requirements']).each_with_index do |req, req_index|
       next if req['rule_id'].blank? || req['variable'].present?
 
       rule = Rule.find_by(id: req['rule_id'])
       next unless rule&.variable_requirement?
 
-      errors.add(:units, "#{rule.name} requires a value")
+      add_unit_error(unit_index, "requirements_attributes[#{req_index}][variable]", "requirement #{rule.name} requires a value", "#{rule.name} requires a value")
     end
   end
 end

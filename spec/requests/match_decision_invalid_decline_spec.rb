@@ -61,6 +61,53 @@ RSpec.describe 'Submitting an invalid decline', type: :request do
     expect(selected['value']).to eq(reason.id.to_s)
   end
 
+  it 'lists the header and each validation error on its own line in the error flash' do
+    patch match_decision_path(match, 'match_recommendation_shelter_agency'), params: {
+      decision: { status: 'accepted', release_of_information: '0' },
+    }
+
+    alert = Nokogiri::HTML(response.body).at_css('.alert.error')
+    lines = alert.at_css('div').children.reject { |node| node.name == 'br' }.map { |node| node.text.strip }
+    expect(response).to have_http_status(:ok)
+    expect(alert.css('br').size).to eq(3)
+    expect(lines.size).to eq(4)
+    expect(lines).to start_with(
+      'Please review the form problems below.',
+      /\ARelease of information .*release of information to move forward/,
+      /\AClient spoken with services agency .*services agency is required\./,
+      /\ACori release form submitted .*CORI release form is required\./,
+    )
+    expect(alert.text).not_to include(';')
+  end
+
+  describe 'error flash lifetime' do
+    def error_flash_text
+      Nokogiri::HTML(response.body).css('.alert.error').text
+    end
+
+    it 'shows a validation error on the re-rendered form and not on the next page' do
+      patch match_decision_path(match, 'match_recommendation_shelter_agency'), params: {
+        decision: { status: 'accepted', release_of_information: '0' },
+      }
+      expect(error_flash_text).to include('Please review the form problems below.')
+
+      get match_path(match)
+      expect(response).to have_http_status(:ok)
+      expect(error_flash_text).not_to include('Please review the form problems below.')
+    end
+
+    it 'shows a conflicting-reason error on the re-rendered form and not on the next page' do
+      patch match_decision_path(match, 'match_recommendation_shelter_agency'), params: {
+        decision: { status: 'accepted', decline_reason_id: reason.id },
+      }
+      expect(error_flash_text).to include('if a decline reason is specified, you can only decline')
+
+      get match_path(match)
+      expect(response).to have_http_status(:ok)
+      expect(error_flash_text).not_to include('if a decline reason is specified')
+    end
+  end
+
   it 'shows Declined once a valid decline is saved' do
     submit_decline(explanation: 'Client moved out of state')
     follow_redirect!

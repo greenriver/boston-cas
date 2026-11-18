@@ -11,9 +11,9 @@ class OpportunitiesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :require_can_view_opportunities!, except: [:new, :create]
-  before_action :require_can_edit_opportunities!, only: [:update, :destroy, :restore]
+  before_action :require_can_edit_opportunities!, only: [:destroy, :restore]
   before_action :require_can_add_vacancies!, only: [:new, :create]
-  before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
+  before_action :set_opportunity, only: [:show, :destroy]
   helper_method :sort_column, :sort_direction
 
   # GET /hmis/opportunities
@@ -102,10 +102,6 @@ class OpportunitiesController < ApplicationController
     @buildings = building_scope
   end
 
-  # GET /hmis/opportunities/1/edit
-  def edit
-  end
-
   # Bulk create available units with associated available vouchers
   def create
     @opportunity = Opportunity.new(opportunity_params)
@@ -161,21 +157,12 @@ class OpportunitiesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /hmis/opportunities/1
-  def update
-    if @opportunity.update(opportunity_params)
-      redirect_to opportunity_path(@opportunity), notice: "Opportunity <strong>#{@opportunity[:id]}</strong> was successfully updated."
-    else
-      render :edit, { flash: { error: "Unable to update opportunity <strong>#{@opportunity[:name]}</strong>." } }
-    end
-  end
-
   # DELETE /hmis/opportunities/1
   def destroy
     if @opportunity.destroy
-      redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> was successfully deleted."
+      redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} was successfully deleted."
     else
-      render :edit, { flash: { error: "Unable to delete opportunity <strong>#{@opportunity[:name]}</strong>." } }
+      redirect_to opportunity_path(@opportunity), flash: { error: "Unable to delete opportunity #{@opportunity.id}." }
     end
   end
 
@@ -183,9 +170,9 @@ class OpportunitiesController < ApplicationController
   def restore
     @opportunity = Opportunity.only_deleted.visible_or_editable_by(current_user).find(params[:opportunity_id])
     if @opportunity.restore
-      redirect_to opportunities_path, notice: "Opportunity <strong>#{@opportunity[:id]}</strong> successfully restored."
+      redirect_to opportunities_path, notice: "Opportunity #{@opportunity[:id]} successfully restored."
     else
-      render :edit, { flash: { error: 'Unable to restore opportunity.' } }
+      redirect_to opportunities_path, flash: { error: 'Unable to restore opportunity.' }
     end
   end
 

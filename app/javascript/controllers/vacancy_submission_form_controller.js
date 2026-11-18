@@ -25,6 +25,7 @@ export default class extends Controller {
 
   connect() {
     this.isInitializing = true
+    this.sectionRequestIds = {}
     this.programMap = {}
     this.programsValue.forEach((p) => {
       this.programMap[p.id] = p
@@ -88,9 +89,11 @@ export default class extends Controller {
 
     sub.disabled = false
     if (typeof $ !== 'undefined') {
+      // Runs onSubProgramChange, which refreshes the sections.
       $(sub).trigger('change')
+    } else {
+      this.refreshAll()
     }
-    this.refreshAll()
   }
 
   static sectionDefs = [
@@ -111,6 +114,11 @@ export default class extends Controller {
     if (!this[hasProp]) return
 
     const containerProp = `${target}Target`
+    // Responses can arrive out of order; only the latest request per section
+    // may replace the container, or it would discard what the user entered.
+    const requestId = (this.sectionRequestIds[target] || 0) + 1
+    this.sectionRequestIds[target] = requestId
+
     const subProgramId = this.subProgramSelectTarget.value
     if (!subProgramId) {
       this[containerProp].innerHTML = emptyHtml
@@ -127,8 +135,20 @@ export default class extends Controller {
       delete this[containerProp].dataset.forwardParams
     }
 
-    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-    this[containerProp].innerHTML = await response.text()
+    let html
+    try {
+      const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      if (!response.ok) throw new Error(`${section} section request failed with status ${response.status}`)
+      html = await response.text()
+    } catch (error) {
+      if (this.sectionRequestIds[target] !== requestId) return
+      console.error(error)
+      this[containerProp].innerHTML = '<p class="text-danger">This section could not be loaded. Reload the page to try again.</p>'
+      return
+    }
+    if (this.sectionRequestIds[target] !== requestId) return
+
+    this[containerProp].innerHTML = html
     this.applyErrors(this[containerProp])
   }
 
@@ -158,17 +178,63 @@ export default class extends Controller {
     delete container.dataset.fieldErrors
     if (!errors.length) return
 
-    container.querySelectorAll('input[required], select[required]').forEach((el) => {
-      if (el.value.trim() !== '') return
-      el.classList.add('is-invalid')
-      const select2Container = el.nextElementSibling?.classList.contains('select2-container')
-        ? el.nextElementSibling
-        : null
-      if (select2Container) select2Container.classList.add('is-invalid')
-      const feedback = document.createElement('div')
-      feedback.className = 'invalid-feedback'
-      feedback.textContent = 'This field is required.'
-      ;(select2Container || el).after(feedback)
+    const unitEntries = container.querySelectorAll('[data-unit-entry]')
+    errors.forEach((error) => {
+      // field is a path such as "media_links[0][url]"; the input name brackets its first key too.
+      const path = error.field?.replace(/^[^[]+/, (key) => `[${key}]`)
+      const named = path && container.querySelector(
+        `[name="vacancy_submission[units][${error.unit_index}]${path}"]`
+      )
+      const field = named?.type === 'hidden'
+        ? named.closest('[data-req-entry]')?.querySelector('[data-req-multi-display]')
+        : named
+      if (field) {
+        this.markInvalid(field, error.field_message)
+      } else {
+        this.showMessage(unitEntries[error.unit_index] || container, error.message)
+      }
     })
+
+    container.querySelectorAll('input[required], select[required]').forEach((el) => {
+      if (el.value.trim() !== '' || el.classList.contains('is-invalid')) return
+      this.markInvalid(el, 'This field is required.')
+    })
+  }
+
+  markInvalid(el, message) {
+    el.classList.add('is-invalid')
+    const feedback = document.createElement('div')
+    feedback.className = 'invalid-feedback'
+    feedback.textContent = message
+
+    const select2Container = this.select2ContainerFor(el)
+    if (select2Container) {
+      select2Container.classList.add('is-invalid')
+      select2Container.after(feedback)
+      return
+    }
+    el.after(feedback)
+
+    // select2 wraps selects after this runs, so move the feedback behind its container once it exists.
+    if (el.tagName === 'SELECT') {
+      setTimeout(() => {
+        const container = this.select2ContainerFor(el)
+        if (!container) return
+        container.classList.add('is-invalid')
+        container.after(feedback)
+      }, 0)
+    }
+  }
+
+  select2ContainerFor(el) {
+    const sibling = el.nextElementSibling
+    return sibling?.classList.contains('select2-container') ? sibling : null
+  }
+
+  showMessage(target, message) {
+    const alert = document.createElement('div')
+    alert.className = 'alert alert-danger py-2 mb-2'
+    alert.textContent = message
+    target.prepend(alert)
   }
 }

@@ -32,7 +32,7 @@ class AccountsController < ApplicationController
     end
 
     if changed_notes.present?
-      flash[:notice] = changed_notes.join(' ')
+      flash[:notice] = changed_notes.join("\n")
       @user.update(account_params)
       bypass_sign_in(@user)
     end

@@ -16,7 +16,7 @@ RSpec.describe VouchersController, type: :controller do
     let(:sub_program) { create(:sub_program) }
     let(:requirement_owner) { create(:voucher, sub_program: sub_program) }
     let(:changed_attributes) { {} }
-    let(:minimal_role_attributes) { { can_view_vouchers: true, can_edit_vouchers: true, can_edit_voucher_rules: true } }
+    let(:minimal_role_attributes) { { can_view_vouchers: true, can_edit_vouchers: true, can_edit_voucher_rules: true, can_view_programs: true } }
     let(:send_request) do
       ->(requirements) do
         patch :update, params: {

@@ -10,7 +10,8 @@
       - submit_data = {}
       - if show_confirm
         - submit_data.merge!({ confirm: Voucher.translated_confirmation_text })
-      = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto', disabled: @subprogram.closed?, data: submit_data
+      - if current_user.can_edit_vouchers
+        = f.button :submit, value: 'Update Vouchers', class: 'btn btn-primary ml-auto', disabled: @subprogram.closed?, data: submit_data
     - else
       %p.alert.alert-info.mt-3
         This program has no #{@voucher_state} vouchers.

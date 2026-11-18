@@ -377,6 +377,29 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       end
     end
 
+    context 'when a unit has media links' do
+      render_views
+
+      before do
+        links = [
+          { 'url' => 'https://example.com/kitchen.jpg', 'label' => 'Kitchen' },
+          { 'url' => 'http://example.com/hall.jpg', 'label' => 'Hall' },
+          { 'url' => 'ftp://example.com/bath.jpg', 'label' => 'Bath' },
+        ]
+        submission.update_column(:draft_data, submission.draft_data.merge('units' => [submission.units.first.merge('media_links' => links)]))
+      end
+
+      it 'links only http and https URLs' do
+        get :show, params: { id: submission.id }
+
+        page = Nokogiri::HTML(response.body)
+        expect(page.at_css('a[href="https://example.com/kitchen.jpg"]').text).to include('Kitchen')
+        expect(page.at_css('a[href="http://example.com/hall.jpg"]').text).to include('Hall')
+        expect(page.at_css('a[href="ftp://example.com/bath.jpg"]')).to be_nil
+        expect(page.css('li').map(&:text)).to include(a_string_including('ftp://example.com/bath.jpg'))
+      end
+    end
+
     context 'when user lacks both vacancy permissions' do
       let(:no_vacancy_role) { create(:role, name: 'no_vacancy') }
 
@@ -465,6 +488,66 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: { program_id: program.id },
       }
       expect(response).to render_template(:edit)
+    end
+
+    it 'rejects a media link that is not http or https and re-renders edit' do
+      params = update_params.deep_merge(
+        vacancy_submission: { units: { '0' => { media_links: { '0' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' } } } } },
+      )
+
+      expect { patch :update, params: params }.not_to(change { submission.reload.draft_data })
+      expect(response).to render_template(:edit)
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(assigns(:submission).errors.full_messages).to include('Unit 1 media link 1 must be a valid http or https URL')
+    end
+
+    context 'when the edit form re-renders with a unit error' do
+      render_views
+
+      it 'gives the form each unit error with its unit and field' do
+        params = update_params.deep_merge(
+          vacancy_submission: { units: { '0' => { media_links: { '0' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' } } } } },
+        )
+
+        patch :update, params: params
+
+        container = Nokogiri::HTML(response.body).at_css('[data-field-errors]')
+        expect(JSON.parse(container['data-field-errors'])).to contain_exactly(
+          'unit_index' => 0,
+          'field' => 'media_links[0][url]',
+          'field_message' => 'Must be a valid http or https URL',
+          'message' => 'Unit 1 media link 1 must be a valid http or https URL',
+        )
+      end
+    end
+
+    context 'when blank media link rows precede a link with an error' do
+      render_views
+
+      it 'indexes the error by the rows that remain' do
+        params = update_params.deep_merge(
+          vacancy_submission: {
+            units: {
+              '0' => {
+                media_links: {
+                  '0' => { url: '', label: '' },
+                  '1' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' },
+                },
+              },
+            },
+          },
+        )
+
+        patch :update, params: params
+
+        container = Nokogiri::HTML(response.body).at_css('[data-field-errors]')
+        expect(JSON.parse(container['data-field-errors'])).to contain_exactly(
+          'unit_index' => 0,
+          'field' => 'media_links[0][url]',
+          'field_message' => 'Must be a valid http or https URL',
+          'message' => 'Unit 1 media link 1 must be a valid http or https URL',
+        )
+      end
     end
 
     context 'when a unit already has requirements' do
@@ -611,6 +694,28 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
         expect(response).to redirect_to(vacancy_submission_path(submission))
         expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'names the unit and field when a unit has no building' do
+        submission.units = [{ 'building_id' => '', 'unit_number' => '1A' }]
+        submission.save!(validate: false)
+
+        post :approve, params: { id: submission.id }
+
+        expect(flash[:alert]).to include('Unit 1 needs a building')
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'shows an unparsable ready date as escaped text in the alert' do
+        submission.units = [submission.units.first.merge('date_ready' => '<b>soon</b>')]
+        submission.save!
+
+        post :approve, params: { id: submission.id }
+
+        expect(flash[:alert]).to include('is not a valid ready date')
+        expect(flash[:alert]).to include('&lt;b&gt;soon&lt;/b&gt;')
+        expect(flash[:alert]).not_to include('<b>')
         expect(submission.reload.status).to eq('awaiting_approval')
       end
 
