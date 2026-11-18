@@ -4,6 +4,8 @@
 # License detail: https://github.com/greenriver/boston-cas/blob/stable/LICENSE.md
 ###
 
+# frozen_string_literal: true
+
 class NotificationRegistrationsController < Devise::RegistrationsController
   before_action :load_notification!
   before_action :ensure_notification_allows_registration!
@@ -17,11 +19,9 @@ class NotificationRegistrationsController < Devise::RegistrationsController
   def create
     @user = User.new(email: @contact.email, name: @contact.full_name)
     role = @notification.registration_role
-    if role.present?
-      @user[role] = true
-    end
+    @user[role] = true if role.present?
     @user.invite!
-    flash[:notice] = "Please check your email for login information."
+    flash[:notice] = 'Please check your email for login information.'
     redirect_to new_notification_session_path(@notification)
   end
 
@@ -31,24 +31,20 @@ class NotificationRegistrationsController < Devise::RegistrationsController
 
   private def load_contact!
     @contact = @notification.recipient
-    raise ActiveRecord::NotFound unless @contact
+    raise ActiveRecord::RecordNotFound unless @contact
   end
 
   private def ensure_contact_has_no_user!
-    if @contact.user
-      flash[:alert] = "You already have an account.  Please login or use the Reset Account Password form below."
-      redirect_to new_notification_session_path(@notification)
-    end
+    return unless @contact.user
+
+    flash[:alert] = 'You already have an account.  Please login or use the Reset Account Password form below.'
+    redirect_to new_notification_session_path(@notification)
   end
 
   private def ensure_notification_allows_registration!
-    unless @notification.allows_registration?
-      flash[:alert] = "Sorry, you do not have authorization to create an account.  Please contact #{Translation.translate('DND')}."
-      redirect_to new_notification_session_path(@notification)
-    end
+    return if @notification.allows_registration?
+
+    flash[:alert] = "Sorry, you do not have authorization to create an account.  Please contact #{Translation.translate('DND')}."
+    redirect_to new_notification_session_path(@notification)
   end
-
-
-
-
 end

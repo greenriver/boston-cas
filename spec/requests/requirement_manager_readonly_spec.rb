@@ -64,7 +64,7 @@ RSpec.describe 'Requirement manager rules card', type: :request do
     let(:sub_program) { create(:sub_program) }
     let(:requirement_owner) { create(:voucher, sub_program: sub_program) }
     let(:other_owner) { create(:voucher, sub_program: sub_program) }
-    let(:minimal_role_attributes) { { can_view_vouchers: true, can_edit_vouchers: true, can_edit_voucher_rules: true } }
+    let(:minimal_role_attributes) { { can_view_programs: true, can_view_vouchers: true, can_edit_vouchers: true, can_edit_voucher_rules: true } }
     let(:edit_path) { edit_program_sub_program_voucher_path(sub_program.program, sub_program, requirement_owner) }
 
     it_behaves_like 'rules listed read-only', positive: true, expected_row: ['Must', 'have Bedroom exact (Two)']
