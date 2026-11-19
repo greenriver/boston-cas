@@ -50,6 +50,8 @@ module BostonCa
     # FIXME Suppress the Rails 5 belongs_to requirement
     config.active_record.belongs_to_required_by_default = false
 
+    config.active_model.i18n_customize_full_message = true
+
     # https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
     config.active_record.use_yaml_unsafe_load = true
 

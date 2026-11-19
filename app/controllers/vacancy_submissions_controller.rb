@@ -157,7 +157,7 @@ class VacancySubmissionsController < ApplicationController
     @submission.approve!(user: current_user)
     redirect_to vacancy_submission_path(@submission), notice: 'Submission approved.'
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to vacancy_submission_path(@submission), alert: "Could not approve: #{e.message}"
+    redirect_to vacancy_submission_path(@submission), alert: "Could not approve: #{ERB::Util.html_escape(e.message)}"
   rescue StandardError => e
     Rails.logger.error("VacancySubmission ##{@submission.id} approval failed: #{e.class}: #{e.message}")
     redirect_to vacancy_submission_path(@submission),
@@ -270,7 +270,7 @@ class VacancySubmissionsController < ApplicationController
     units_params.values.map do |unit|
       h = unit.respond_to?(:to_unsafe_h) ? unit.to_unsafe_h : unit.to_h
       h['attributes'] = Array(h['attributes']&.values)
-      h['media_links'] = Array(h['media_links']&.values)
+      h['media_links'] = Array(h['media_links']&.values).reject { |l| l['url'].blank? && l['label'].blank? }
       h['uid'] = h['uid'].presence || SecureRandom.uuid
       posted_requirements = posted_unit_requirements(h)
       # Removed from the hash so a uid posted twice keeps its requirements on one unit only.

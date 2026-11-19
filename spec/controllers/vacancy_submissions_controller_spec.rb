@@ -11,6 +11,7 @@ require 'rails_helper'
 RSpec.describe VacancySubmissionsController, type: :controller do
   let(:user)       { create(:user) }
   let(:admin_role) { create(:admin_role) }
+  let(:unit_details) { { 'date_ready' => Date.current.iso8601, 'age_limit' => 'N/A', 'bedrooms' => 'One bedroom' } }
 
   before do
     authenticate(user)
@@ -96,6 +97,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           sub_program_id: sub_program.id,
           units: {
             '0' => {
+              **unit_details,
               building_id: building.id,
               unit_number: '1A',
             },
@@ -179,6 +181,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
               sub_program_id: sub_program.id,
               units: {
                 '0' => {
+                  **unit_details,
                   building_id: building.id,
                   unit_number: '1A',
                   requirements_attributes: {
@@ -310,7 +313,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           section: 'vacancy',
           sub_program_id: submission.sub_program_id,
           vacancy_submission_id: submission.id,
-          units: { '0' => { building_id: submission.units.first['building_id'], unit_number: '1A', uid: 'position-0' } },
+          units: { '0' => { **unit_details, building_id: submission.units.first['building_id'], unit_number: '1A', uid: 'position-0' } },
         }
 
         expect(response.body).to include('Must have Bedroom exact')
@@ -361,7 +364,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       let(:active_submission) { create(:vacancy_submission, :active, user: create(:user, agency: user.agency)) }
 
       before do
-        active_submission.units = [{ 'building_id' => unit.building_id, 'unit_number' => '1A', 'unit_id' => unit.id, 'voucher_id' => 999 }]
+        active_submission.units = [{ **unit_details, 'building_id' => unit.building_id, 'unit_number' => '1A', 'unit_id' => unit.id, 'voucher_id' => 999 }]
         active_submission.save!
       end
 
@@ -374,6 +377,29 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         user.roles = [create(:role, name: 'reviewer_only', can_review_vacancies: true)]
         get :show, params: { id: active_submission.id }
         expect(response.body).not_to include(edit_unit_path(unit))
+      end
+    end
+
+    context 'when a unit has media links' do
+      render_views
+
+      before do
+        links = [
+          { 'url' => 'https://example.com/kitchen.jpg', 'label' => 'Kitchen' },
+          { 'url' => 'http://example.com/hall.jpg', 'label' => 'Hall' },
+          { 'url' => 'ftp://example.com/bath.jpg', 'label' => 'Bath' },
+        ]
+        submission.update_column(:draft_data, submission.draft_data.merge('units' => [submission.units.first.merge('media_links' => links)]))
+      end
+
+      it 'links only http and https URLs' do
+        get :show, params: { id: submission.id }
+
+        page = Nokogiri::HTML(response.body)
+        expect(page.at_css('a[href="https://example.com/kitchen.jpg"]').text).to include('Kitchen')
+        expect(page.at_css('a[href="http://example.com/hall.jpg"]').text).to include('Hall')
+        expect(page.at_css('a[href="ftp://example.com/bath.jpg"]')).to be_nil
+        expect(page.css('li').map(&:text)).to include(a_string_including('ftp://example.com/bath.jpg'))
       end
     end
 
@@ -427,6 +453,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           sub_program_id: sub_program.id,
           units: {
             '0' => {
+              **unit_details,
               building_id: new_building.id,
               unit_number: '2B',
             },
@@ -465,6 +492,66 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: { program_id: program.id },
       }
       expect(response).to render_template(:edit)
+    end
+
+    it 'rejects a media link that is not http or https and re-renders edit' do
+      params = update_params.deep_merge(
+        vacancy_submission: { units: { '0' => { media_links: { '0' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' } } } } },
+      )
+
+      expect { patch :update, params: params }.not_to(change { submission.reload.draft_data })
+      expect(response).to render_template(:edit)
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(assigns(:submission).errors.full_messages).to include('Unit 1 media link 1 must be a valid http or https URL')
+    end
+
+    context 'when the edit form re-renders with a unit error' do
+      render_views
+
+      it 'gives the form each unit error with its unit and field' do
+        params = update_params.deep_merge(
+          vacancy_submission: { units: { '0' => { media_links: { '0' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' } } } } },
+        )
+
+        patch :update, params: params
+
+        container = Nokogiri::HTML(response.body).at_css('[data-field-errors]')
+        expect(JSON.parse(container['data-field-errors'])).to contain_exactly(
+          'unit_index' => 0,
+          'field' => 'media_links[0][url]',
+          'field_message' => 'Must be a valid http or https URL',
+          'message' => 'Unit 1 media link 1 must be a valid http or https URL',
+        )
+      end
+    end
+
+    context 'when blank media link rows precede a link with an error' do
+      render_views
+
+      it 'indexes the error by the rows that remain' do
+        params = update_params.deep_merge(
+          vacancy_submission: {
+            units: {
+              '0' => {
+                media_links: {
+                  '0' => { url: '', label: '' },
+                  '1' => { url: 'ftp://example.com/bath.jpg', label: 'Bath' },
+                },
+              },
+            },
+          },
+        )
+
+        patch :update, params: params
+
+        container = Nokogiri::HTML(response.body).at_css('[data-field-errors]')
+        expect(JSON.parse(container['data-field-errors'])).to contain_exactly(
+          'unit_index' => 0,
+          'field' => 'media_links[0][url]',
+          'field_message' => 'Must be a valid http or https URL',
+          'message' => 'Unit 1 media link 1 must be a valid http or https URL',
+        )
+      end
     end
 
     context 'when a unit already has requirements' do
@@ -524,14 +611,14 @@ RSpec.describe VacancySubmissionsController, type: :controller do
       before do
         user.roles = [create(:admin_role, can_assign_requirements: false)]
         submission.units = [
-          { 'building_id' => building.id, 'unit_number' => '1A', 'uid' => 'unit-a', 'requirements' => requirements_a },
-          { 'building_id' => building.id, 'unit_number' => '1B', 'uid' => 'unit-b', 'requirements' => requirements_b },
+          { **unit_details, 'building_id' => building.id, 'unit_number' => '1A', 'uid' => 'unit-a', 'requirements' => requirements_a },
+          { **unit_details, 'building_id' => building.id, 'unit_number' => '1B', 'uid' => 'unit-b', 'requirements' => requirements_b },
         ]
         submission.save!
       end
 
       it 'keeps each remaining unit paired with its own requirements after another unit is removed' do
-        patch_units('1' => { building_id: building.id, unit_number: '1B', uid: 'unit-b' })
+        patch_units('1' => { **unit_details, building_id: building.id, unit_number: '1B', uid: 'unit-b' })
 
         units = submission.reload.draft_data['units']
         expect(units.map { |u| [u['uid'], u['unit_number'], u['requirements']] }).to eq([['unit-b', '1B', requirements_b]])
@@ -539,8 +626,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
       it 'gives stored requirements only to the first unit that posts their uid' do
         patch_units(
-          '0' => { building_id: building.id, unit_number: '1A', uid: 'unit-a' },
-          '1' => { building_id: building.id, unit_number: '1C', uid: 'unit-a' },
+          '0' => { **unit_details, building_id: building.id, unit_number: '1A', uid: 'unit-a' },
+          '1' => { **unit_details, building_id: building.id, unit_number: '1C', uid: 'unit-a' },
         )
 
         units = submission.reload.draft_data['units']
@@ -549,8 +636,8 @@ RSpec.describe VacancySubmissionsController, type: :controller do
 
       it 'saves a new unit with no requirements and a generated uid' do
         patch_units(
-          '0' => { building_id: building.id, unit_number: '1A', uid: 'unit-a' },
-          '2' => { building_id: building.id, unit_number: '3C' },
+          '0' => { **unit_details, building_id: building.id, unit_number: '1A', uid: 'unit-a' },
+          '2' => { **unit_details, building_id: building.id, unit_number: '3C' },
         )
 
         new_unit = submission.reload.draft_data['units'].last
@@ -604,13 +691,35 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         # Drive a real approval failure (no stubbing): a unit whose building can't
         # be found makes Approval raise RecordInvalid, so this exercises the real
         # rescue path and the reload genuinely proves the transaction rolled back.
-        submission.units = [{ 'building_id' => 0, 'unit_number' => '1A' }]
+        submission.units = [{ **unit_details, 'building_id' => 0, 'unit_number' => '1A' }]
         submission.save!
 
         post :approve, params: { id: submission.id }
 
         expect(response).to redirect_to(vacancy_submission_path(submission))
         expect(flash[:alert]).to be_present
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'names the unit and field when a unit has no building' do
+        submission.units = [{ **unit_details, 'building_id' => '', 'unit_number' => '1A' }]
+        submission.save!(validate: false)
+
+        post :approve, params: { id: submission.id }
+
+        expect(flash[:alert]).to include('Unit 1 needs a building')
+        expect(submission.reload.status).to eq('awaiting_approval')
+      end
+
+      it 'shows an unparsable ready date as escaped text in the alert' do
+        submission.units = [submission.units.first.merge('date_ready' => '<b>soon</b>')]
+        submission.save!
+
+        post :approve, params: { id: submission.id }
+
+        expect(flash[:alert]).to include('is not a valid ready date')
+        expect(flash[:alert]).to include('&lt;b&gt;soon&lt;/b&gt;')
+        expect(flash[:alert]).not_to include('<b>')
         expect(submission.reload.status).to eq('awaiting_approval')
       end
 
@@ -829,7 +938,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: {
           program_id: other_program.id,
           sub_program_id: other_sub_program.id,
-          units: { '0' => { building_id: other_sub_program.building_id, unit_number: '1A' } },
+          units: { '0' => { **unit_details, building_id: other_sub_program.building_id, unit_number: '1A' } },
         },
       }
 
@@ -843,7 +952,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
         vacancy_submission: {
           program_id: other_program.id,
           sub_program_id: other_sub_program.id,
-          units: { '0' => { building_id: other_sub_program.building_id, unit_number: '1A' } },
+          units: { '0' => { **unit_details, building_id: other_sub_program.building_id, unit_number: '1A' } },
         },
       }
 
@@ -883,7 +992,7 @@ RSpec.describe VacancySubmissionsController, type: :controller do
           vacancy_submission: {
             program_id: other_program.id,
             sub_program_id: sub_program.id,
-            units: { '0' => { building_id: new_building.id, unit_number: '2B' } },
+            units: { '0' => { **unit_details, building_id: new_building.id, unit_number: '2B' } },
           },
         }
       end

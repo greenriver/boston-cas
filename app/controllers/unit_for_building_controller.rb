@@ -21,7 +21,7 @@ class UnitForBuildingController < ApplicationController
     @unit.elevator_accessible = @unit.building.elevator_accessible_default
     if @unit.save
       @unit.apply_default_housing_attributes
-      flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> in <a href=\"#{building_path(@unit.building)}\">#{@unit.building.name}</a> was successfully created."
+      flash[:notice] = unit_link_message(@unit, 'created')
       redirect_to program_sub_program_vouchers_path(program_id: params[:program_id].to_i, sub_program_id: params[:sub_program_id].to_i)
     else
       flash[:error] = 'Unable to add unit'
@@ -37,7 +37,7 @@ class UnitForBuildingController < ApplicationController
   def update
     @unit = unit_source.find(params[:id].to_i)
     if @unit.update(unit_params)
-      flash[:notice] = "Unit <strong>#{@unit[:name]}</strong> in <a href=\"#{building_path(@unit.building)}\">#{@unit.building.name}</a> was successfully updated."
+      flash[:notice] = unit_link_message(@unit, 'updated')
       redirect_to program_sub_program_vouchers_path(program_id: params[:program_id].to_i, sub_program_id: params[:sub_program_id].to_i)
     else
       flash[:error] = 'Unable to update unit'
@@ -45,6 +45,12 @@ class UnitForBuildingController < ApplicationController
   end
 
   private
+
+  def unit_link_message(unit, action)
+    helpers.safe_join(
+      ["Unit #{unit.name} in ", helpers.link_to(unit.building.name, building_path(unit.building)), " was successfully #{action}."],
+    )
+  end
 
   def unit_scope
     unit_source.all

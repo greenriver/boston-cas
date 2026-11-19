@@ -41,7 +41,7 @@
   %div{data: { 'vacancy-submission-form-target': 'documentsContainer', 'forward-params': { required_document_names: Array(vacancy_submission.required_document_names) }.to_json }}
 
   / ── Section 2: Vacancy ──
-  - units_errors = vacancy_submission.errors[:units]
+  - units_errors = vacancy_submission.errors.where(:units).map { |e| { message: e.full_message, unit_index: e.options[:unit_index], field: e.options[:field], field_message: e.options[:field_message] }.compact }
   %div{data: { 'vacancy-submission-form-target': 'vacancyContainer', 'field-errors': units_errors.to_json, 'forward-params': { units: vacancy_submission.units_with_uids }.to_json }}
     %p.text-muted Select a sub-program to see unit type information.
 

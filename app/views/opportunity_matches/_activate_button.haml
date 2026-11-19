@@ -1,13 +1,14 @@
 - if client.client_opportunity_matches.active.on_route(@opportunity.match_route).exists?
-  - match_warning = "Activating this match will cancel all other active matches for #{client.name} on the #{@opportunity.match_route.title}."
+  - match_warning = "Activating this match will cancel all other active matches for #{@exporter.client_name(client)} on the #{@opportunity.match_route.title}."
 - else
   - match_warning = ''
-- if @opportunity.active_matches.exists? && @opportunity.active_matches.first.client.present?
+- active_client = @opportunity.active_matches.first&.client
+- if active_client.present?
   - text = 'Activate Match Canceling Current'
   - if match_warning.present?
-    - match_warning += " In addition, it will cancel the current match involving #{@opportunity.active_matches.first.client.name}."
+    - match_warning += " In addition, it will cancel the current match involving #{@exporter.client_name(active_client)}."
   - else
-    - match_warning = "Activating this match will cancel the current match involving #{@opportunity.active_matches.first.client.name}."
+    - match_warning = "Activating this match will cancel the current match involving #{@exporter.client_name(active_client)}."
 - else
   - text = 'Activate Match'
 

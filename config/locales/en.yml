@@ -133,3 +133,9 @@ en:
         ssn: 'SSN'
         date_of_birth: 'DOB'
         hiv_aids: 'HIV aids'
+    errors:
+      models:
+        vacancy_submission:
+          attributes:
+            units:
+              format: '%{message}'
