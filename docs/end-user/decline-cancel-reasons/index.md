@@ -12,7 +12,7 @@
 
 ## The Reason Catalog
 
-Go to **Decline & Cancel Reasons** in the admin navigation bar (`/admin/match_decision_reasons`). This page lists every reason that can be offered to someone declining or canceling a match, across every route.
+Go to **Admin > Configuration > Decline & Cancel Reasons** in the sidebar menu (`/admin/match_decision_reasons`). This page lists every reason that can be offered to someone declining or canceling a match, across every route.
 
 ![The Decline & Cancel Reasons catalog page](./images/01-reason-catalog-index.png)
 
@@ -32,7 +32,7 @@ This catalog only controls what reasons *exist*. It doesn't decide which reasons
 
 ## Finding a Route's Steps
 
-Go to **Match Routes** in the admin nav (`/admin/match_routes`), then click **Edit** on the route you want to configure.
+Go to **Admin > Configuration > Match Routes** in the sidebar menu (`/admin/match_routes`), then click **Edit** on the route you want to configure.
 
 Scroll to the **Decline & Cancel Reasons** section on that route's edit page. It lists every step on the route, with a count of how many active decline and cancel reasons are currently assigned to each one.
 
