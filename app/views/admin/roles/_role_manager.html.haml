@@ -1,5 +1,5 @@
 .card.roles{ data: { controller: 'role-manager' } }
-  = form_tag batch_update_admin_roles_path, method: :patch, data: { action: 'submit->role-manager#disableUnchangedFields' } do
+  = form_tag batch_update_admin_roles_path, method: :patch, autocomplete: 'off', data: { action: 'submit->role-manager#disableUnchangedFields' } do
     .card-header
       .d-flex
         .user-role.w-25.d-flex.border-end.border-dark{ style: 'min-width: 350px;' }
