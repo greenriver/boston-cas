@@ -18,13 +18,38 @@ RSpec.describe 'Admin::Roles', type: :request do
   end
 
   describe 'PATCH batch_update_admin_roles' do
-    let!(:role) { create(:role, can_view_reports: false) }
+    let!(:role) { create(:role, name: 'Changed', can_view_reports: false, can_view_buildings: true) }
+    let!(:untouched_role) { create(:role, name: 'Untouched', can_view_reports: false, can_view_buildings: true) }
 
-    it 'updates multiple roles and redirects to admin_roles_path' do
+    it 'updates the posted permissions and leaves unposted permissions and roles unchanged' do
       patch batch_update_admin_roles_path, params: { role: { role.id.to_s => { can_view_reports: '1' } } }
 
       expect(response).to redirect_to(admin_roles_path)
-      expect(role.reload.can_view_reports).to be true
+      expect(flash[:notice]).to eq('Roles updated successfully.')
+      expect(role.reload.slice(:can_view_reports, :can_view_buildings)).to eq('can_view_reports' => true, 'can_view_buildings' => true)
+      expect(untouched_role.reload.slice(:can_view_reports, :can_view_buildings)).to eq('can_view_reports' => false, 'can_view_buildings' => true)
+    end
+
+    it 'rolls back every posted role and shows an alert when a posted role does not exist' do
+      missing_id = Role.maximum(:id) + 1
+
+      patch batch_update_admin_roles_path, params: {
+        role: {
+          role.id.to_s => { can_view_reports: '1' },
+          missing_id.to_s => { can_view_reports: '1' },
+        },
+      }
+
+      expect(response).to redirect_to(admin_roles_path)
+      expect(flash[:alert]).to start_with('Update failed: ')
+      expect(role.reload.can_view_reports).to be(false)
+    end
+
+    it 'redirects without changing any role when no role is posted' do
+      patch batch_update_admin_roles_path
+
+      expect(response).to redirect_to(admin_roles_path)
+      expect(role.reload.slice(:can_view_reports, :can_view_buildings)).to eq('can_view_reports' => false, 'can_view_buildings' => true)
     end
 
     it 'ignores unpermitted attributes like name' do
