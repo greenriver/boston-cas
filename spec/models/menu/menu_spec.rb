@@ -77,7 +77,7 @@ RSpec.describe Menu::Menu do
       let(:granted) { {} }
       let(:menu_list) { described_class.new(user: user, context: build_menu_context(**granted)).site_menu }
       let(:admin) { menu_list.find { |i| i.id.to_s == 'admin' } }
-      let(:admin_titles) { admin.children.select(&:show?).to_h { |group| [group.title, group.children.select(&:show?).map(&:title)] } }
+      let(:admin_titles) { admin.children.to_h { |group| [group.title, group.children.map(&:title)] } }
 
       context 'with every admin permission' do
         let(:granted) do
@@ -192,7 +192,7 @@ RSpec.describe Menu::Menu do
         let(:context) { build_menu_context(can_view_rule_list?: true) }
 
         it 'links only to the rules list' do
-          expect(section.children.select(&:show?).map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules']])
+          expect(section.children.map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules']])
         end
       end
 
@@ -200,7 +200,7 @@ RSpec.describe Menu::Menu do
         let(:context) { build_menu_context(can_view_available_services?: true) }
 
         it 'links only to the services list' do
-          expect(section.children.select(&:show?).map { |c| [c.title, c.path] }).to eq([['Services List', '/services']])
+          expect(section.children.map { |c| [c.title, c.path] }).to eq([['Services List', '/services']])
         end
       end
 
