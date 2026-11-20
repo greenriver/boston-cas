@@ -73,6 +73,121 @@ RSpec.describe Menu::Menu do
       expect(account.children.map(&:title).join(' ')).to match(/Account|Edit|Sign/i)
     end
 
+    describe 'admin section' do
+      let(:granted) { {} }
+      let(:menu_list) { described_class.new(user: user, context: build_menu_context(**granted)).site_menu }
+      let(:admin) { menu_list.find { |i| i.id.to_s == 'admin' } }
+      let(:admin_titles) { admin.children.select(&:show?).to_h { |group| [group.title, group.children.select(&:show?).map(&:title)] } }
+
+      context 'with every admin permission' do
+        let(:granted) do
+          {
+            can_edit_users?: true, can_edit_roles?: true, can_edit_translations?: true,
+            can_manage_config?: true, can_manage_tags?: true, can_manage_sessions?: true
+          }
+        end
+
+        it 'is shown with the title Admin and groups in Access, Configuration, Status order' do
+          expect(admin.show?).to be(true)
+          expect(admin.title).to eq('Admin')
+          expect(admin.children.map(&:title)).to eq(['Access', 'Configuration', 'Status'])
+        end
+
+        it 'links each admin page to its index path' do
+          tree = admin.children.to_h { |group| [group.title, group.children.map { |leaf| [leaf.title, leaf.path] }] }
+          expect(tree).to eq(
+            'Access' => [['Users', '/admin/users'], ['Roles', '/admin/roles'], ['Agencies', '/admin/agencies']],
+            'Configuration' => [
+              ['Site Configuration', '/admin/configs'],
+              ['Theme', '/admin/themes'],
+              ['Translations', '/admin/translation_keys'],
+              ['Match Routes', '/admin/match_routes'],
+              ['Decline & Cancel Reasons', '/admin/match_decision_reasons'],
+              ['Housing Attributes', '/admin/housing_attribute_names'],
+              ['Tags', '/tags'],
+            ],
+            'Status' => [['Sessions', '/admin/sessions']],
+          )
+        end
+
+        it 'stays expanded on nested admin pages' do
+          expect(admin.collapsed_class('/admin/users/5/edit')).to eq(:show)
+          expect(admin.collapsed_class('/admin/user_search_queries/1')).to eq(:show)
+          expect(admin.collapsed_class('/tags/2/edit')).to eq(:show)
+          expect(admin.collapsed_class('/reports')).to eq(:collapsed)
+        end
+      end
+
+      context 'with only can_edit_users?' do
+        let(:granted) { { can_edit_users?: true } }
+
+        it 'shows Users and Agencies but not Roles' do
+          expect(admin_titles).to eq('Access' => ['Users', 'Agencies'])
+        end
+      end
+
+      context 'with only can_edit_roles?' do
+        let(:granted) { { can_edit_roles?: true } }
+
+        it 'shows only Roles' do
+          expect(admin_titles).to eq('Access' => ['Roles'])
+        end
+      end
+
+      context 'with only can_manage_config?' do
+        let(:granted) { { can_manage_config?: true } }
+
+        it 'shows the site configuration pages but not Translations or Tags' do
+          expect(admin_titles).to eq(
+            'Configuration' => ['Site Configuration', 'Theme', 'Match Routes', 'Decline & Cancel Reasons', 'Housing Attributes'],
+          )
+        end
+      end
+
+      context 'with only can_edit_translations?' do
+        let(:granted) { { can_edit_translations?: true } }
+
+        it 'shows only Translations' do
+          expect(admin_titles).to eq('Configuration' => ['Translations'])
+        end
+      end
+
+      context 'with only can_manage_sessions?' do
+        let(:granted) { { can_manage_sessions?: true } }
+
+        it 'shows only Sessions' do
+          expect(admin_titles).to eq('Status' => ['Sessions'])
+        end
+      end
+
+      context 'with can_manage_tags? and the inventory gate closed' do
+        let(:granted) { { can_manage_tags?: true, can_view_opportunities?: false, can_view_contacts?: false } }
+
+        it 'shows Tags under Admin' do
+          expect(admin_titles).to eq('Configuration' => ['Tags'])
+        end
+      end
+
+      context 'with no admin permissions' do
+        it 'hides the Admin section' do
+          expect(admin.show?).to be(false)
+        end
+      end
+    end
+
+    describe 'rules and services section' do
+      let(:context) do
+        build_menu_context(can_view_rule_list?: true, can_view_available_services?: true, can_manage_tags?: true)
+      end
+      let(:menu_list) { described_class.new(user: user, context: context).site_menu }
+      let(:section) { menu_list.find { |i| i.id.to_s == 'rules-and-services' } }
+
+      it 'is titled Rules & Services and links only to the rules and services lists' do
+        expect(section.title).to eq('Rules & Services')
+        expect(section.children.map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules'], ['Services List', '/services']])
+      end
+    end
+
     describe 'help section' do
       let(:help_record) { nil }
       let(:can_edit_help) { false }
