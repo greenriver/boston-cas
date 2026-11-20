@@ -1,5 +1,5 @@
 .card.roles{ data: { controller: 'role-manager' } }
-  = form_tag batch_update_admin_roles_path, method: :patch do
+  = form_tag batch_update_admin_roles_path, method: :patch, autocomplete: 'off', data: { action: 'submit->role-manager#disableUnchangedFields' } do
     .card-header
       .d-flex
         .user-role.w-25.d-flex.border-end.border-dark{ style: 'min-width: 350px;' }
@@ -16,7 +16,7 @@
       .w-25.border-end.border-dark{ style: 'min-width: 350px;' }
         .card-body
           %label.w-100{ for: 'search-roles' } Search
-          %input#search-roles.form-control.j-table__search.w-100{ placeholder: 'Search permissions', data: { 'role-manager': { target: 'searchInput' }, action: 'keyup->role-manager#searchPermissions' } }
+          %input#search-roles.form-control.j-table__search.w-100{ placeholder: 'Search permissions', data: { 'role-manager': { target: 'searchInput' }, action: 'keyup->role-manager#searchPermissions keydown.enter->role-manager#preventSubmit' } }
         .administrative-permissions.d-flex.administrative
           .form-check.form-switch
             %input.form-check-input{ type: :checkbox, role: :switch, id: 'administrative-permissions-toggle', checked: :checked, data: { 'role-manager': { target: 'administrativeFilter' }, action: 'change->role-manager#toggleAdmin' } }

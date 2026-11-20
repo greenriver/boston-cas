@@ -25,6 +25,11 @@ const controller = class extends Controller {
     this.enabledColumns = this.setInitialColumns()
     this.setInitialState()
     this.bindCollapseSyncListeners()
+    // After a submit, a page restored from the back/forward cache keeps the inputs disabled and the
+    // pre-save initial state, so load it fresh. Without a submit the restored edits are kept.
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted && this.submitted) window.location.reload()
+    })
   }
 
   // Sync same-category panels across role columns. Uses native addEventListener
@@ -210,27 +215,48 @@ const controller = class extends Controller {
   }
 
   updateState(e) {
-    this.currentState = {}
-    this.setState(this.currentState)
-    this.updateUi()
+    this.refreshCurrentState()
+    this.markInput($(e.currentTarget).attr('name'))
+    this.updateChangeCount()
   }
 
-  updateUi() {
-    let changed = 0
-    $.each(this.currentState, (key, value) => {
-      const input = $(`input[name="${key}"]`)
-      const input_status = input.closest('.form-check').find('.input-status')
-      const dirty_note = '<div class="dirty-note d-flex"><div class="ms-auto"><i>change pending</i></div></div>'
-      if (this.initialState[key] != value) {
-        changed += 1
-        input.addClass('dirty')
-        input_status.find('.dirty-note').remove()
-        input_status.append(dirty_note)
-      } else {
-        input.removeClass('dirty')
-        input_status.find('.dirty-note').remove()
-      }
+  refreshCurrentState() {
+    this.currentState = {}
+    this.setState(this.currentState)
+  }
+
+  // Every role renders a field per permission, hidden roles included, and Rack caps the number of
+  // params in a request body. Submit only the fields with pending changes.
+  disableUnchangedFields() {
+    this.submitted = true
+    this.refreshCurrentState()
+    $(this.roleColumnTargets).find('input').each((_, input) => {
+      if (this.initialState[input.name] === this.currentState[input.name]) input.disabled = true
     })
+  }
+
+  // Touching the DOM for every permission of every role takes seconds once there are many roles,
+  // so only the clicked permission's markers are updated.
+  markInput(name) {
+    const input = $(`input[name="${name}"]`)
+    const input_status = input.closest('.form-check').find('.input-status')
+    const dirty_note = '<div class="dirty-note d-flex"><div class="ms-auto"><i>change pending</i></div></div>'
+    input_status.find('.dirty-note').remove()
+    if (this.initialState[name] != this.currentState[name]) {
+      input.addClass('dirty')
+      input_status.append(dirty_note)
+    } else {
+      input.removeClass('dirty')
+    }
+  }
+
+  // Enter in the search box would otherwise submit the form.
+  preventSubmit(e) {
+    e.preventDefault()
+  }
+
+  updateChangeCount() {
+    const changed = Object.keys(this.currentState).filter((key) => this.initialState[key] != this.currentState[key]).length
     if (changed == 0) {
       $(this.changeCountTargets).text('')
       $(this.changeButtonTargets).addClass('hide')
