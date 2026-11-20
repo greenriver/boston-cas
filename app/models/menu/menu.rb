@@ -272,7 +272,7 @@ class Menu::Menu
       id: 'admin',
       icon: 'icon-settings_backup_restore',
       match_pattern_terminator: '.*',
-      match_pattern: '(?:^/admin/)|(?:^/users/invitations)',
+      match_pattern: '(?:^/admin/)|(?:^/users/invitation)',
     )
     menu.add_child(admin_access_group)
     menu.add_child(admin_configuration_group)

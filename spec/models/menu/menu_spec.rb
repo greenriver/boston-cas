@@ -114,7 +114,8 @@ RSpec.describe Menu::Menu do
           expect(admin.collapsed_class('/admin/users/5/edit')).to eq(:show)
           expect(admin.collapsed_class('/admin/user_search_queries/1')).to eq(:show)
           expect(admin.collapsed_class('/tags/2/edit')).to eq(:show)
-          expect(admin.collapsed_class('/users/invitations/new')).to eq(:show)
+          expect(admin.collapsed_class('/users/invitation/new')).to eq(:show)
+          expect(admin.collapsed_class('/users/invitations/confirm')).to eq(:show)
           expect(admin.collapsed_class('/reports')).to eq(:collapsed)
         end
       end
