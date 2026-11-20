@@ -9,6 +9,33 @@
 require 'rails_helper'
 
 RSpec.describe Menu::Menu do
+  let(:menu_permission_helpers) do
+    [
+      :can_view_reports?, :can_view_opportunities?, :can_view_contacts?, :can_view_programs?,
+      :can_view_assigned_programs?, :can_view_buildings?, :can_enter_deidentified_clients?,
+      :can_enter_identified_clients?, :can_manage_imported_clients?, :can_manage_neighborhoods?,
+      :can_view_some_clients?, :can_manage_tags?, :can_view_rule_list?, :can_view_available_services?,
+      :can_edit_users?, :can_edit_roles?, :can_edit_translations?, :can_manage_config?,
+      :can_manage_sessions?, :can_view_funding_sources?, :can_view_subgrantees?, :can_edit_help?
+    ]
+  end
+
+  def build_menu_context(help_for_path: nil, **granted)
+    values = { can_view_opportunities?: true, can_view_contacts?: true }.merge(granted)
+    helpers = menu_permission_helpers
+
+    Class.new do
+      include Rails.application.routes.url_helpers
+
+      helpers.each { |name| define_method(name) { values.fetch(name, false) } }
+      define_method(:help_for_path) { help_for_path }
+
+      def help_link = nil
+      def controller_path = 'application'
+      def action_name = 'index'
+    end.new
+  end
+
   describe '#site_menu' do
     before do
       routes = [['PSH Route', {}]]
@@ -17,113 +44,7 @@ RSpec.describe Menu::Menu do
 
     let(:user) { build(:user) }
 
-    let(:menu_context) do
-      klass = Class.new do
-        include Rails.application.routes.url_helpers
-
-        def can_view_reports?
-          false
-        end
-
-        def can_view_opportunities?
-          true
-        end
-
-        def can_view_contacts?
-          true
-        end
-
-        def can_view_programs?
-          false
-        end
-
-        def can_view_assigned_programs?
-          false
-        end
-
-        def can_view_buildings?
-          false
-        end
-
-        def can_enter_deidentified_clients?
-          false
-        end
-
-        def can_enter_identified_clients?
-          false
-        end
-
-        def can_manage_imported_clients?
-          false
-        end
-
-        def can_manage_neighborhoods?
-          false
-        end
-
-        def can_view_some_clients?
-          false
-        end
-
-        def can_manage_tags?
-          false
-        end
-
-        def can_view_rule_list?
-          false
-        end
-
-        def can_view_available_services?
-          false
-        end
-
-        def can_edit_users?
-          false
-        end
-
-        def can_edit_translations?
-          false
-        end
-
-        def can_view_imports?
-          false
-        end
-
-        def can_administer_health?
-          false
-        end
-
-        def can_view_funding_sources?
-          false
-        end
-
-        def can_view_subgrantees?
-          false
-        end
-
-        def help_link
-          nil
-        end
-
-        def help_for_path
-          nil
-        end
-
-        def controller_path
-          'application'
-        end
-
-        def action_name
-          'index'
-        end
-
-        def can_edit_help?
-          false
-        end
-      end
-
-      klass.new
-    end
+    let(:menu_context) { build_menu_context }
 
     it 'includes a collapsible Matches section when multiple routes exist' do
       routes = [['PSH Route', {}], ['RRH Route', {}]]
@@ -156,41 +77,7 @@ RSpec.describe Menu::Menu do
       let(:help_record) { nil }
       let(:can_edit_help) { false }
 
-      let(:menu_context) do
-        help = help_record
-        can_edit = can_edit_help
-
-        Class.new do
-          include Rails.application.routes.url_helpers
-
-          define_method(:can_edit_help?) { can_edit }
-          define_method(:help_for_path) { help }
-
-          def help_link = nil
-          def controller_path = 'application'
-          def action_name = 'index'
-          def can_view_reports? = false
-          def can_view_opportunities? = true
-          def can_view_contacts? = true
-          def can_view_programs? = false
-          def can_view_assigned_programs? = false
-          def can_view_buildings? = false
-          def can_enter_deidentified_clients? = false
-          def can_enter_identified_clients? = false
-          def can_manage_imported_clients? = false
-          def can_manage_neighborhoods? = false
-          def can_view_some_clients? = false
-          def can_manage_tags? = false
-          def can_view_rule_list? = false
-          def can_view_available_services? = false
-          def can_edit_users? = false
-          def can_edit_translations? = false
-          def can_view_imports? = false
-          def can_administer_health? = false
-          def can_view_funding_sources? = false
-          def can_view_subgrantees? = false
-        end.new
-      end
+      let(:menu_context) { build_menu_context(help_for_path: help_record, can_edit_help?: can_edit_help) }
 
       let(:menu_list) { described_class.new(user: user, context: menu_context).site_menu }
       let(:help_item) { menu_list.find { |i| i.id.to_s == 'help' } }
