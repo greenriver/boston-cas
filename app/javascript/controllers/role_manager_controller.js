@@ -25,10 +25,10 @@ const controller = class extends Controller {
     this.enabledColumns = this.setInitialColumns()
     this.setInitialState()
     this.bindCollapseSyncListeners()
-    // A page restored from the back/forward cache keeps the inputs disabled on submit and the
-    // pre-save initial state, so load it fresh.
+    // After a submit, a page restored from the back/forward cache keeps the inputs disabled and the
+    // pre-save initial state, so load it fresh. Without a submit the restored edits are kept.
     window.addEventListener('pageshow', (e) => {
-      if (e.persisted) window.location.reload()
+      if (e.persisted && this.submitted) window.location.reload()
     })
   }
 
@@ -228,6 +228,7 @@ const controller = class extends Controller {
   // Every role renders a field per permission, hidden roles included, and Rack caps the number of
   // params in a request body. Submit only the fields with pending changes.
   disableUnchangedFields() {
+    this.submitted = true
     this.refreshCurrentState()
     $(this.roleColumnTargets).find('input').each((_, input) => {
       if (this.initialState[input.name] === this.currentState[input.name]) input.disabled = true
