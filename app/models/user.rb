@@ -144,11 +144,6 @@ class User < ApplicationRecord
     )
   end
 
-  def admin_dashboard_landing_path
-    return admin_users_path if can_edit_users?
-    return admin_translation_keys_path if can_edit_translations?
-  end
-
   def impersonateable_by?(user)
     return false unless user.present?
 

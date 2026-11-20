@@ -1,7 +1,6 @@
 - type_label = @row.include_value? ? 'Attribute' : 'Amenity'
 - title = "Edit #{type_label} '#{@row.name}'"
 - content_for :title, title
-= render 'menus/admin_tabs'
 %h1= content_for :title
 
 .row.mb-4
