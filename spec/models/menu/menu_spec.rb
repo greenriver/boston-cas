@@ -114,6 +114,7 @@ RSpec.describe Menu::Menu do
           expect(admin.collapsed_class('/admin/users/5/edit')).to eq(:show)
           expect(admin.collapsed_class('/admin/user_search_queries/1')).to eq(:show)
           expect(admin.collapsed_class('/tags/2/edit')).to eq(:show)
+          expect(admin.collapsed_class('/users/invitations/new')).to eq(:show)
           expect(admin.collapsed_class('/reports')).to eq(:collapsed)
         end
       end
@@ -185,6 +186,30 @@ RSpec.describe Menu::Menu do
       it 'is titled Rules & Services and links only to the rules and services lists' do
         expect(section.title).to eq('Rules & Services')
         expect(section.children.map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules'], ['Services List', '/services']])
+      end
+
+      context 'with only can_view_rule_list?' do
+        let(:context) { build_menu_context(can_view_rule_list?: true) }
+
+        it 'links only to the rules list' do
+          expect(section.children.select(&:show?).map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules']])
+        end
+      end
+
+      context 'with only can_view_available_services?' do
+        let(:context) { build_menu_context(can_view_available_services?: true) }
+
+        it 'links only to the services list' do
+          expect(section.children.select(&:show?).map { |c| [c.title, c.path] }).to eq([['Services List', '/services']])
+        end
+      end
+
+      context 'with neither can_view_rule_list? nor can_view_available_services?' do
+        let(:context) { build_menu_context }
+
+        it 'leaves the section out of the visible menu' do
+          expect(menu_list.select(&:show?).map { |i| i.id.to_s }).not_to include('rules-and-services')
+        end
       end
     end
 
