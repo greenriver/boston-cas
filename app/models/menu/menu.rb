@@ -25,9 +25,9 @@ class Menu::Menu
         menu << clients_section
         menu << property_section
         menu << program_section
-        menu << configuration_section
+        menu << rules_and_services_section
       end
-      menu << admin_dashboard_section
+      menu << admin_section
       menu << account_section
       menu << help_section
       menu << style_guide_section
@@ -238,11 +238,11 @@ class Menu::Menu
     menu
   end
 
-  private def configuration_section
+  private def rules_and_services_section
     menu = Menu::Item.new(
       user: user,
-      title: Translation.translate('Configuration'),
-      id: 'configuration',
+      title: Translation.translate('Rules & Services'),
+      id: 'rules-and-services',
       icon: 'icon-cog',
       match_pattern_terminator: '.*',
     )
@@ -262,6 +262,111 @@ class Menu::Menu
         visible: ->(_user) { h.can_view_available_services? },
       ),
     )
+    menu
+  end
+
+  private def admin_section
+    menu = Menu::Item.new(
+      user: user,
+      title: Translation.translate('Admin'),
+      id: 'admin',
+      icon: 'icon-settings_backup_restore',
+      match_pattern_terminator: '.*',
+      match_pattern: '(?:^/admin/)|(?:^/users/invitation)',
+    )
+    menu.add_child(admin_access_group)
+    menu.add_child(admin_configuration_group)
+    menu.add_child(admin_status_group)
+    menu
+  end
+
+  private def admin_access_group
+    menu = Menu::Item.new(
+      user: user,
+      title: Translation.translate('Access'),
+      id: 'admin-access',
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_users_path,
+        title: Translation.translate('Users'),
+        visible: ->(_user) { h.can_edit_users? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_roles_path,
+        title: Translation.translate('Roles'),
+        visible: ->(_user) { h.can_edit_roles? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_agencies_path,
+        title: Translation.translate('Agencies'),
+        visible: ->(_user) { h.can_edit_users? },
+      ),
+    )
+    menu
+  end
+
+  private def admin_configuration_group
+    menu = Menu::Item.new(
+      user: user,
+      title: Translation.translate('Configuration'),
+      id: 'admin-configuration',
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_configs_path,
+        title: Translation.translate('Site Configuration'),
+        visible: ->(_user) { h.can_manage_config? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_themes_path,
+        title: Translation.translate('Theme'),
+        visible: ->(_user) { h.can_manage_config? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_translation_keys_path,
+        title: Translation.translate('Translations'),
+        visible: ->(_user) { h.can_edit_translations? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_match_routes_path,
+        title: Translation.translate('Match Routes'),
+        visible: ->(_user) { h.can_manage_config? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_match_decision_reasons_path,
+        title: Translation.translate('Decline & Cancel Reasons'),
+        visible: ->(_user) { h.can_manage_config? },
+      ),
+    )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_housing_attribute_names_path,
+        title: Translation.translate('Housing Attributes'),
+        visible: ->(_user) { h.can_manage_config? },
+      ),
+    )
     menu.add_child(
       Menu::Item.new(
         user: user,
@@ -273,19 +378,21 @@ class Menu::Menu
     menu
   end
 
-  # Same placement as legacy `menus/admin_dashboard` (outside the inventory block).
-  private def admin_dashboard_section
-    Menu::Item.new(
+  private def admin_status_group
+    menu = Menu::Item.new(
       user: user,
-      path: user.admin_dashboard_landing_path,
-      title: Translation.translate('Admin Dashboard'),
-      id: 'admin-dashboard',
-      icon: 'icon-settings_backup_restore',
-      visible: lambda { |_u|
-        (h.can_edit_users? || h.can_edit_translations?) &&
-          user.admin_dashboard_landing_path.present?
-      },
+      title: Translation.translate('Status'),
+      id: 'admin-status',
     )
+    menu.add_child(
+      Menu::Item.new(
+        user: user,
+        path: admin_sessions_path,
+        title: Translation.translate('Sessions'),
+        visible: ->(_user) { h.can_manage_sessions? },
+      ),
+    )
+    menu
   end
 
   private def account_section

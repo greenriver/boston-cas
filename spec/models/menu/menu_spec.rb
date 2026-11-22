@@ -9,6 +9,33 @@
 require 'rails_helper'
 
 RSpec.describe Menu::Menu do
+  let(:menu_permission_helpers) do
+    [
+      :can_view_reports?, :can_view_opportunities?, :can_view_contacts?, :can_view_programs?,
+      :can_view_assigned_programs?, :can_view_buildings?, :can_enter_deidentified_clients?,
+      :can_enter_identified_clients?, :can_manage_imported_clients?, :can_manage_neighborhoods?,
+      :can_view_some_clients?, :can_manage_tags?, :can_view_rule_list?, :can_view_available_services?,
+      :can_edit_users?, :can_edit_roles?, :can_edit_translations?, :can_manage_config?,
+      :can_manage_sessions?, :can_view_funding_sources?, :can_view_subgrantees?, :can_edit_help?
+    ]
+  end
+
+  def build_menu_context(help_for_path: nil, **granted)
+    values = { can_view_opportunities?: true, can_view_contacts?: true }.merge(granted)
+    helpers = menu_permission_helpers
+
+    Class.new do
+      include Rails.application.routes.url_helpers
+
+      helpers.each { |name| define_method(name) { values.fetch(name, false) } }
+      define_method(:help_for_path) { help_for_path }
+
+      def help_link = nil
+      def controller_path = 'application'
+      def action_name = 'index'
+    end.new
+  end
+
   describe '#site_menu' do
     before do
       routes = [['PSH Route', {}]]
@@ -17,113 +44,7 @@ RSpec.describe Menu::Menu do
 
     let(:user) { build(:user) }
 
-    let(:menu_context) do
-      klass = Class.new do
-        include Rails.application.routes.url_helpers
-
-        def can_view_reports?
-          false
-        end
-
-        def can_view_opportunities?
-          true
-        end
-
-        def can_view_contacts?
-          true
-        end
-
-        def can_view_programs?
-          false
-        end
-
-        def can_view_assigned_programs?
-          false
-        end
-
-        def can_view_buildings?
-          false
-        end
-
-        def can_enter_deidentified_clients?
-          false
-        end
-
-        def can_enter_identified_clients?
-          false
-        end
-
-        def can_manage_imported_clients?
-          false
-        end
-
-        def can_manage_neighborhoods?
-          false
-        end
-
-        def can_view_some_clients?
-          false
-        end
-
-        def can_manage_tags?
-          false
-        end
-
-        def can_view_rule_list?
-          false
-        end
-
-        def can_view_available_services?
-          false
-        end
-
-        def can_edit_users?
-          false
-        end
-
-        def can_edit_translations?
-          false
-        end
-
-        def can_view_imports?
-          false
-        end
-
-        def can_administer_health?
-          false
-        end
-
-        def can_view_funding_sources?
-          false
-        end
-
-        def can_view_subgrantees?
-          false
-        end
-
-        def help_link
-          nil
-        end
-
-        def help_for_path
-          nil
-        end
-
-        def controller_path
-          'application'
-        end
-
-        def action_name
-          'index'
-        end
-
-        def can_edit_help?
-          false
-        end
-      end
-
-      klass.new
-    end
+    let(:menu_context) { build_menu_context }
 
     it 'includes a collapsible Matches section when multiple routes exist' do
       routes = [['PSH Route', {}], ['RRH Route', {}]]
@@ -152,45 +73,152 @@ RSpec.describe Menu::Menu do
       expect(account.children.map(&:title).join(' ')).to match(/Account|Edit|Sign/i)
     end
 
+    describe 'admin section' do
+      let(:granted) { {} }
+      let(:menu_list) { described_class.new(user: user, context: build_menu_context(**granted)).site_menu }
+      let(:admin) { menu_list.find { |i| i.id.to_s == 'admin' } }
+      let(:admin_titles) { admin.children.to_h { |group| [group.title, group.children.map(&:title)] } }
+
+      context 'with every admin permission' do
+        let(:granted) do
+          {
+            can_edit_users?: true, can_edit_roles?: true, can_edit_translations?: true,
+            can_manage_config?: true, can_manage_tags?: true, can_manage_sessions?: true
+          }
+        end
+
+        it 'is shown with the title Admin and groups in Access, Configuration, Status order' do
+          expect(admin.show?).to be(true)
+          expect(admin.title).to eq('Admin')
+          expect(admin.children.map(&:title)).to eq(['Access', 'Configuration', 'Status'])
+        end
+
+        it 'links each admin page to its index path' do
+          tree = admin.children.to_h { |group| [group.title, group.children.map { |leaf| [leaf.title, leaf.path] }] }
+          expect(tree).to eq(
+            'Access' => [['Users', '/admin/users'], ['Roles', '/admin/roles'], ['Agencies', '/admin/agencies']],
+            'Configuration' => [
+              ['Site Configuration', '/admin/configs'],
+              ['Theme', '/admin/themes'],
+              ['Translations', '/admin/translation_keys'],
+              ['Match Routes', '/admin/match_routes'],
+              ['Decline & Cancel Reasons', '/admin/match_decision_reasons'],
+              ['Housing Attributes', '/admin/housing_attribute_names'],
+              ['Tags', '/tags'],
+            ],
+            'Status' => [['Sessions', '/admin/sessions']],
+          )
+        end
+
+        it 'stays expanded on nested admin pages' do
+          expect(admin.collapsed_class('/admin/users/5/edit')).to eq(:show)
+          expect(admin.collapsed_class('/admin/user_search_queries/1')).to eq(:show)
+          expect(admin.collapsed_class('/tags/2/edit')).to eq(:show)
+          expect(admin.collapsed_class('/users/invitation/new')).to eq(:show)
+          expect(admin.collapsed_class('/users/invitations/confirm')).to eq(:show)
+          expect(admin.collapsed_class('/reports')).to eq(:collapsed)
+        end
+      end
+
+      context 'with only can_edit_users?' do
+        let(:granted) { { can_edit_users?: true } }
+
+        it 'shows Users and Agencies but not Roles' do
+          expect(admin_titles).to eq('Access' => ['Users', 'Agencies'])
+        end
+      end
+
+      context 'with only can_edit_roles?' do
+        let(:granted) { { can_edit_roles?: true } }
+
+        it 'shows only Roles' do
+          expect(admin_titles).to eq('Access' => ['Roles'])
+        end
+      end
+
+      context 'with only can_manage_config?' do
+        let(:granted) { { can_manage_config?: true } }
+
+        it 'shows the site configuration pages but not Translations or Tags' do
+          expect(admin_titles).to eq(
+            'Configuration' => ['Site Configuration', 'Theme', 'Match Routes', 'Decline & Cancel Reasons', 'Housing Attributes'],
+          )
+        end
+      end
+
+      context 'with only can_edit_translations?' do
+        let(:granted) { { can_edit_translations?: true } }
+
+        it 'shows only Translations' do
+          expect(admin_titles).to eq('Configuration' => ['Translations'])
+        end
+      end
+
+      context 'with only can_manage_sessions?' do
+        let(:granted) { { can_manage_sessions?: true } }
+
+        it 'shows only Sessions' do
+          expect(admin_titles).to eq('Status' => ['Sessions'])
+        end
+      end
+
+      context 'with can_manage_tags? and the inventory gate closed' do
+        let(:granted) { { can_manage_tags?: true, can_view_opportunities?: false, can_view_contacts?: false } }
+
+        it 'shows Tags under Admin' do
+          expect(admin_titles).to eq('Configuration' => ['Tags'])
+        end
+      end
+
+      context 'with no admin permissions' do
+        it 'hides the Admin section' do
+          expect(admin.show?).to be(false)
+        end
+      end
+    end
+
+    describe 'rules and services section' do
+      let(:context) do
+        build_menu_context(can_view_rule_list?: true, can_view_available_services?: true, can_manage_tags?: true)
+      end
+      let(:menu_list) { described_class.new(user: user, context: context).site_menu }
+      let(:section) { menu_list.find { |i| i.id.to_s == 'rules-and-services' } }
+
+      it 'is titled Rules & Services and links only to the rules and services lists' do
+        expect(section.title).to eq('Rules & Services')
+        expect(section.children.map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules'], ['Services List', '/services']])
+      end
+
+      context 'with only can_view_rule_list?' do
+        let(:context) { build_menu_context(can_view_rule_list?: true) }
+
+        it 'links only to the rules list' do
+          expect(section.children.map { |c| [c.title, c.path] }).to eq([['Rules List', '/rules']])
+        end
+      end
+
+      context 'with only can_view_available_services?' do
+        let(:context) { build_menu_context(can_view_available_services?: true) }
+
+        it 'links only to the services list' do
+          expect(section.children.map { |c| [c.title, c.path] }).to eq([['Services List', '/services']])
+        end
+      end
+
+      context 'with neither can_view_rule_list? nor can_view_available_services?' do
+        let(:context) { build_menu_context }
+
+        it 'leaves the section out of the visible menu' do
+          expect(menu_list.select(&:show?).map { |i| i.id.to_s }).not_to include('rules-and-services')
+        end
+      end
+    end
+
     describe 'help section' do
       let(:help_record) { nil }
       let(:can_edit_help) { false }
 
-      let(:menu_context) do
-        help = help_record
-        can_edit = can_edit_help
-
-        Class.new do
-          include Rails.application.routes.url_helpers
-
-          define_method(:can_edit_help?) { can_edit }
-          define_method(:help_for_path) { help }
-
-          def help_link = nil
-          def controller_path = 'application'
-          def action_name = 'index'
-          def can_view_reports? = false
-          def can_view_opportunities? = true
-          def can_view_contacts? = true
-          def can_view_programs? = false
-          def can_view_assigned_programs? = false
-          def can_view_buildings? = false
-          def can_enter_deidentified_clients? = false
-          def can_enter_identified_clients? = false
-          def can_manage_imported_clients? = false
-          def can_manage_neighborhoods? = false
-          def can_view_some_clients? = false
-          def can_manage_tags? = false
-          def can_view_rule_list? = false
-          def can_view_available_services? = false
-          def can_edit_users? = false
-          def can_edit_translations? = false
-          def can_view_imports? = false
-          def can_administer_health? = false
-          def can_view_funding_sources? = false
-          def can_view_subgrantees? = false
-        end.new
-      end
+      let(:menu_context) { build_menu_context(help_for_path: help_record, can_edit_help?: can_edit_help) }
 
       let(:menu_list) { described_class.new(user: user, context: menu_context).site_menu }
       let(:help_item) { menu_list.find { |i| i.id.to_s == 'help' } }
